@@ -1,0 +1,28 @@
+# Eclipse
+.settings
+.project
+.classpath
+**/.settings
+**/.project
+**/.classpath
+
+# IntelliJ
+.idea
+*.iml
+
+# Maven
+target
+**/target
+
+# General
+bak
+
+# Firefox
+C:\\nppdf32Log\\debuglog.txt
+
+# Editors
+*.swp
+*.kate-swp
+
+# Git
+*.orig
