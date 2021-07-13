@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Domain
+ * REST
  * %%
  * Copyright (C) 2021 David A. Ruano Ordás, José Ramón Méndez Reboredo,
  * 		Miguel Ferreiro Díaz
@@ -20,12 +20,16 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.rihana.domain.dao.spi.user;
+package org.sing_group.rihana.rest.entity.mapper;
 
 import org.sing_group.rihana.domain.entities.user.User;
+import org.sing_group.rihana.rest.entity.mapper.spi.UserMapper;
+import org.sing_group.rihana.rest.entity.user.UserData;
 
-public interface UserDAO {
-	public User get(String login);
+public class DefaultUserMapper implements UserMapper {
 
-	public User create(User user);
+	@Override
+	public UserData toUserData(User user) {
+		return new UserData(user.getLogin(), user.getPassword(), user.getRole());
+	}
 }

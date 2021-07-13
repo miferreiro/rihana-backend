@@ -22,10 +22,14 @@
  */
 package org.sing_group.rihana.rest.resource.spi.user;
 
+import org.sing_group.rihana.rest.entity.user.UserEditionData;
+
 import javax.ejb.Local;
 import javax.ws.rs.core.Response;
 
 @Local
 public interface UserResource {
 	public Response getRole(String login);
+
+	public Response create(UserEditionData userEditionData);
 }

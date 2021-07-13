@@ -46,4 +46,9 @@ public class DefaultUserService implements UserService {
 	public User getCurrentUser() {
 		return userDAO.get(this.context.getCallerPrincipal().getName());
 	}
+
+	@Override
+	public User create(User user) {
+		return userDAO.create(user);
+	}
 }

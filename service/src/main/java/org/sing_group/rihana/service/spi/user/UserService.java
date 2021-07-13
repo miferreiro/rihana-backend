@@ -29,4 +29,6 @@ import org.sing_group.rihana.domain.entities.user.User;
 @Local
 public interface UserService {
 	public User getCurrentUser();
+
+	public User create(User user);
 }
