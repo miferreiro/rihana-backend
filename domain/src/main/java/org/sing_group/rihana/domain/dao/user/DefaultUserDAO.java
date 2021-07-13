@@ -22,6 +22,8 @@
  */
 package org.sing_group.rihana.domain.dao.user;
 
+import java.util.stream.Stream;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;
 import javax.persistence.EntityManager;
@@ -63,5 +65,10 @@ public class DefaultUserDAO implements UserDAO {
 	@Override
 	public User create(User user) {
 		return this.dh.persist(user);
+	}
+
+	@Override
+	public Stream<User> getUsers() {
+		return this.dh.list().stream();
 	}
 }

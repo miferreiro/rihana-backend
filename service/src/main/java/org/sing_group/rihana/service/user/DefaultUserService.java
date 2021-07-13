@@ -22,6 +22,8 @@
  */
 package org.sing_group.rihana.service.user;
 
+import java.util.stream.Stream;
+
 import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
 import javax.ejb.SessionContext;
@@ -50,5 +52,10 @@ public class DefaultUserService implements UserService {
 	@Override
 	public User create(User user) {
 		return userDAO.create(user);
+	}
+
+	@Override
+	public Stream<User> getUsers() {
+		return userDAO.getUsers();
 	}
 }

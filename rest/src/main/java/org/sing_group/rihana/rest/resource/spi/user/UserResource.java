@@ -32,4 +32,6 @@ public interface UserResource {
 	public Response getRole(String login);
 
 	public Response create(UserEditionData userEditionData);
+
+	public Response getUsers();
 }

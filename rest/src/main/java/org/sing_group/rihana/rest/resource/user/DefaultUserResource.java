@@ -109,4 +109,16 @@ public class DefaultUserResource implements UserResource {
 		return Response.created(UriBuilder.fromResource(DefaultUserResource.class).path(user.getLogin()).build())
 			.entity(userMapper.toUserData(user)).build();
 	}
+
+	@GET
+	@RolesAllowed("ADMIN")
+	@ApiOperation(
+		value = "Return the data of all users.", response = UserData.class, responseContainer = "List", code = 200
+	)
+	@Override
+	public Response getUsers() {
+		return Response.ok(
+			this.userService.getUsers().map(this.userMapper::toUserData).toArray(UserData[]::new)
+		).build();
+	}
 }

@@ -22,10 +22,14 @@
  */
 package org.sing_group.rihana.domain.dao.spi.user;
 
+import java.util.stream.Stream;
+
 import org.sing_group.rihana.domain.entities.user.User;
 
 public interface UserDAO {
 	public User get(String login);
 
 	public User create(User user);
+
+	public Stream<User> getUsers();
 }
