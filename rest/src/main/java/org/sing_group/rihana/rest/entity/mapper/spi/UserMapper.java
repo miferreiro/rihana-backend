@@ -24,7 +24,10 @@ package org.sing_group.rihana.rest.entity.mapper.spi;
 
 import org.sing_group.rihana.domain.entities.user.User;
 import org.sing_group.rihana.rest.entity.user.UserData;
+import org.sing_group.rihana.rest.entity.user.UserEditionData;
 
 public interface UserMapper {
 	public UserData toUserData(User user);
+
+	public void assignUserEditionData(User user, UserEditionData userEditionData);
 }

@@ -25,11 +25,20 @@ package org.sing_group.rihana.rest.entity.mapper;
 import org.sing_group.rihana.domain.entities.user.User;
 import org.sing_group.rihana.rest.entity.mapper.spi.UserMapper;
 import org.sing_group.rihana.rest.entity.user.UserData;
+import org.sing_group.rihana.rest.entity.user.UserEditionData;
 
 public class DefaultUserMapper implements UserMapper {
 
 	@Override
 	public UserData toUserData(User user) {
 		return new UserData(user.getLogin(), user.getPassword(), user.getRole());
+	}
+
+	@Override
+	public void assignUserEditionData(User user, UserEditionData userEditionData) {
+		// Checks if the password has been modified
+		if (!userEditionData.getPassword().isEmpty()) {
+			user.setPassword(userEditionData.getPassword());
+		}
 	}
 }

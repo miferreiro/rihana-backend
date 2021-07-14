@@ -31,5 +31,7 @@ public interface UserDAO {
 
 	public User create(User user);
 
+	public User edit(User user);
+
 	public Stream<User> getUsers();
 }
