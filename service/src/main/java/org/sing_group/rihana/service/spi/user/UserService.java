@@ -38,5 +38,7 @@ public interface UserService {
 
 	public User edit(User user);
 
+	public void delete(User user);
+
 	public Stream<User> getUsers();
 }
