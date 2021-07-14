@@ -38,4 +38,6 @@ public interface UserResource {
 	public Response delete(String id);
 
 	public Response getUsers();
+
+	public Response getUser(String login);
 }
