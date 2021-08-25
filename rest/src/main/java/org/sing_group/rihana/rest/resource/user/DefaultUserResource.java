@@ -55,7 +55,7 @@ import org.sing_group.rihana.rest.resource.spi.user.UserResource;
 import org.sing_group.rihana.service.spi.user.UserService;
 
 @RolesAllowed({
-	"ADMIN", "USER"
+	"ADMIN", "USER", "RADIOLOGIST"
 })
 @Path("user")
 @Produces({
@@ -126,9 +126,6 @@ public class DefaultUserResource implements UserResource {
 
 	@GET
 	@Path("{login}")
-	@RolesAllowed({
-		"ADMIN", "USER"
-	})
 	@ApiOperation(
 		value = "Return the data of a user.", response = UserData.class, code = 200
 	)
