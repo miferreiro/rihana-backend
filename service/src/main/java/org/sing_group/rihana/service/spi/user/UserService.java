@@ -30,15 +30,16 @@ import org.sing_group.rihana.domain.entities.user.User;
 
 @Local
 public interface UserService {
-	public User getCurrentUser();
 
-	public User get(String id);
+	User getCurrentUser();
 
-	public User create(User user);
+	User get(String id);
 
-	public User edit(User user);
+	User create(User user);
 
-	public void delete(User user);
+	User edit(User user);
 
-	public Stream<User> getUsers();
+	void delete(User user);
+
+	Stream<User> getUsers();
 }

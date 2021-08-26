@@ -9,12 +9,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -93,7 +93,7 @@ public class DAOHelper<K, T> {
 	public List<T> list(ListingOptions options) {
 		return this.list(options, context -> new Predicate[0]);
 	}
-	
+
 	public List<T> list(Function<ListQueryContext, Predicate[]> predicatesBuilder) {
 		return this.list(ListingOptions.allResults().unsorted(), predicatesBuilder);
 	}
@@ -174,9 +174,9 @@ public class DAOHelper<K, T> {
 		final Root<T> root = queryBuilder.from(this.getEntityType());
 
 		final Predicate[] predicates = predicatesBuilder.apply(cb(), root);
-		
+
 		CriteriaQuery<Long> select = queryBuilder.select(cb().count(root));
-		
+
 		if (predicates.length > 0) {
 			select = queryBuilder.where(predicates);
 		}
@@ -188,7 +188,7 @@ public class DAOHelper<K, T> {
 		CriteriaQuery<Integer> query = cb().createQuery(Integer.class);
 
 		final Root<T> root = query.from(this.getEntityType());
-		
+
 		query = query.select(cb().size(root.get(relationFieldName)))
 			.where(cb().equal(root.get(key), keyValue));
 
@@ -245,7 +245,7 @@ public class DAOHelper<K, T> {
 	public CriteriaBuilder cb() {
 		return em.getCriteriaBuilder();
 	}
-	
+
 	public class ListQueryContext {
 		private final Root<T> root;
 		private final CriteriaQuery<T> query;

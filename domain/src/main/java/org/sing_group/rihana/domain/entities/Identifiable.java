@@ -23,5 +23,6 @@
 package org.sing_group.rihana.domain.entities;
 
 public interface Identifiable {
-	public String getId();
+
+	String getId();
 }

@@ -44,7 +44,7 @@ public class UuidAndUri implements Serializable {
 	@XmlElement(name = "uri", required = true)
 	private URI uri;
 
-	UuidAndUri() {}
+	UuidAndUri() { }
 
 	public UuidAndUri(String id, URI uri) {
 		this.id = id;

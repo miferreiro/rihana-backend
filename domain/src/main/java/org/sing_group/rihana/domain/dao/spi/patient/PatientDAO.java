@@ -28,15 +28,15 @@ import org.sing_group.rihana.domain.entities.patient.Patient;
 
 public interface PatientDAO {
 
-	public Patient create(Patient patient);
+	Patient create(Patient patient);
 
-	public Stream<Patient> getPatients();
+	Stream<Patient> getPatients();
 
-	public Patient get(String id);
+	Patient get(String id);
 
-	public Patient getPatientBy(String patientID);
+	Patient getPatientBy(String patientID);
 
-	public Patient edit(Patient patient);
+	Patient edit(Patient patient);
 
-	public void delete(Patient patient);
+	void delete(Patient patient);
 }

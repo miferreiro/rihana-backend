@@ -27,13 +27,13 @@ import java.util.stream.Stream;
 import org.sing_group.rihana.domain.entities.user.User;
 
 public interface UserDAO {
-	public User get(String login);
+	User get(String login);
 
-	public User create(User user);
+	User create(User user);
 
-	public User edit(User user);
+	User edit(User user);
 
-	public void delete(User user);
+	void delete(User user);
 
-	public Stream<User> getUsers();
+	Stream<User> getUsers();
 }

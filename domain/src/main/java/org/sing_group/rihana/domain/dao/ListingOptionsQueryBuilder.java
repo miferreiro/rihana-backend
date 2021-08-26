@@ -9,12 +9,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -41,7 +41,7 @@ public class ListingOptionsQueryBuilder {
 	public ListingOptionsQueryBuilder(ListingOptions options) {
 		this.options = requireNonNull(options, "options can't be null");
 	}
-	
+
 	public <T> CriteriaQuery<T> addOrder(CriteriaBuilder cb, CriteriaQuery<T> query, Root<T> root) {
 		if (options.hasOrder()) {
 			final List<Order> order = this.options.getSortFields()
@@ -55,25 +55,25 @@ public class ListingOptionsQueryBuilder {
 							throw new IllegalStateException("Invalid sort direction: " + sortField.getSortDirection());
 					}
 				})
-			.collect(toList());
-			
+				.collect(toList());
+
 			return query.orderBy(order);
 		} else {
 			return query;
 		}
 	}
-	
+
 	private static Path<Object> getField(String field, Root<?> root) {
 		final String[] subfields = field.split("\\.");
-		
+
 		From<?, ?> join = root;
 		for (int i = 0; i < subfields.length - 1; i++) {
 			join = join.join(subfields[i]);
 		}
-		
+
 		return join.get(subfields[subfields.length - 1]);
 	}
-	
+
 	public <T> TypedQuery<T> addLimits(TypedQuery<T> query) {
 		if (this.options.hasResultLimits()) {
 			return query

@@ -9,12 +9,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -35,31 +35,31 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 
 public class CrossDomainBuilder {
 	public void buildCorsHeaders(
-			final CrossDomainConfiguration configuration,
-			final ResponseHeaderBuilder responseHeaders
+		final CrossDomainConfiguration configuration,
+		final ResponseHeaderBuilder responseHeaders
 	) {
 		this.buildCorsHeaders(configuration, responseHeaders::header, __ -> null);
 	}
 
 	public void buildCorsHeaders(
-			final CrossDomainConfiguration configuration,
-			final BiConsumer<String, Object> responseHeaders
+		final CrossDomainConfiguration configuration,
+		final BiConsumer<String, Object> responseHeaders
 	) {
 		this.buildCorsHeaders(configuration, responseHeaders, __ -> null);
 	}
 
 	public void buildCorsHeaders(
-			final CrossDomainConfiguration configuration,
-			final ResponseHeaderBuilder responseHeaders,
-			final Function<String, String> requestHeadersProvider
+		final CrossDomainConfiguration configuration,
+		final ResponseHeaderBuilder responseHeaders,
+		final Function<String, String> requestHeadersProvider
 	) {
 		this.buildCorsHeaders(configuration, responseHeaders::header, requestHeadersProvider);
 	}
 
 	public void buildCorsHeaders(
-			final CrossDomainConfiguration configuration,
-			final BiConsumer<String, Object> responseHeaders,
-			final Function<String, String> requestHeadersProvider
+		final CrossDomainConfiguration configuration,
+		final BiConsumer<String, Object> responseHeaders,
+		final Function<String, String> requestHeadersProvider
 	) {
 		processOrigin(configuration, responseHeaders, requestHeadersProvider);
 		processAllowedCredentials(configuration, responseHeaders);
@@ -67,30 +67,31 @@ public class CrossDomainBuilder {
 	}
 
 	public void buildCorsPreFlightHeaders(
-			final CrossDomainConfiguration configuration,
-			final ResponseHeaderBuilder responseHeaders
+		final CrossDomainConfiguration configuration,
+		final ResponseHeaderBuilder responseHeaders
 	) {
 		this.buildCorsPreFlightHeaders(configuration, responseHeaders::header, __ -> null);
 	}
+
 	public void buildCorsPreFlightHeaders(
-			final CrossDomainConfiguration configuration,
-			final BiConsumer<String, Object> responseHeaders
+		final CrossDomainConfiguration configuration,
+		final BiConsumer<String, Object> responseHeaders
 	) {
 		this.buildCorsPreFlightHeaders(configuration, responseHeaders, __ -> null);
 	}
 
 	public void buildCorsPreFlightHeaders(
-			final CrossDomainConfiguration configuration,
-			final ResponseHeaderBuilder responseHeaders,
-			final Function<String, String> requestHeadersProvider
+		final CrossDomainConfiguration configuration,
+		final ResponseHeaderBuilder responseHeaders,
+		final Function<String, String> requestHeadersProvider
 	) {
 		this.buildCorsPreFlightHeaders(configuration, responseHeaders::header, requestHeadersProvider);
 	}
 
 	public void buildCorsPreFlightHeaders(
-			final CrossDomainConfiguration configuration,
-			final BiConsumer<String, Object> responseHeaders,
-			final Function<String, String> requestHeadersProvider
+		final CrossDomainConfiguration configuration,
+		final BiConsumer<String, Object> responseHeaders,
+		final Function<String, String> requestHeadersProvider
 	) {
 		processOrigin(configuration, responseHeaders, requestHeadersProvider);
 		processMaxAge(configuration, responseHeaders);
@@ -100,10 +101,10 @@ public class CrossDomainBuilder {
 	}
 
 	private static void processAllowedHeaders(
-			final CrossDomainConfiguration configuration,
-			final BiConsumer<String, Object> headerConsumer,
-			final Function<String, String> requestHeadersProvider,
-			final boolean preflight
+		final CrossDomainConfiguration configuration,
+		final BiConsumer<String, Object> headerConsumer,
+		final Function<String, String> requestHeadersProvider,
+		final boolean preflight
 	) {
 		final List<String> allowedHeaders = new ArrayList<>();
 
@@ -117,17 +118,17 @@ public class CrossDomainBuilder {
 
 		if (!allowedHeaders.isEmpty()) {
 			final String header = preflight
-					? "Access-Control-Allow-Headers"
-					: "Access-Control-Expose-Headers";
+				? "Access-Control-Allow-Headers"
+				: "Access-Control-Expose-Headers";
 
 			headerConsumer.accept(header, String.join(", ", allowedHeaders));
 		}
 	}
 
 	private static void processOrigin(
-			final CrossDomainConfiguration configuration,
-			final BiConsumer<String, Object> headerConsumer,
-			final Function<String, String> requestHeadersProvider
+		final CrossDomainConfiguration configuration,
+		final BiConsumer<String, Object> headerConsumer,
+		final Function<String, String> requestHeadersProvider
 	) {
 		if (configuration.getAllowedOrigin() == null) {
 			final String originHeader = requestHeadersProvider.apply("Origin");
