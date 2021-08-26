@@ -9,12 +9,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -24,13 +24,19 @@ package org.sing_group.rihana.rest.entity;
 
 import java.io.Serializable;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
 
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import io.swagger.annotations.ApiModel;
+import org.sing_group.rihana.domain.entities.Identifiable;
 
 @XmlRootElement(name = "uuid-and-uri", namespace = "http://entity.resource.rest.rihana.sing-group.org")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -96,5 +102,51 @@ public class UuidAndUri implements Serializable {
 		} else if (!uri.equals(other.uri))
 			return false;
 		return true;
+	}
+
+	public static List<UuidAndUri> fromEntities(
+		UriInfo requestURI, List<? extends Identifiable> list, Class<?> resourceClass
+	) {
+		return fromEntities(requestURI, list, resourceClass, null);
+	}
+
+	public static List<UuidAndUri> fromEntities(
+		UriInfo requestURI, List<? extends Identifiable> list, Class<?> resourceClass, String concatURL
+	) {
+		Function<UriBuilder, UriBuilder> uriBuilderMap =
+			(concatURL != null) ? (uriBuilder) -> uriBuilder.path(concatURL) : null;
+		List<UuidAndUri> urls = new ArrayList<>();
+		for (Identifiable object : list) {
+			urls.add(_fromEntity(requestURI, uriBuilderMap, object, resourceClass));
+		}
+		return urls;
+	}
+
+	public static UuidAndUri fromEntity(UriInfo requestURI, Identifiable entity, Class<?> resourceClass) {
+		return _fromEntity(requestURI, null, entity, resourceClass);
+	}
+
+	public static UuidAndUri fromEntity(UriInfo requestURI, Identifiable entity, Class<?> resourceClass, String concatURL) {
+		Function<UriBuilder, UriBuilder> uriBuilderMap =
+			(concatURL != null) ? (uriBuilder) -> uriBuilder.path(concatURL) : null;
+		return _fromEntity(requestURI, uriBuilderMap, entity, resourceClass);
+	}
+
+	private static UuidAndUri _fromEntity(
+		UriInfo requestURI, Function<UriBuilder, UriBuilder> uriBuilderMap, Identifiable entity, Class<?> resourceClass
+	) {
+		if (entity == null) {
+			return null;
+		}
+
+		UriBuilder pathUntilId = UriBuilder.fromResource(resourceClass).path(entity.getId());
+		return new UuidAndUri(
+			entity.getId(),
+			requestURI.getBaseUriBuilder().path(
+					(uriBuilderMap != null ? uriBuilderMap.apply(pathUntilId) : pathUntilId)
+						.build()
+						.toString())
+				.build()
+		);
 	}
 }

@@ -31,6 +31,9 @@
 			<web-resource-name>private</web-resource-name>
 			<url-pattern>/api/user/*</url-pattern>
 			<url-pattern>/api/patient/*</url-pattern>
+			<url-pattern>/api/exploration/*</url-pattern>
+			<url-pattern>/api/report/*</url-pattern>
+			<url-pattern>/api/radiography/*</url-pattern>
 			<url-pattern>/api/explorationcode/*</url-pattern>
 			<http-method-omission>OPTIONS</http-method-omission>
 		</web-resource-collection>

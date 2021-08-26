@@ -9,12 +9,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -29,14 +29,21 @@ import static org.sing_group.fluent.checker.Checks.requirePattern;
 import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
+
+import org.sing_group.rihana.domain.entities.exploration.Exploration;
 
 @Entity
 @Table(name = "user")
@@ -54,7 +61,10 @@ public class User implements Serializable {
 	@Column(nullable = false)
 	private Role role;
 
-	User() {}
+	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Exploration> explorations = new ArrayList<>();
+
+	User() { }
 
 	public User(String login, String password, Role role) {
 		this.setLogin(login);
@@ -98,5 +108,25 @@ public class User implements Serializable {
 	public void setRole(Role role) {
 		checkArgument(role, r -> requireNonNull(r, "role cannot be null"));
 		this.role = role;
+	}
+
+	public void internalRemoveExploration(Exploration exploration) {
+		this.explorations.remove(exploration);
+	}
+
+	public void internalAddExploration(Exploration exploration) {
+		this.explorations.add(exploration);
+	}
+
+	public List<Exploration> getExplorations() {
+		return explorations;
+	}
+
+	public void addExploration(Exploration exploration) {
+		exploration.setUser(this);
+	}
+
+	public void removeExploration(Exploration exploration) {
+		exploration.setUser(null);
 	}
 }

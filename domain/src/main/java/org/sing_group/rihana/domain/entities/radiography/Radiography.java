@@ -20,14 +20,10 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.rihana.domain.entities.patient;
-
-import static java.util.Objects.requireNonNull;
-import static org.sing_group.fluent.checker.Checks.checkArgument;
+package org.sing_group.rihana.domain.entities.radiography;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,40 +34,37 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 
 import org.sing_group.rihana.domain.entities.Identifiable;
 import org.sing_group.rihana.domain.entities.exploration.Exploration;
+import org.sing_group.rihana.domain.entities.sign.Sign;
 
 @Entity
-@Table(name = "patient", uniqueConstraints = @UniqueConstraint(columnNames = {
-	"patientID"
-}))
-public class Patient implements Identifiable {
+@Table(name = "radiography")
+public class Radiography implements Identifiable {
 
 	@Id
 	@Column(name = "id")
 	private String id;
 
-	@Column(name = "patientID", nullable = false)
-	private String patientID;
+	@Column(name = "source")
+	private String source;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "sex")
-	private SEX sex;
+	@Column(name = "type")
+	private RadiographyType type;
 
-	public enum SEX {
-		MALE, FEMALE
-	}
+	@ManyToOne
+	@JoinColumn(name = "exploration_id")
+	private Exploration exploration;
 
-	@Column(name = "birthdate")
-	private Timestamp birthdate;
-
-	@OneToMany(mappedBy = "patient", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Exploration> explorations = new ArrayList<>();
+	@OneToMany(mappedBy = "radiography", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Sign> signs = new ArrayList<>();
 
 	@Column(name = "creation_date", columnDefinition = "DATETIME(3)")
 	private Timestamp creationDate;
@@ -80,13 +73,12 @@ public class Patient implements Identifiable {
 	@Column(name = "update_date", columnDefinition = "DATETIME(3)")
 	private Timestamp updateDate;
 
-	Patient() { }
+	Radiography() { }
 
-	public Patient(String patientID, SEX sex, Date birthdate) {
+	public Radiography(String source, RadiographyType type) {
 		this.id = UUID.randomUUID().toString();
-		this.setPatientID(patientID);
-		this.setSex(sex);
-		this.setBirthdate(birthdate);
+		this.source = source;
+		this.type = type;
 		this.creationDate = this.updateDate = new Timestamp(System.currentTimeMillis());
 	}
 
@@ -95,48 +87,45 @@ public class Patient implements Identifiable {
 		return id;
 	}
 
-	public String getPatientID() {
-		return patientID;
+	public String getSource() {
+		return source;
 	}
 
-	public void setPatientID(String publicID) {
-		checkArgument(publicID, p -> requireNonNull(p, "patient identifier cannot be null"));
-		this.patientID = publicID;
+	public void setSource(String source) {
+		this.source = source;
 	}
 
-	public SEX getSex() {
-		return sex;
+	public RadiographyType getType() {
+		return type;
 	}
 
-	public void setSex(SEX sex) {
-		this.sex = sex;
+	public void setType(RadiographyType type) {
+		this.type = type;
 	}
 
-	public Date getBirthdate() {
-		return birthdate;
+	public Exploration getExploration() {
+		return exploration;
 	}
 
-	public void setBirthdate(Date birthdate) {
-		this.birthdate = new Timestamp(birthdate.getTime());
+	public void setExploration(Exploration exploration) {
+		if (this.exploration != null) {
+			this.exploration.internalRemoveRadiography(this);
+		}
+		this.exploration = exploration;
+		if (exploration != null) {
+			this.exploration.internalAddRadiography(this);
+		}
 	}
 
-	public void internalRemoveExploration(Exploration exploration) {
-		this.explorations.remove(exploration);
+	public void internalRemoveSign(Sign sign) {
+		this.signs.remove(sign);
 	}
 
-	public void internalAddExploration(Exploration exploration) {
-		this.explorations.add(exploration);
+	public void internalAddSign(Sign sign) {
+		this.signs.add(sign);
 	}
 
-	public List<Exploration> getExplorations() {
-		return explorations;
-	}
-
-	public void addExploration(Exploration exploration) {
-		exploration.setPatient(this);
-	}
-
-	public void removeExploration(Exploration exploration) {
-		exploration.setPatient(null);
+	public List<Sign> getSigns() {
+		return signs;
 	}
 }

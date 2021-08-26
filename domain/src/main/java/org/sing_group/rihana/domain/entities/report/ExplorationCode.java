@@ -1,3 +1,4 @@
+
 /*-
  * #%L
  * Domain
@@ -9,12 +10,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -23,10 +24,15 @@
 package org.sing_group.rihana.domain.entities.report;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -40,6 +46,12 @@ public class ExplorationCode implements Serializable {
 
 	@Column(name = "description")
 	private String description;
+
+	@OneToMany(mappedBy = "explorationCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<RequestedExploration> requestedExplorations = new ArrayList<>();
+
+	@OneToMany(mappedBy = "explorationCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<PerformedExploration> performedExplorations = new ArrayList<>();
 
 	ExplorationCode() { }
 
@@ -62,5 +74,29 @@ public class ExplorationCode implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public void internalRemoveRequestedExploration(RequestedExploration requestedExploration) {
+		this.requestedExplorations.remove(requestedExploration);
+	}
+
+	public void internalAddRequestedExploration(RequestedExploration requestedExploration) {
+		this.requestedExplorations.add(requestedExploration);
+	}
+
+	public List<RequestedExploration> getRequestedExplorations() {
+		return requestedExplorations;
+	}
+
+	public void internalRemovePerformedExploration(PerformedExploration performedExploration) {
+		this.performedExplorations.remove(performedExploration);
+	}
+
+	public void internalAddPerformedExploration(PerformedExploration performedExploration) {
+		this.performedExplorations.add(performedExploration);
+	}
+
+	public List<PerformedExploration> getPerformedExplorations() {
+		return performedExplorations;
 	}
 }
