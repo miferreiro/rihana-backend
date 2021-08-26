@@ -1,9 +1,9 @@
 /*-
  * #%L
- * Domain
+ * Service
  * %%
  * Copyright (C) 2021 David A. Ruano Ordás, José Ramón Méndez Reboredo,
- * 			Miguel Ferreiro Díaz
+ * 		Miguel Ferreiro Díaz
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -20,8 +20,25 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.rihana.domain.dao;
+package org.sing_group.rihana.service.report;
 
-public enum SortDirection {
-	ASCENDING, DESCENDING, NONE
+import javax.annotation.security.PermitAll;
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+
+import org.sing_group.rihana.domain.dao.spi.report.ExplorationCodeDAO;
+import org.sing_group.rihana.domain.entities.report.ExplorationCode;
+import org.sing_group.rihana.service.spi.report.ExplorationCodeService;
+
+@Stateless
+@PermitAll
+public class DefaultExplorationCodeService implements ExplorationCodeService {
+
+	@Inject
+	private ExplorationCodeDAO explorationCodeDao;
+
+	@Override
+	public ExplorationCode getExplorationCode(String code) {
+		return explorationCodeDao.getExplorationCode(code);
+	}
 }

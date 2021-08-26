@@ -21,3 +21,11 @@ CREATE TABLE `patient` (
     PRIMARY KEY (`id`),
     UNIQUE KEY (`patientID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+--
+-- Table structure for table `explorationcode`
+--
+CREATE TABLE `explorationcode` (
+    `code`              varchar(255)    NOT NULL,
+    `description`       varchar(255)    NOT NULL,
+    PRIMARY KEY (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;

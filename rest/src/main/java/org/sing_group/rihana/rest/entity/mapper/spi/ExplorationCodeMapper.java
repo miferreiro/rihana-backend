@@ -1,9 +1,9 @@
 /*-
  * #%L
- * Domain
+ * REST
  * %%
  * Copyright (C) 2021 David A. Ruano Ordás, José Ramón Méndez Reboredo,
- * 			Miguel Ferreiro Díaz
+ * 		Miguel Ferreiro Díaz
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -20,8 +20,16 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.rihana.domain.dao;
+package org.sing_group.rihana.rest.entity.mapper.spi;
 
-public enum SortDirection {
-	ASCENDING, DESCENDING, NONE
+import javax.ws.rs.core.UriInfo;
+
+import org.sing_group.rihana.domain.entities.report.ExplorationCode;
+import org.sing_group.rihana.rest.entity.report.ExplorationCodeData;
+
+public interface ExplorationCodeMapper {
+
+	void setRequestURI(UriInfo requestURI);
+
+	ExplorationCodeData toExplorationCodeData(ExplorationCode explorationCode);
 }

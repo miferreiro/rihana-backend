@@ -3,7 +3,7 @@
  * Domain
  * %%
  * Copyright (C) 2021 David A. Ruano Ordás, José Ramón Méndez Reboredo,
- * 			Miguel Ferreiro Díaz
+ * 		Miguel Ferreiro Díaz
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -20,8 +20,11 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.rihana.domain.dao;
+package org.sing_group.rihana.domain.dao.spi.report;
 
-public enum SortDirection {
-	ASCENDING, DESCENDING, NONE
+import org.sing_group.rihana.domain.entities.report.ExplorationCode;
+
+public interface ExplorationCodeDAO {
+
+	ExplorationCode getExplorationCode(String code);
 }

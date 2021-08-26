@@ -2,5 +2,6 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 DELETE FROM `user`;
 DELETE FROM `patient`;
+DELETE FROM `explorationcode`;
 
 SET FOREIGN_KEY_CHECKS = 1;
