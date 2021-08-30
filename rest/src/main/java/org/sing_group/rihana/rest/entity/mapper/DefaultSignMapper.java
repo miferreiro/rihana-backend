@@ -23,6 +23,7 @@
 package org.sing_group.rihana.rest.entity.mapper;
 
 import javax.enterprise.inject.Default;
+import javax.ws.rs.core.UriInfo;
 
 import org.sing_group.rihana.domain.entities.sign.Sign;
 import org.sing_group.rihana.rest.entity.sign.SignData;
@@ -32,6 +33,13 @@ import org.sing_group.rihana.rest.entity.mapper.spi.SignMapper;
 
 @Default
 public class DefaultSignMapper implements SignMapper {
+
+	private UriInfo requestURI;
+
+	@Override
+	public void setRequestURI(UriInfo requestURI) {
+		this.requestURI = requestURI;
+	}
 
 	@Override
 	public SignData toSignData(Sign sign) {
