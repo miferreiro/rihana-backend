@@ -58,6 +58,12 @@ public class Sign implements Identifiable {
 	@OneToOne(mappedBy = "sign", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
 	private SignLocation signLocation;
 
+	@Column(name = "brightness")
+	private int brightness;
+
+	@Column(name = "contrast")
+	private int contrast;
+
 	@Column(name = "creation_date", columnDefinition = "DATETIME(3)")
 	private Timestamp creationDate;
 
@@ -67,9 +73,11 @@ public class Sign implements Identifiable {
 
 	Sign() { }
 
-	public Sign(SignType type) {
+	public Sign(SignType type, int brightness, int contrast) {
 		this.id = UUID.randomUUID().toString();
 		this.type = type;
+		this.brightness = brightness;
+		this.contrast = contrast;
 		this.creationDate = this.updateDate = new Timestamp(System.currentTimeMillis());
 	}
 
@@ -98,6 +106,22 @@ public class Sign implements Identifiable {
 
 	public void setSignLocation(SignLocation signLocation) {
 		this.signLocation = signLocation;
+	}
+
+	public int getBrightness() {
+		return brightness;
+	}
+
+	public void setBrightness(int brightness) {
+		this.brightness = brightness;
+	}
+
+	public int getContrast() {
+		return contrast;
+	}
+
+	public void setContrast(int contrast) {
+		this.contrast = contrast;
 	}
 
 	public Radiography getRadiography() {

@@ -38,7 +38,6 @@ public class DefaultSignMapper implements SignMapper {
 		return new SignData(sign.getId(), new SignTypeData(sign.getType().getCode(), sign.getType().getName(),
 			sign.getType().getDescription()), new SignLocationData(
 			sign.getSignLocation().getX(), sign.getSignLocation().getY(), sign.getSignLocation().getWidth(),
-			sign.getSignLocation().getHeight(), sign.getSignLocation().getBrightness(),
-			sign.getSignLocation().getContrast()));
+			sign.getSignLocation().getHeight()), sign.getBrightness(), sign.getContrast());
 	}
 }

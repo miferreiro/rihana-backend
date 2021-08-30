@@ -46,12 +46,20 @@ public class SignData implements Serializable {
 	@XmlElement(name = "location", required = true)
 	private SignLocationData location;
 
+	@XmlElement(name = "brightness", required = true)
+	private Integer brightness;
+
+	@XmlElement(name = "contrast", required = true)
+	private Integer contrast;
+
 	public SignData() { }
 
-	public SignData(String id, SignTypeData type, SignLocationData location) {
+	public SignData(String id, SignTypeData type, SignLocationData location, Integer brightness, Integer contrast) {
 		this.id = id;
 		this.type = type;
 		this.location = location;
+		this.brightness = brightness;
+		this.contrast = contrast;
 	}
 
 	public String getId() {
@@ -64,5 +72,13 @@ public class SignData implements Serializable {
 
 	public SignLocationData getLocation() {
 		return location;
+	}
+
+	public Integer getBrightness() {
+		return brightness;
+	}
+
+	public Integer getContrast() {
+		return contrast;
 	}
 }

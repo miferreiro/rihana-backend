@@ -57,12 +57,6 @@ public class SignLocation implements Identifiable {
 	@Column(name = "height", nullable = false)
 	private int height;
 
-	@Column(name = "brightness")
-	private int brightness;
-
-	@Column(name = "contrast")
-	private int contrast;
-
 	@Column(name = "creation_date", columnDefinition = "DATETIME(3)")
 	private Timestamp creationDate;
 
@@ -71,14 +65,12 @@ public class SignLocation implements Identifiable {
 
 	SignLocation() { }
 
-	public SignLocation(int x, int y, int width, int height, int brightness, int contrast) {
+	public SignLocation(int x, int y, int width, int height) {
 		this.id = UUID.randomUUID().toString();
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		this.brightness = brightness;
-		this.contrast = contrast;
 		this.creationDate = new Timestamp(System.currentTimeMillis());
 	}
 
@@ -121,22 +113,6 @@ public class SignLocation implements Identifiable {
 	public void setHeight(int height) {
 		checkArgument(height, h -> requireNonNull(h, "Height can not be null"));
 		this.height = height;
-	}
-
-	public int getBrightness() {
-		return brightness;
-	}
-
-	public void setBrightness(int brightness) {
-		this.brightness = brightness;
-	}
-
-	public int getContrast() {
-		return contrast;
-	}
-
-	public void setContrast(int contrast) {
-		this.contrast = contrast;
 	}
 
 	public Sign getSign() {

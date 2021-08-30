@@ -71,7 +71,9 @@ public class DefaultRadiographyMapper implements RadiographyMapper {
 		for (Sign sign : signs) {
 			signDataList.add(new SignData(sign.getId(),
 				signTypeMapper.toSignTypeData(sign.getType()),
-				signLocationMapper.toSignLocationData(sign.getSignLocation()))
+				signLocationMapper.toSignLocationData(sign.getSignLocation()),
+				sign.getBrightness(),
+				sign.getContrast())
 			);
 		}
 
