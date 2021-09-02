@@ -28,7 +28,7 @@ import javax.ws.rs.core.Response;
 @Local
 public interface SignResource {
 
-	Response listSigns();
+	Response listSigns(String userId);
 
-	Response listSignsByUser(String userId);
+	Response listSignTypes();
 }

@@ -46,12 +46,16 @@ public class SignTypeData implements Serializable {
 	@XmlElement(name = "description", required = true)
 	private String description;
 
+	@XmlElement(name = "target", required = true)
+	private Integer target;
+
 	public SignTypeData() { }
 
-	public SignTypeData(String code, String name, String description) {
+	public SignTypeData(String code, String name, String description, Integer target) {
 		this.code = code;
 		this.name = name;
 		this.description = description;
+		this.target = target;
 	}
 
 	public String getCode() {
@@ -64,5 +68,9 @@ public class SignTypeData implements Serializable {
 
 	public String getDescription() {
 		return description;
+	}
+
+	public Integer getTarget() {
+		return target;
 	}
 }

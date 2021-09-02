@@ -118,6 +118,7 @@ CREATE TABLE `signtype` (
     `code`          varchar(255)    NOT NULL,
     `name`          varchar(255)    NOT NULL,
     `description`   varchar(255)    NOT NULL,
+    `target`        int             NOT NULL,
     PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -151,5 +152,3 @@ CREATE TABLE `signlocation` (
     PRIMARY KEY (`id`),
     CONSTRAINT FOREIGN KEY (`sign_id`) REFERENCES `sign` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-

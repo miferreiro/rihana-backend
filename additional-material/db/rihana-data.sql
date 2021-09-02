@@ -121,15 +121,15 @@ VALUES
 --
 -- Data for table `Sign type`
 --
-INSERT INTO `signtype` (`code`, `name`, `description`)
+INSERT INTO `signtype` (`code`, `name`, `description`, `target`)
 VALUES
-    ('CAR', 'Cardiomegaly', 'Cardiomegaly'),
-    ('CON', 'Condensation', 'Condensation'),
-    ('MAS', 'Masses', 'Masses'),
-    ('NOD', 'Nodules', 'Nodules'),
-    ('PLE', 'Pleural effusion', 'Pleural effusion'),
-    ('PNE', 'Pneumothorax', 'Pneumothorax'),
-    ('RED', 'Redistribution', 'Redistribution');
+    ('CAR', 'Cardiomegaly', 'Cardiomegaly', '1500'),
+    ('CON', 'Condensation', 'Condensation', '1500'),
+    ('MAS', 'Masses', 'Masses', '1500'),
+    ('NOD', 'Nodules', 'Nodules', '1500'),
+    ('PLE', 'Pleural effusion', 'Pleural effusion', '1500'),
+    ('PNE', 'Pneumothorax', 'Pneumothorax', '1500'),
+    ('RED', 'Redistribution', 'Redistribution', '1500');
 
 --
 -- Data for table `sign`

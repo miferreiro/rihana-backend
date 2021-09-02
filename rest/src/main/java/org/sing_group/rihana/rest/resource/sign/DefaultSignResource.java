@@ -26,6 +26,8 @@ package org.sing_group.rihana.rest.resource.sign;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.APPLICATION_XML;
 
+import java.util.stream.Stream;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -34,19 +36,23 @@ import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.sing_group.rihana.domain.entities.sign.Sign;
 import org.sing_group.rihana.rest.entity.mapper.spi.SignMapper;
+import org.sing_group.rihana.rest.entity.mapper.spi.SignTypeMapper;
 import org.sing_group.rihana.rest.entity.sign.SignData;
+import org.sing_group.rihana.rest.entity.sign.SignTypeData;
 import org.sing_group.rihana.rest.filter.CrossDomain;
 import org.sing_group.rihana.rest.resource.spi.sign.SignResource;
 import org.sing_group.rihana.service.spi.sign.SignService;
+import org.sing_group.rihana.service.spi.sign.SignTypeService;
 import org.sing_group.rihana.service.spi.user.UserService;
 
 @RolesAllowed({
@@ -72,7 +78,13 @@ public class DefaultSignResource implements SignResource {
 	private UserService userService;
 
 	@Inject
+	private SignTypeService signTypeService;
+
+	@Inject
 	private SignMapper signMapper;
+
+	@Inject
+	private SignTypeMapper signTypeMapper;
 
 	@Context
 	private UriInfo uriInfo;
@@ -84,27 +96,31 @@ public class DefaultSignResource implements SignResource {
 
 	@GET
 	@ApiOperation(
-		value = "Return the data of all signs.", response = SignData.class, responseContainer = "List", code = 200
+		value = "Return the data of all signs or signs of a specified user.", response = SignData.class, responseContainer = "List", code = 200
 	)
 	@Override
-	public Response listSigns() {
-		return Response.ok(
-			this.service.listSigns().map(this.signMapper::toSignData).toArray(SignData[]::new)
-		).build();
+	public Response listSigns(
+		@QueryParam("user") String userId
+	) {
+		Stream<Sign> signs;
+		if (userId == null || userId == "") {
+			signs = this.service.listSigns();
+		} else {
+			signs = this.service.listSignsByUser(this.userService.get(userId));
+		}
+		return Response.ok(signs.map(this.signMapper::toSignData).toArray(SignData[]::new)).build();
 	}
 
 	@GET
-	@Path("{user}")
+	@Path("type")
 	@ApiOperation(
-		value = "Return the data of all signs of a specified user.", response = SignData.class, responseContainer = "List", code = 200
+		value = "Return the data of all signs of a specified user.", response = SignTypeData.class, responseContainer = "List", code = 200
 	)
 	@Override
-	public Response listSignsByUser(
-		@PathParam("user") String userId
-	) {
+	public Response listSignTypes() {
 		return Response.ok(
-			this.service.listSignsByUser(this.userService.get(userId))
-				.map(this.signMapper::toSignData).toArray(SignData[]::new)
+			this.signTypeService.listSignTypes()
+				.map(this.signTypeMapper::toSignTypeData).toArray(SignTypeData[]::new)
 		).build();
 	}
 }

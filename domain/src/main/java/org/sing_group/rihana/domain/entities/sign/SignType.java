@@ -49,15 +49,19 @@ public class SignType implements Serializable {
 	@Column(name = "description")
 	private String description;
 
+	@Column(name = "target")
+	private int target;
+
 	@OneToMany(mappedBy = "type", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Sign> signs = new ArrayList<>();
 
 	SignType() { }
 
-	public SignType(String code, String name, String description) {
+	public SignType(String code, String name, String description, int target) {
 		this.setCode(code);
 		this.setName(name);
 		this.setDescription(description);
+		this.setTarget(target);
 	}
 
 	public String getCode() {
@@ -82,6 +86,14 @@ public class SignType implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public int getTarget() {
+		return target;
+	}
+
+	public void setTarget(int target) {
+		this.target = target;
 	}
 
 	public void internalRemoveSign(Sign sign) {

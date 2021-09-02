@@ -44,7 +44,7 @@ public class DefaultSignMapper implements SignMapper {
 	@Override
 	public SignData toSignData(Sign sign) {
 		return new SignData(sign.getId(), new SignTypeData(sign.getType().getCode(), sign.getType().getName(),
-			sign.getType().getDescription()), new SignLocationData(
+			sign.getType().getDescription(), sign.getType().getTarget()), new SignLocationData(
 			sign.getSignLocation().getX(), sign.getSignLocation().getY(), sign.getSignLocation().getWidth(),
 			sign.getSignLocation().getHeight()), sign.getBrightness(), sign.getContrast());
 	}
