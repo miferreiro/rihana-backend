@@ -31,8 +31,10 @@ import javax.ejb.Stateless;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -43,10 +45,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.sing_group.rihana.domain.entities.exploration.Exploration;
 import org.sing_group.rihana.domain.entities.user.User;
 import org.sing_group.rihana.rest.entity.exploration.ExplorationData;
 import org.sing_group.rihana.rest.entity.mapper.spi.ExplorationMapper;
 import org.sing_group.rihana.rest.filter.CrossDomain;
+import org.sing_group.rihana.rest.mapper.SecurityExceptionMapper;
 import org.sing_group.rihana.rest.resource.spi.exploration.ExplorationResource;
 import org.sing_group.rihana.service.spi.exploration.ExplorationService;
 import org.sing_group.rihana.service.spi.user.UserService;
@@ -110,5 +114,21 @@ public class DefaultExplorationResource implements ExplorationResource {
 			this.service.listExplorationsByUser(page, pageSize, user)
 				.map(this.explorationMapper::toExplorationData).toArray(ExplorationData[]::new)
 		).header("X-Pagination-Total-Items", countExplorations).build();
+	}
+
+	@DELETE
+	@Path("{id}")
+	@ApiOperation(
+		value = "Deletes an existing exploration.", code = 200
+	)
+	@ApiResponses({
+		@ApiResponse(code = 400, message = "Unknown exploration: {id}"),
+		@ApiResponse(code = 430, message = SecurityExceptionMapper.FORBIDDEN_MESSAGE)
+	})
+	@Override
+	public Response delete(@PathParam("id") String id) {
+		Exploration exploration = this.service.getExploration(id);
+		this.service.delete(exploration);
+		return Response.ok().build();
 	}
 }

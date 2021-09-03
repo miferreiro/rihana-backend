@@ -29,4 +29,6 @@ import javax.ws.rs.core.Response;
 public interface ExplorationResource {
 
 	Response listExplorationsByUser(String userId, int page, int pageSize);
+
+	Response delete(String id);
 }
