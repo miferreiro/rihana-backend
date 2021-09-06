@@ -98,9 +98,9 @@ VALUES
     ('12', '2018-12-12', 'N', 'N', '12', '70102');
 
 --
--- Data for table `Radiography`
+-- Data for table `Radiograph`
 --
-INSERT INTO `radiography` (`id`, `source`, `type`, `exploration_id`, `creation_date`, `update_date`)
+INSERT INTO `radiograph` (`id`, `source`, `type`, `exploration_id`, `creation_date`, `update_date`)
 VALUES
     ('1', 'source1', 'PA', '1', '2018-12-12 23:00:00', '2020-02-24 17:21:58'),
     ('2', 'source2', 'LAT', '1', '2018-12-12 23:00:00', '2020-02-24 17:21:58'),
@@ -134,7 +134,7 @@ VALUES
 --
 -- Data for table `sign`
 --
-INSERT INTO `sign` (`id`, `signtype_code`, `radiography_id`, `brightness`, `contrast`, `creation_date`, `update_date`)
+INSERT INTO `sign` (`id`, `signtype_code`, `radiograph_id`, `brightness`, `contrast`, `creation_date`, `update_date`)
 VALUES
     ('1', 'CAR', '1', '100', '100', '2018-12-12 23:00:00', '2020-02-24 17:21:58'),
     ('2', 'MAS', '1', '100', '100', '2018-12-12 23:00:00', '2020-02-24 17:21:58'),

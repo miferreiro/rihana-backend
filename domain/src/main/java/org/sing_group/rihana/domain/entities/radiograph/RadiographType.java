@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Service
+ * Domain
  * %%
  * Copyright (C) 2021 David A. Ruano Ordás, José Ramón Méndez Reboredo,
  * 		Miguel Ferreiro Díaz
@@ -20,14 +20,8 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.rihana.service.spi.radiography;
+package org.sing_group.rihana.domain.entities.radiograph;
 
-import javax.ejb.Local;
-
-import org.sing_group.rihana.domain.entities.radiography.Radiography;
-
-@Local
-public interface RadiographyService {
-
-	Radiography getRadiography(String id);
+public enum RadiographType {
+	PA, LAT, AP
 }

@@ -20,7 +20,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.rihana.domain.dao.radiography;
+package org.sing_group.rihana.domain.dao.radiograph;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;
@@ -29,35 +29,35 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import org.sing_group.rihana.domain.dao.DAOHelper;
-import org.sing_group.rihana.domain.dao.spi.radiography.RadiographyDAO;
-import org.sing_group.rihana.domain.entities.radiography.Radiography;
+import org.sing_group.rihana.domain.dao.spi.radiograph.RadiographDAO;
+import org.sing_group.rihana.domain.entities.radiograph.Radiograph;
 
 @Default
 @Transactional(value = Transactional.TxType.MANDATORY)
-public class DefaultRadiographyDAO implements RadiographyDAO {
+public class DefaultRadiographDAO implements RadiographDAO {
 
 	@PersistenceContext
 	protected EntityManager em;
 
-	protected DAOHelper<String, Radiography> dh;
+	protected DAOHelper<String, Radiograph> dh;
 
-	public DefaultRadiographyDAO() {
+	public DefaultRadiographDAO() {
 		super();
 	}
 
-	public DefaultRadiographyDAO(EntityManager em) {
+	public DefaultRadiographDAO(EntityManager em) {
 		this.em = em;
 		createDAOHelper();
 	}
 
 	@PostConstruct
 	protected void createDAOHelper() {
-		this.dh = DAOHelper.of(String.class, Radiography.class, this.em);
+		this.dh = DAOHelper.of(String.class, Radiograph.class, this.em);
 	}
 
 	@Override
-	public Radiography get(String id) {
+	public Radiograph get(String id) {
 		return this.dh.get(id)
-			.orElseThrow(() -> new IllegalArgumentException("Unknown radiography: " + id));
+			.orElseThrow(() -> new IllegalArgumentException("Unknown radiograph: " + id));
 	}
 }

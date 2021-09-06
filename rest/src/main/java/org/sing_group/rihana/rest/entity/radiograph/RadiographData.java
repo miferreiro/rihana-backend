@@ -20,7 +20,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.rihana.rest.entity.radiography;
+package org.sing_group.rihana.rest.entity.radiograph;
 
 import java.io.Serializable;
 import java.util.List;
@@ -31,14 +31,14 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import io.swagger.annotations.ApiModel;
-import org.sing_group.rihana.domain.entities.radiography.RadiographyType;
+import org.sing_group.rihana.domain.entities.radiograph.RadiographType;
 import org.sing_group.rihana.rest.entity.sign.SignData;
 import org.sing_group.rihana.rest.entity.UuidAndUri;
 
-@XmlRootElement(name = "Radiography-data", namespace = "http://entity.resource.rest.rihana.sing-group.org")
+@XmlRootElement(name = "Radiograph-data", namespace = "http://entity.resource.rest.rihana.sing-group.org")
 @XmlAccessorType(XmlAccessType.FIELD)
-@ApiModel(value = "Radiography-data", description = "Information of a radiography.")
-public class RadiographyData implements Serializable {
+@ApiModel(value = "Radiograph-data", description = "Information of a radiograph.")
+public class RadiographData implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@XmlElement(name = "id", required = true)
@@ -48,7 +48,7 @@ public class RadiographyData implements Serializable {
 	private String source;
 
 	@XmlElement(name = "type", required = true)
-	private RadiographyType type;
+	private RadiographType type;
 
 	@XmlElement(name = "exploration")
 	private UuidAndUri exploration;
@@ -56,9 +56,9 @@ public class RadiographyData implements Serializable {
 	@XmlElement(name = "signs")
 	private List<SignData> signs;
 
-	public RadiographyData() { }
+	public RadiographData() { }
 
-	public RadiographyData(String id, String source, RadiographyType type, UuidAndUri exploration, List<SignData> signs) {
+	public RadiographData(String id, String source, RadiographType type, UuidAndUri exploration, List<SignData> signs) {
 		this.id = id;
 		this.source = source;
 		this.type = type;
@@ -74,7 +74,7 @@ public class RadiographyData implements Serializable {
 		return source;
 	}
 
-	public RadiographyType getType() {
+	public RadiographType getType() {
 		return type;
 	}
 

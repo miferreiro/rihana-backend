@@ -33,7 +33,7 @@
 			<url-pattern>/api/patient/*</url-pattern>
 			<url-pattern>/api/exploration/*</url-pattern>
 			<url-pattern>/api/report/*</url-pattern>
-			<url-pattern>/api/radiography/*</url-pattern>
+			<url-pattern>/api/radiograph/*</url-pattern>
 			<url-pattern>/api/explorationcode/*</url-pattern>
 			<url-pattern>/api/sign/*</url-pattern>
 			<http-method-omission>OPTIONS</http-method-omission>

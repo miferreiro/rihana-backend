@@ -20,7 +20,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.rihana.rest.resource.radiography;
+package org.sing_group.rihana.rest.resource.radiograph;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.APPLICATION_XML;
@@ -43,56 +43,56 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.sing_group.rihana.rest.entity.mapper.spi.RadiographyMapper;
+import org.sing_group.rihana.rest.entity.mapper.spi.RadiographMapper;
 import org.sing_group.rihana.rest.entity.report.ReportData;
 import org.sing_group.rihana.rest.filter.CrossDomain;
-import org.sing_group.rihana.rest.resource.spi.radiography.RadiographyResource;
-import org.sing_group.rihana.service.spi.radiography.RadiographyService;
+import org.sing_group.rihana.rest.resource.spi.radiograph.RadiographResource;
+import org.sing_group.rihana.service.spi.radiograph.RadiographService;
 
 @RolesAllowed({
 	"ADMIN", "USER", "RADIOLOGIST"
 })
-@Path("radiography")
+@Path("radiograph")
 @Produces({
 	APPLICATION_JSON, APPLICATION_XML
 })
 @Consumes({
 	APPLICATION_JSON, APPLICATION_XML
 })
-@Api(value = "radiography")
+@Api(value = "radiograph")
 @Stateless
 @Default
 @CrossDomain(allowedHeaders = "X-Pagination-Total-Items")
-public class DefaultRadiographyResource implements RadiographyResource {
+public class DefaultRadiographResource implements RadiographResource {
 
 	@Inject
-	private RadiographyService service;
+	private RadiographService service;
 
 	@Inject
-	private RadiographyMapper radiographyMapper;
+	private RadiographMapper radiographMapper;
 
 	@Context
 	private UriInfo uriInfo;
 
 	@PostConstruct
 	public void init() {
-		this.radiographyMapper.setRequestURI(this.uriInfo);
+		this.radiographMapper.setRequestURI(this.uriInfo);
 	}
 
 	@Path("{id}")
 	@GET
 	@ApiOperation(
-		value = "Return the data of a radiography.", response = ReportData.class, code = 200
+		value = "Return the data of a radiograph.", response = ReportData.class, code = 200
 	)
 	@ApiResponses(
-		@ApiResponse(code = 400, message = "Unknown radiography: {id}")
+		@ApiResponse(code = 400, message = "Unknown radiograph: {id}")
 	)
 	@Override
-	public Response getRadiography(
+	public Response getRadiograph(
 		@PathParam("id") String id
 	) {
 		return Response
-			.ok(this.radiographyMapper.toRadiographyData(this.service.getRadiography(id)))
+			.ok(this.radiographMapper.toRadiographData(this.service.getRadiograph(id)))
 			.build();
 	}
 }

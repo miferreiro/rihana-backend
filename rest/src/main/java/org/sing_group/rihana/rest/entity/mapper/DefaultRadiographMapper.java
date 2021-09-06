@@ -31,17 +31,17 @@ import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.ws.rs.core.UriInfo;
 
-import org.sing_group.rihana.domain.entities.radiography.Radiography;
+import org.sing_group.rihana.domain.entities.radiograph.Radiograph;
 import org.sing_group.rihana.domain.entities.sign.Sign;
-import org.sing_group.rihana.rest.entity.mapper.spi.RadiographyMapper;
+import org.sing_group.rihana.rest.entity.mapper.spi.RadiographMapper;
 import org.sing_group.rihana.rest.entity.mapper.spi.SignLocationMapper;
 import org.sing_group.rihana.rest.entity.mapper.spi.SignTypeMapper;
-import org.sing_group.rihana.rest.entity.radiography.RadiographyData;
+import org.sing_group.rihana.rest.entity.radiograph.RadiographData;
 import org.sing_group.rihana.rest.entity.sign.SignData;
 import org.sing_group.rihana.rest.resource.exploration.DefaultExplorationResource;
 
 @Default
-public class DefaultRadiographyMapper implements RadiographyMapper {
+public class DefaultRadiographMapper implements RadiographMapper {
 
 	private UriInfo requestURI;
 
@@ -57,11 +57,11 @@ public class DefaultRadiographyMapper implements RadiographyMapper {
 	}
 
 	@Override
-	public RadiographyData toRadiographyData(Radiography radiography) {
-		return new RadiographyData(
-			radiography.getId(), radiography.getSource(), radiography.getType(),
-			fromEntity(requestURI, radiography.getExploration(), DefaultExplorationResource.class),
-			toListSignData(radiography.getSigns())
+	public RadiographData toRadiographData(Radiograph radiograph) {
+		return new RadiographData(
+			radiograph.getId(), radiograph.getSource(), radiograph.getType(),
+			fromEntity(requestURI, radiograph.getExploration(), DefaultExplorationResource.class),
+			toListSignData(radiograph.getSigns())
 		);
 	}
 

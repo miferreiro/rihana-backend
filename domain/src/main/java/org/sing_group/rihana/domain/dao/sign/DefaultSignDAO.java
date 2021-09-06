@@ -65,8 +65,8 @@ public class DefaultSignDAO implements SignDAO {
 
 	@Override
 	public Stream<Sign> listSignsByUser(User user) {
-		final String query = "SELECT s FROM Sign s, Radiography r, Exploration e " +
-			"WHERE s.radiography.id=r.id AND r.exploration.id=e.id AND :login=e.user.login";
+		final String query = "SELECT s FROM Sign s, Radiograph r, Exploration e " +
+			"WHERE s.radiograph.id=r.id AND r.exploration.id=e.id AND :login=e.user.login";
 
 		return this.em.createQuery(query, Sign.class).setParameter("login", user.getLogin()).getResultList().stream();
 	}

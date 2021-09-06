@@ -7,7 +7,7 @@ DELETE FROM `report`;
 DELETE FROM `requestedexploration`;
 DELETE FROM `performedexploration`;
 DELETE FROM `explorationcode`;
-DELETE FROM `radiography`;
+DELETE FROM `radiograph`;
 DELETE FROM `signtype`;
 DELETE FROM `sign`;
 DELETE FROM `signlocation`;

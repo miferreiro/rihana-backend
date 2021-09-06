@@ -59,19 +59,19 @@ public class ExplorationData implements Serializable {
 	@XmlElement(name = "report")
 	private UuidAndUri report;
 
-	@XmlElement(name = "radiographies")
-	private List<UuidAndUri> radiographies;
+	@XmlElement(name = "radiographs")
+	private List<UuidAndUri> radiographs;
 
 	public ExplorationData() { }
 
-	public ExplorationData(String id, String title, Date explorationDate, User user, UuidAndUri patient, UuidAndUri report, List<UuidAndUri> radiographies) {
+	public ExplorationData(String id, String title, Date explorationDate, User user, UuidAndUri patient, UuidAndUri report, List<UuidAndUri> radiographs) {
 		this.id = id;
 		this.title = title;
 		this.explorationDate = explorationDate;
 		this.user = user.getLogin();
 		this.patient = patient;
 		this.report = report;
-		this.radiographies = radiographies;
+		this.radiographs = radiographs;
 	}
 
 	public String getId() {
@@ -98,7 +98,7 @@ public class ExplorationData implements Serializable {
 		return this.report;
 	}
 
-	public List<UuidAndUri> getRadiographies() {
-		return this.radiographies;
+	public List<UuidAndUri> getRadiographs() {
+		return this.radiographs;
 	}
 }

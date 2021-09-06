@@ -20,7 +20,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.rihana.domain.entities.radiography;
+package org.sing_group.rihana.domain.entities.radiograph;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -45,8 +45,8 @@ import org.sing_group.rihana.domain.entities.exploration.Exploration;
 import org.sing_group.rihana.domain.entities.sign.Sign;
 
 @Entity
-@Table(name = "radiography")
-public class Radiography implements Identifiable {
+@Table(name = "radiograph")
+public class Radiograph implements Identifiable {
 
 	@Id
 	@Column(name = "id")
@@ -57,13 +57,13 @@ public class Radiography implements Identifiable {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "type")
-	private RadiographyType type;
+	private RadiographType type;
 
 	@ManyToOne
 	@JoinColumn(name = "exploration_id")
 	private Exploration exploration;
 
-	@OneToMany(mappedBy = "radiography", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "radiograph", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Sign> signs = new ArrayList<>();
 
 	@Column(name = "creation_date", columnDefinition = "DATETIME(3)")
@@ -73,9 +73,9 @@ public class Radiography implements Identifiable {
 	@Column(name = "update_date", columnDefinition = "DATETIME(3)")
 	private Timestamp updateDate;
 
-	Radiography() { }
+	Radiograph() { }
 
-	public Radiography(String source, RadiographyType type) {
+	public Radiograph(String source, RadiographType type) {
 		this.id = UUID.randomUUID().toString();
 		this.source = source;
 		this.type = type;
@@ -95,11 +95,11 @@ public class Radiography implements Identifiable {
 		this.source = source;
 	}
 
-	public RadiographyType getType() {
+	public RadiographType getType() {
 		return type;
 	}
 
-	public void setType(RadiographyType type) {
+	public void setType(RadiographType type) {
 		this.type = type;
 	}
 
@@ -109,11 +109,11 @@ public class Radiography implements Identifiable {
 
 	public void setExploration(Exploration exploration) {
 		if (this.exploration != null) {
-			this.exploration.internalRemoveRadiography(this);
+			this.exploration.internalRemoveRadiograph(this);
 		}
 		this.exploration = exploration;
 		if (exploration != null) {
-			this.exploration.internalAddRadiography(this);
+			this.exploration.internalAddRadiograph(this);
 		}
 	}
 

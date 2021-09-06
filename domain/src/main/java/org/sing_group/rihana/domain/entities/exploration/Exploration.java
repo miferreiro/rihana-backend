@@ -45,7 +45,7 @@ import javax.persistence.Version;
 
 import org.sing_group.rihana.domain.entities.Identifiable;
 import org.sing_group.rihana.domain.entities.patient.Patient;
-import org.sing_group.rihana.domain.entities.radiography.Radiography;
+import org.sing_group.rihana.domain.entities.radiograph.Radiograph;
 import org.sing_group.rihana.domain.entities.report.Report;
 import org.sing_group.rihana.domain.entities.user.User;
 
@@ -75,7 +75,7 @@ public class Exploration implements Identifiable {
 	private Report report;
 
 	@OneToMany(mappedBy = "exploration", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Radiography> radiographies = new ArrayList<>();
+	private List<Radiograph> radiographs = new ArrayList<>();
 
 	@Column(name = "creation_date", columnDefinition = "DATETIME(3)")
 	private Timestamp creationDate;
@@ -96,13 +96,13 @@ public class Exploration implements Identifiable {
 		this.creationDate = this.updateDate = new Timestamp(System.currentTimeMillis());
 	}
 
-	public Exploration(String title, User user, Patient patient, Report report, List<Radiography> radiographies) {
+	public Exploration(String title, User user, Patient patient, Report report, List<Radiograph> radiographs) {
 		id = UUID.randomUUID().toString();
 		this.setTitle(title);
 		this.setUser(user);
 		this.setPatient(patient);
 		this.setReport(report);
-		this.radiographies = radiographies;
+		this.radiographs = radiographs;
 		this.creationDate = this.updateDate = new Timestamp(System.currentTimeMillis());
 	}
 
@@ -165,15 +165,15 @@ public class Exploration implements Identifiable {
 		this.report = report;
 	}
 
-	public void internalRemoveRadiography(Radiography radiography) {
-		this.radiographies.remove(radiography);
+	public void internalRemoveRadiograph(Radiograph radiograph) {
+		this.radiographs.remove(radiograph);
 	}
 
-	public void internalAddRadiography(Radiography radiography) {
-		this.radiographies.add(radiography);
+	public void internalAddRadiograph(Radiograph radiograph) {
+		this.radiographs.add(radiograph);
 	}
 
-	public List<Radiography> getRadiographies() {
-		return radiographies;
+	public List<Radiograph> getRadiographs() {
+		return radiographs;
 	}
 }

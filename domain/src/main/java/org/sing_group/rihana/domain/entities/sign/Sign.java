@@ -37,7 +37,7 @@ import javax.persistence.Table;
 import javax.persistence.Version;
 
 import org.sing_group.rihana.domain.entities.Identifiable;
-import org.sing_group.rihana.domain.entities.radiography.Radiography;
+import org.sing_group.rihana.domain.entities.radiograph.Radiograph;
 
 @Entity
 @Table(name = "sign")
@@ -52,8 +52,8 @@ public class Sign implements Identifiable {
 	private SignType type;
 
 	@ManyToOne
-	@JoinColumn(name = "radiography_id")
-	private Radiography radiography;
+	@JoinColumn(name = "radiograph_id")
+	private Radiograph radiograph;
 
 	@OneToOne(mappedBy = "sign", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
 	private SignLocation signLocation;
@@ -124,17 +124,17 @@ public class Sign implements Identifiable {
 		this.contrast = contrast;
 	}
 
-	public Radiography getRadiography() {
-		return radiography;
+	public Radiograph getRadiograph() {
+		return radiograph;
 	}
 
-	public void setRadiography(Radiography radiography) {
-		if (this.radiography != null) {
-			this.radiography.internalRemoveSign(this);
+	public void setRadiograph(Radiograph radiograph) {
+		if (this.radiograph != null) {
+			this.radiograph.internalRemoveSign(this);
 		}
-		this.radiography = radiography;
-		if (radiography != null) {
-			this.radiography.internalAddSign(this);
+		this.radiograph = radiograph;
+		if (radiograph != null) {
+			this.radiograph.internalAddSign(this);
 		}
 	}
 }

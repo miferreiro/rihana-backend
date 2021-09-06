@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Domain
+ * REST
  * %%
  * Copyright (C) 2021 David A. Ruano Ordás, José Ramón Méndez Reboredo,
  * 		Miguel Ferreiro Díaz
@@ -20,8 +20,16 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.rihana.domain.entities.radiography;
+package org.sing_group.rihana.rest.entity.mapper.spi;
 
-public enum RadiographyType {
-	PA, LAT, AP
+import javax.ws.rs.core.UriInfo;
+
+import org.sing_group.rihana.domain.entities.radiograph.Radiograph;
+import org.sing_group.rihana.rest.entity.radiograph.RadiographData;
+
+public interface RadiographMapper {
+
+	void setRequestURI(UriInfo requestURI);
+
+	RadiographData toRadiographData(Radiograph radiograph);
 }

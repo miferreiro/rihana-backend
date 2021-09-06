@@ -98,9 +98,9 @@ CREATE TABLE `performedexploration` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Table structure for table `radiography`
+-- Table structure for table `radiograph`
 --
-CREATE TABLE `radiography` (
+CREATE TABLE `radiograph` (
     `id`                varchar(255)    NOT NULL,
     `source`            varchar(255)    NOT NULL,
     `type`              varchar(255)    NOT NULL,
@@ -128,14 +128,14 @@ CREATE TABLE `signtype` (
 CREATE TABLE `sign` (
     `id`                varchar(255)    NOT NULL,
     `signtype_code`     varchar(255)    NOT NULL,
-    `radiography_id`    varchar(255)    NOT NULL,
+    `radiograph_id`    varchar(255)    NOT NULL,
     `brightness`        int             NOT NULL,
     `contrast`          int             NOT NULL,
     `creation_date`     datetime(3)     DEFAULT NULL,
     `update_date`       datetime(3)     DEFAULT NULL,
     PRIMARY KEY (`id`),
     CONSTRAINT FOREIGN KEY (`signtype_code`) REFERENCES `signtype` (`code`),
-    CONSTRAINT FOREIGN KEY (`radiography_id`) REFERENCES `radiography` (`id`)
+    CONSTRAINT FOREIGN KEY (`radiograph_id`) REFERENCES `radiograph` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --

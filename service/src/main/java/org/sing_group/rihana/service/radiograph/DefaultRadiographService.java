@@ -1,6 +1,6 @@
 /*-
  * #%L
- * REST
+ * Service
  * %%
  * Copyright (C) 2021 David A. Ruano Ordás, José Ramón Méndez Reboredo,
  * 		Miguel Ferreiro Díaz
@@ -20,16 +20,25 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.rihana.rest.entity.mapper.spi;
+package org.sing_group.rihana.service.radiograph;
 
-import javax.ws.rs.core.UriInfo;
+import javax.annotation.security.PermitAll;
+import javax.ejb.Stateless;
+import javax.inject.Inject;
 
-import org.sing_group.rihana.domain.entities.radiography.Radiography;
-import org.sing_group.rihana.rest.entity.radiography.RadiographyData;
+import org.sing_group.rihana.domain.dao.spi.radiograph.RadiographDAO;
+import org.sing_group.rihana.domain.entities.radiograph.Radiograph;
+import org.sing_group.rihana.service.spi.radiograph.RadiographService;
 
-public interface RadiographyMapper {
+@Stateless
+@PermitAll
+public class DefaultRadiographService implements RadiographService {
 
-	void setRequestURI(UriInfo requestURI);
+	@Inject
+	private RadiographDAO radiographDAO;
 
-	RadiographyData toRadiographyData(Radiography radiography);
+	@Override
+	public Radiograph getRadiograph(String id) {
+		return radiographDAO.get(id);
+	}
 }

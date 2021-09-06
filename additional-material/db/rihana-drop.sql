@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS `report`;
 DROP TABLE IF EXISTS `requestedexploration`;
 DROP TABLE IF EXISTS `performedexploration`;
 DROP TABLE IF EXISTS `explorationcode`;
-DROP TABLE IF EXISTS `radiography`;
+DROP TABLE IF EXISTS `radiograph`;
 DROP TABLE IF EXISTS `signtype`;
 DROP TABLE IF EXISTS `sign`;
 DROP TABLE IF EXISTS `signlocation`;

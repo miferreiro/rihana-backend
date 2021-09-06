@@ -20,25 +20,14 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.rihana.service.radiography;
+package org.sing_group.rihana.service.spi.radiograph;
 
-import javax.annotation.security.PermitAll;
-import javax.ejb.Stateless;
-import javax.inject.Inject;
+import javax.ejb.Local;
 
-import org.sing_group.rihana.domain.dao.spi.radiography.RadiographyDAO;
-import org.sing_group.rihana.domain.entities.radiography.Radiography;
-import org.sing_group.rihana.service.spi.radiography.RadiographyService;
+import org.sing_group.rihana.domain.entities.radiograph.Radiograph;
 
-@Stateless
-@PermitAll
-public class DefaultRadiographyService implements RadiographyService {
+@Local
+public interface RadiographService {
 
-	@Inject
-	private RadiographyDAO radiographyDAO;
-
-	@Override
-	public Radiography getRadiography(String id) {
-		return radiographyDAO.get(id);
-	}
+	Radiograph getRadiograph(String id);
 }

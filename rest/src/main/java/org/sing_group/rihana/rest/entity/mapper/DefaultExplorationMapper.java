@@ -33,7 +33,7 @@ import org.sing_group.rihana.rest.entity.exploration.ExplorationData;
 import org.sing_group.rihana.rest.entity.exploration.ExplorationEditionData;
 import org.sing_group.rihana.rest.entity.mapper.spi.ExplorationMapper;
 import org.sing_group.rihana.rest.resource.patient.DefaultPatientResource;
-import org.sing_group.rihana.rest.resource.radiography.DefaultRadiographyResource;
+import org.sing_group.rihana.rest.resource.radiograph.DefaultRadiographResource;
 import org.sing_group.rihana.rest.resource.report.DefaultReportResource;
 
 @Default
@@ -52,7 +52,7 @@ public class DefaultExplorationMapper implements ExplorationMapper {
 			exploration.getId(), exploration.getTitle(), exploration.getDate(), exploration.getUser(),
 			fromEntity(requestURI, exploration.getPatient(), DefaultPatientResource.class),
 			fromEntity(requestURI, exploration.getReport(), DefaultReportResource.class),
-			fromEntities(requestURI, exploration.getRadiographies(), DefaultRadiographyResource.class)
+			fromEntities(requestURI, exploration.getRadiographs(), DefaultRadiographResource.class)
 		);
 	}
 
