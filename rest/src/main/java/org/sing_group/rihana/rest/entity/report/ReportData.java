@@ -43,10 +43,10 @@ public class ReportData implements Serializable {
 	@XmlElement(name = "id", required = true)
 	private String id;
 
-	@XmlElement(name = "reportN", required = true)
+	@XmlElement(name = "reportNumber", required = true)
 	private String reportN;
 
-	@XmlElement(name = "completion_date", required = true)
+	@XmlElement(name = "completionDate", required = true)
 	private Date completion_date;
 
 	@XmlElement(name = "applicant", required = true)
@@ -61,7 +61,7 @@ public class ReportData implements Serializable {
 	@XmlElement(name = "bed", required = true)
 	private String bed;
 
-	@XmlElement(name = "clinical_data", required = true)
+	@XmlElement(name = "clinicalData", required = true)
 	private String clinical_data;
 
 	@XmlElement(name = "findings", required = true)
@@ -73,18 +73,18 @@ public class ReportData implements Serializable {
 	@XmlElement(name = "exploration", required = true)
 	private UuidAndUri exploration;
 
-	@XmlElement(name = "requestedExploration")
-	private List<RequestedExplorationData> requestedExploration;
+	@XmlElement(name = "requestedExplorations")
+	private List<RequestedExplorationData> requestedExplorations;
 
-	@XmlElement(name = "performedExploration")
-	private List<PerformedExplorationData> performedExploration;
+	@XmlElement(name = "performedExplorations")
+	private List<PerformedExplorationData> performedExplorations;
 
 	public ReportData() { }
 
 	public ReportData(String id, String reportN, Date completion_date, String applicant, String priority,
 					  String status, String bed, String clinical_data, String findings, String conclusions,
-					  UuidAndUri exploration, List<RequestedExplorationData> requestedExploration,
-					  List<PerformedExplorationData> performedExploration) {
+					  UuidAndUri exploration, List<RequestedExplorationData> requestedExplorations,
+					  List<PerformedExplorationData> performedExplorations) {
 		this.id = id;
 		this.reportN = reportN;
 		this.completion_date = completion_date;
@@ -96,8 +96,8 @@ public class ReportData implements Serializable {
 		this.findings = findings;
 		this.conclusions = conclusions;
 		this.exploration = exploration;
-		this.requestedExploration = requestedExploration;
-		this.performedExploration = performedExploration;
+		this.requestedExplorations = requestedExplorations;
+		this.performedExplorations = performedExplorations;
 	}
 
 	public String getId() {
@@ -144,11 +144,11 @@ public class ReportData implements Serializable {
 		return exploration;
 	}
 
-	public List<RequestedExplorationData> getRequestedExploration() {
-		return requestedExploration;
+	public List<RequestedExplorationData> getRequestedExplorations() {
+		return requestedExplorations;
 	}
 
-	public List<PerformedExplorationData> getPerformedExploration() {
-		return performedExploration;
+	public List<PerformedExplorationData> getPerformedExplorations() {
+		return performedExplorations;
 	}
 }

@@ -53,14 +53,18 @@ public class PerformedExplorationData implements Serializable {
 	@XmlElement(name = "code", required = true)
 	private String code;
 
+	@XmlElement(name = "description", required = true)
+	private String description;
+
 	public PerformedExplorationData() { }
 
-	public PerformedExplorationData(String id, Date date, String portable, String surgery, String code) {
+	public PerformedExplorationData(String id, Date date, String portable, String surgery, String code, String description) {
 		this.id = id;
 		this.date = date;
 		this.portable = portable;
 		this.surgery = surgery;
 		this.code = code;
+		this.description = description;
 	}
 
 	public String getId() {
@@ -81,5 +85,9 @@ public class PerformedExplorationData implements Serializable {
 
 	public String getCode() {
 		return code;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 }

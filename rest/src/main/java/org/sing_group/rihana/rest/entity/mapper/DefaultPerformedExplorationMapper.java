@@ -35,6 +35,7 @@ public class DefaultPerformedExplorationMapper implements PerformedExplorationMa
 	public PerformedExplorationData toPerformedExplorationData(PerformedExploration performedExploration) {
 		return new PerformedExplorationData(performedExploration.getId(), performedExploration.getDate(),
 			performedExploration.getPortable(), performedExploration.getSurgery(),
-			performedExploration.getExplorationCode().getCode());
+			performedExploration.getExplorationCode().getCode(),
+			performedExploration.getExplorationCode().getDescription());
 	}
 }

@@ -34,6 +34,6 @@ public class DefaultRequestedExplorationMapper implements RequestedExplorationMa
 	@Override
 	public RequestedExplorationData toRequestedExplorationData(RequestedExploration requestedExploration) {
 		return new RequestedExplorationData(requestedExploration.getId(), requestedExploration.getDate(),
-			requestedExploration.getExplorationCode().getCode());
+			requestedExploration.getExplorationCode().getCode(), requestedExploration.getExplorationCode().getDescription());
 	}
 }
