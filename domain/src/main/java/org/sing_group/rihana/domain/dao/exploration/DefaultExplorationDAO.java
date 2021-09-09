@@ -22,18 +22,21 @@
  */
 package org.sing_group.rihana.domain.dao.exploration;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.transaction.Transactional;
 
 import org.sing_group.rihana.domain.dao.DAOHelper;
 import org.sing_group.rihana.domain.dao.ListingOptions;
 import org.sing_group.rihana.domain.dao.spi.exploration.ExplorationDAO;
 import org.sing_group.rihana.domain.entities.exploration.Exploration;
+import org.sing_group.rihana.domain.entities.sign.SignType;
 import org.sing_group.rihana.domain.entities.user.User;
 
 @Default
@@ -66,16 +69,8 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 	}
 
 	@Override
-	public Stream<Exploration> listExplorationsByUser(int page, int pageSize, User user) {
-		final ListingOptions listingOptions = ListingOptions.forPage(page, pageSize)
-			.sortedBy(ListingOptions.SortField.descending("creationDate"));
-
-		// Checks if a patient is sent
-		if (user != null) {
-			return dh.listBy("user", user, listingOptions).stream();
-		} else {
-			return dh.list(listingOptions).stream();
-		}
+	public Stream<Exploration> listExplorationsByUser(Integer page, Integer pageSize, User user, List<SignType> signTypeList) {
+		return this.listExplorations(page, pageSize, user, signTypeList).stream();
 	}
 
 	@Override
@@ -86,6 +81,11 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 	@Override
 	public int countExplorationsByUser(User user) {
 		return dh.listBy("user", user).size();
+	}
+
+	@Override
+	public int countExplorationsByUserAndSignTypes(User user, List<SignType> signTypeList) {
+		return this.listExplorations(null,null, user, signTypeList).size();
 	}
 
 	@Override
@@ -101,5 +101,87 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 	@Override
 	public void delete(Exploration exploration) {
 		this.dh.remove(exploration);
+	}
+
+	private List<Exploration> listExplorations(Integer page, Integer pageSize, User user, List<SignType> signTypeList) {
+
+		// Checks if a user is sent
+		if (signTypeList.size() > 0) {
+
+			StringBuilder stringBuilder = new StringBuilder("");
+			int count = 0;
+			String querySignType = "select tt.code from Exploration ee LEFT JOIN ee.radiographs rr LEFT JOIN rr.signs ss LEFT JOIN ss.type tt WHERE ee.id=e.id";
+
+			if (signTypeList.size() > 0) {
+				stringBuilder.append(" AND (");
+			}
+
+			for (SignType signType: signTypeList) {
+				stringBuilder.append("?").append(count).append(" IN (").append(querySignType).append(")");
+
+				count++;
+				if (count < signTypeList.size()) {
+					stringBuilder.append(" AND ");
+				}
+			}
+
+			if (signTypeList.size() > 0) {
+				stringBuilder.append(")");
+			}
+
+			String queryExplorations;
+			Query query;
+
+			if (user != null) {
+				queryExplorations = "SELECT e " +
+					"FROM Exploration e LEFT JOIN e.radiographs r LEFT JOIN r.signs s LEFT JOIN s.type t " +
+					"WHERE e.user.login=:login" +
+					stringBuilder +
+					" GROUP BY e.id ORDER BY e.creationDate";
+
+				query = this.em.createQuery(queryExplorations, Exploration.class);
+				query.setParameter("login", user.getLogin());
+			} else {
+				queryExplorations = "SELECT e " +
+					"FROM Exploration e LEFT JOIN e.radiographs r LEFT JOIN r.signs s LEFT JOIN s.type t " +
+					"WHERE " +
+					stringBuilder +
+					" GROUP BY e.id ORDER BY e.creationDate";
+
+				query = this.em.createQuery(queryExplorations, Exploration.class);
+			}
+
+			count = 0;
+			for (SignType signType: signTypeList) {
+				query.setParameter(count, signType.getCode());
+				count++;
+			}
+
+			if (page != null && pageSize != null) {
+				return query.setFirstResult((page - 1) * pageSize).setMaxResults(pageSize).getResultList();
+			} else {
+				return query.getResultList();
+			}
+		} else {
+
+			if (user != null) {
+				if (page != null && pageSize != null) {
+					final ListingOptions listingOptions = ListingOptions.forPage(page, pageSize)
+						.sortedBy(ListingOptions.SortField.descending("creationDate"));
+					return dh.listBy("user", user, listingOptions);
+				} else {
+					return dh.listBy("user", user);
+				}
+
+			} else {
+				if (page != null && pageSize != null) {
+					final ListingOptions listingOptions = ListingOptions.forPage(page, pageSize)
+						.sortedBy(ListingOptions.SortField.descending("creationDate"));
+					return dh.list(listingOptions);
+				} else {
+					return dh.list();
+				}
+			}
+		}
 	}
 }

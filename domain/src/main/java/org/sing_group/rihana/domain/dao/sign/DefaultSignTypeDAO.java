@@ -58,6 +58,12 @@ public class DefaultSignTypeDAO implements SignTypeDAO {
 	}
 
 	@Override
+	public SignType get(String code) {
+		return dh.get(code)
+			.orElseThrow(() -> new IllegalArgumentException("Unknown sign type: " + code));
+	}
+
+	@Override
 	public Stream<SignType> listSignTypes() {
 		return dh.list().stream();
 	}

@@ -22,13 +22,15 @@
  */
 package org.sing_group.rihana.rest.resource.spi.exploration;
 
+import java.util.List;
+
 import javax.ejb.Local;
 import javax.ws.rs.core.Response;
 
 @Local
 public interface ExplorationResource {
 
-	Response listExplorationsByUser(String userId, int page, int pageSize);
+	Response listExplorations(String userId, int page, int pageSize, List<String> signTypes);
 
 	Response delete(String id);
 }

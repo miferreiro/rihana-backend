@@ -25,6 +25,10 @@ package org.sing_group.rihana.rest.resource.exploration;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.APPLICATION_XML;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -46,6 +50,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.sing_group.rihana.domain.entities.exploration.Exploration;
+import org.sing_group.rihana.domain.entities.sign.SignType;
 import org.sing_group.rihana.domain.entities.user.User;
 import org.sing_group.rihana.rest.entity.exploration.ExplorationData;
 import org.sing_group.rihana.rest.entity.mapper.spi.ExplorationMapper;
@@ -53,6 +58,7 @@ import org.sing_group.rihana.rest.filter.CrossDomain;
 import org.sing_group.rihana.rest.mapper.SecurityExceptionMapper;
 import org.sing_group.rihana.rest.resource.spi.exploration.ExplorationResource;
 import org.sing_group.rihana.service.spi.exploration.ExplorationService;
+import org.sing_group.rihana.service.spi.sign.SignTypeService;
 import org.sing_group.rihana.service.spi.user.UserService;
 
 
@@ -79,6 +85,9 @@ public class DefaultExplorationResource implements ExplorationResource {
 	private UserService userService;
 
 	@Inject
+	private SignTypeService signTypeService;
+
+	@Inject
 	private ExplorationMapper explorationMapper;
 
 	@Context
@@ -91,27 +100,35 @@ public class DefaultExplorationResource implements ExplorationResource {
 
 	@GET
 	@ApiOperation(
-		value = "Return the data of all explorations or explorations of a specified user.",
+		value = "Return the data of all explorations or explorations of a specified user. In addition, can be filtered by the sign types detected in the explorations",
 		response = ExplorationData.class, responseContainer = "List", code = 200
 	)
 	@ApiResponses(
 		@ApiResponse(code = 400, message = "Invalid page or pageSize. They must be an integer.")
 	)
 	@Override
-	public Response listExplorationsByUser(
-		@QueryParam("user") String userId, @QueryParam("page") int page, @QueryParam("pageSize") int pageSize
+	public Response listExplorations(
+		@QueryParam("user") String userId, @QueryParam("page") int page, @QueryParam("pageSize") int pageSize, @QueryParam("signType") List<String> signTypes
 	) {
 		User user = null;
 		int countExplorations;
+		List<SignType> signTypeList;
+
+		if (signTypes == null || signTypes.size() == 0) {
+			signTypeList = new ArrayList<>();
+		} else {
+			signTypeList = Arrays.asList(signTypes.stream().map(signType -> this.signTypeService.get(signType)).toArray(SignType[]::new));
+		}
+
 		if (userId == null || userId.equals("")) {
 			countExplorations = this.service.countExplorations();
 		} else {
 			user = this.userService.get(userId);
-			countExplorations = this.service.countExplorationsByUser(user);
+			countExplorations = this.service.countExplorationsByUserAndSignTypes(user, signTypeList);
 		}
 
 		return Response.ok(
-			this.service.listExplorationsByUser(page, pageSize, user)
+			this.service.listExplorationsByUser(page, pageSize, user, signTypeList)
 				.map(this.explorationMapper::toExplorationData).toArray(ExplorationData[]::new)
 		).header("X-Pagination-Total-Items", countExplorations).build();
 	}

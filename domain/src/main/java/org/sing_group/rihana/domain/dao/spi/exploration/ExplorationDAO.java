@@ -22,20 +22,24 @@
  */
 package org.sing_group.rihana.domain.dao.spi.exploration;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.sing_group.rihana.domain.entities.exploration.Exploration;
+import org.sing_group.rihana.domain.entities.sign.SignType;
 import org.sing_group.rihana.domain.entities.user.User;
 
 public interface ExplorationDAO {
 
 	Exploration getExploration(String id);
 
-	Stream<Exploration> listExplorationsByUser(int page, int pageSize, User user);
+	Stream<Exploration> listExplorationsByUser(Integer page, Integer pageSize, User user, List<SignType> signTypeList);
 
 	int countExplorations();
 
 	int countExplorationsByUser(User user);
+
+	int countExplorationsByUserAndSignTypes(User user, List<SignType> signTypeList);
 
 	Exploration create(Exploration exploration);
 

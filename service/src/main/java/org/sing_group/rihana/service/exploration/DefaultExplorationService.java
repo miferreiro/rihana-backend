@@ -22,6 +22,7 @@
  */
 package org.sing_group.rihana.service.exploration;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import javax.annotation.security.PermitAll;
@@ -30,6 +31,7 @@ import javax.inject.Inject;
 
 import org.sing_group.rihana.domain.dao.spi.exploration.ExplorationDAO;
 import org.sing_group.rihana.domain.entities.exploration.Exploration;
+import org.sing_group.rihana.domain.entities.sign.SignType;
 import org.sing_group.rihana.domain.entities.user.User;
 import org.sing_group.rihana.service.spi.exploration.ExplorationService;
 
@@ -46,8 +48,8 @@ public class DefaultExplorationService implements ExplorationService {
 	}
 
 	@Override
-	public Stream<Exploration> listExplorationsByUser(int page, int pageSize, User user) {
-		return explorationDao.listExplorationsByUser(page, pageSize, user);
+	public Stream<Exploration> listExplorationsByUser(int page, int pageSize, User user, List<SignType> signTypeList) {
+		return explorationDao.listExplorationsByUser(page, pageSize, user, signTypeList);
 	}
 
 	@Override
@@ -58,6 +60,11 @@ public class DefaultExplorationService implements ExplorationService {
 	@Override
 	public int countExplorationsByUser(User user) {
 		return explorationDao.countExplorationsByUser(user);
+	}
+
+	@Override
+	public int countExplorationsByUserAndSignTypes(User user, List<SignType> signTypeList) {
+		return explorationDao.countExplorationsByUserAndSignTypes(user, signTypeList);
 	}
 
 	@Override

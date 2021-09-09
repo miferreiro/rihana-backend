@@ -31,5 +31,7 @@ import org.sing_group.rihana.domain.entities.sign.SignType;
 @Local
 public interface SignTypeService {
 
+	SignType get(String code);
+
 	Stream<SignType> listSignTypes();
 }

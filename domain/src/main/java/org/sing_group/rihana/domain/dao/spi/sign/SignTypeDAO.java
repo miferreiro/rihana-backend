@@ -28,5 +28,7 @@ import org.sing_group.rihana.domain.entities.sign.SignType;
 
 public interface SignTypeDAO {
 
+	SignType get(String code);
+
 	Stream<SignType> listSignTypes();
 }
