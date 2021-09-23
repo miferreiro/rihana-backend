@@ -59,6 +59,9 @@ public class Radiograph implements Identifiable {
 	@Column(name = "type")
 	private RadiographType type;
 
+	@Column(name = "observations")
+	private String observations;
+
 	@ManyToOne
 	@JoinColumn(name = "exploration_id")
 	private Exploration exploration;
@@ -75,10 +78,11 @@ public class Radiograph implements Identifiable {
 
 	Radiograph() { }
 
-	public Radiograph(String source, RadiographType type) {
+	public Radiograph(String source, RadiographType type, String observations) {
 		this.id = UUID.randomUUID().toString();
 		this.source = source;
 		this.type = type;
+		this.observations = observations;
 		this.creationDate = this.updateDate = new Timestamp(System.currentTimeMillis());
 	}
 
@@ -101,6 +105,14 @@ public class Radiograph implements Identifiable {
 
 	public void setType(RadiographType type) {
 		this.type = type;
+	}
+
+	public String getObservations() {
+		return observations;
+	}
+
+	public void setObservations(String observations) {
+		this.observations = observations;
 	}
 
 	public Exploration getExploration() {

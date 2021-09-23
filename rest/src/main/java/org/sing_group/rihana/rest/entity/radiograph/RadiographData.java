@@ -50,6 +50,9 @@ public class RadiographData implements Serializable {
 	@XmlElement(name = "type", required = true)
 	private RadiographType type;
 
+	@XmlElement(name = "observations", required = true)
+	private String observations;
+
 	@XmlElement(name = "exploration")
 	private UuidAndUri exploration;
 
@@ -58,10 +61,12 @@ public class RadiographData implements Serializable {
 
 	public RadiographData() { }
 
-	public RadiographData(String id, String source, RadiographType type, UuidAndUri exploration, List<SignData> signs) {
+	public RadiographData(String id, String source, RadiographType type, String observations, UuidAndUri exploration,
+						  List<SignData> signs) {
 		this.id = id;
 		this.source = source;
 		this.type = type;
+		this.observations = observations;
 		this.exploration = exploration;
 		this.signs = signs;
 	}
@@ -76,6 +81,10 @@ public class RadiographData implements Serializable {
 
 	public RadiographType getType() {
 		return type;
+	}
+
+	public String getObservations() {
+		return observations;
 	}
 
 	public UuidAndUri getExploration() {

@@ -59,7 +59,7 @@ public class DefaultRadiographMapper implements RadiographMapper {
 	@Override
 	public RadiographData toRadiographData(Radiograph radiograph) {
 		return new RadiographData(
-			radiograph.getId(), radiograph.getSource(), radiograph.getType(),
+			radiograph.getId(), radiograph.getSource(), radiograph.getType(), radiograph.getObservations(),
 			fromEntity(requestURI, radiograph.getExploration(), DefaultExplorationResource.class),
 			toListSignData(radiograph.getSigns())
 		);
