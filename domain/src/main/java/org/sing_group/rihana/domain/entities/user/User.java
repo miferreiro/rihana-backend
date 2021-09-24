@@ -29,6 +29,7 @@ import static org.sing_group.fluent.checker.Checks.requirePattern;
 import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,12 +65,20 @@ public class User implements Serializable {
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Exploration> explorations = new ArrayList<>();
 
+	@Column(name = "deleted", columnDefinition="BIT(1) DEFAULT FALSE")
+	private boolean deleted;
+
+	@Column(name = "delete_date", columnDefinition = "DATETIME(3)")
+	private Timestamp deleteDate;
+
 	User() { }
 
 	public User(String login, String password, Role role) {
 		this.setLogin(login);
 		this.setPassword(password);
 		this.setRole(role);
+		this.setDeleted(false);
+		this.deleteDate = null;
 	}
 
 	public String getLogin() {
@@ -128,5 +137,19 @@ public class User implements Serializable {
 
 	public void removeExploration(Exploration exploration) {
 		exploration.setUser(null);
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+
+		if(this.deleted) {
+			this.deleteDate = new Timestamp(System.currentTimeMillis());;
+		} else {
+			this.deleteDate = null;
+		}
 	}
 }

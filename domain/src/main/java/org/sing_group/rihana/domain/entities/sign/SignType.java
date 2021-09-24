@@ -23,6 +23,7 @@
 package org.sing_group.rihana.domain.entities.sign;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +56,12 @@ public class SignType implements Serializable {
 	@OneToMany(mappedBy = "type", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Sign> signs = new ArrayList<>();
 
+	@Column(name = "deleted", columnDefinition="BIT(1) DEFAULT FALSE")
+	private boolean deleted;
+
+	@Column(name = "delete_date", columnDefinition = "DATETIME(3)")
+	private Timestamp deleteDate;
+
 	SignType() { }
 
 	public SignType(String code, String name, String description, int target) {
@@ -62,6 +69,8 @@ public class SignType implements Serializable {
 		this.setName(name);
 		this.setDescription(description);
 		this.setTarget(target);
+		this.setDeleted(false);
+		this.deleteDate = null;
 	}
 
 	public String getCode() {
@@ -106,5 +115,13 @@ public class SignType implements Serializable {
 
 	public List<Sign> getSigns() {
 		return signs;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 }

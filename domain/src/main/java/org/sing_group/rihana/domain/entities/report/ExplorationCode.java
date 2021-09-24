@@ -24,6 +24,7 @@
 package org.sing_group.rihana.domain.entities.report;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,11 +54,19 @@ public class ExplorationCode implements Serializable {
 	@OneToMany(mappedBy = "explorationCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<PerformedExploration> performedExplorations = new ArrayList<>();
 
+	@Column(name = "deleted", columnDefinition="BIT(1) DEFAULT FALSE")
+	private boolean deleted;
+
+	@Column(name = "delete_date", columnDefinition = "DATETIME(3)")
+	private Timestamp deleteDate;
+
 	ExplorationCode() { }
 
 	public ExplorationCode(String code, String description) {
 		this.code = code;
 		this.description = description;
+		this.setDeleted(false);
+		this.deleteDate = null;
 	}
 
 	public String getCode() {
@@ -98,5 +107,13 @@ public class ExplorationCode implements Serializable {
 
 	public List<PerformedExploration> getPerformedExplorations() {
 		return performedExplorations;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 }

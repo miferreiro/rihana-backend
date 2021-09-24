@@ -97,6 +97,12 @@ public class Report implements Identifiable {
 	@Column(name = "update_date", columnDefinition = "DATETIME(3)")
 	private Timestamp updateDate;
 
+	@Column(name = "deleted", columnDefinition="BIT(1) DEFAULT FALSE")
+	private boolean deleted;
+
+	@Column(name = "delete_date", columnDefinition = "DATETIME(3)")
+	private Timestamp deleteDate;
+
 	Report() { }
 
 	public Report(String reportN, Timestamp completionDate, String applicant, String priority, String status,
@@ -113,6 +119,8 @@ public class Report implements Identifiable {
 		this.conclusions = conclusions;
 		this.exploration = exploration;
 		this.creationDate = this.updateDate = new Timestamp(System.currentTimeMillis());
+		this.setDeleted(false);
+		this.deleteDate = null;
 	}
 
 	@Override
@@ -223,5 +231,13 @@ public class Report implements Identifiable {
 
 	public List<PerformedExploration> getPerformedExplorations() {
 		return performedExplorations;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 }

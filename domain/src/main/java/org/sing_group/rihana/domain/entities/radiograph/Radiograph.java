@@ -76,6 +76,12 @@ public class Radiograph implements Identifiable {
 	@Column(name = "update_date", columnDefinition = "DATETIME(3)")
 	private Timestamp updateDate;
 
+	@Column(name = "deleted", columnDefinition="BIT(1) DEFAULT FALSE")
+	private boolean deleted;
+
+	@Column(name = "delete_date", columnDefinition = "DATETIME(3)")
+	private Timestamp deleteDate;
+
 	Radiograph() { }
 
 	public Radiograph(String source, RadiographType type, String observations) {
@@ -84,6 +90,8 @@ public class Radiograph implements Identifiable {
 		this.type = type;
 		this.observations = observations;
 		this.creationDate = this.updateDate = new Timestamp(System.currentTimeMillis());
+		this.setDeleted(false);
+		this.deleteDate = null;
 	}
 
 	@Override
@@ -139,5 +147,13 @@ public class Radiograph implements Identifiable {
 
 	public List<Sign> getSigns() {
 		return signs;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 }

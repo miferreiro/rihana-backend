@@ -60,13 +60,13 @@ public class DefaultSignDAO implements SignDAO {
 
 	@Override
 	public Stream<Sign> listSigns() {
-		return dh.list().stream();
+		return dh.listBy("deleted", 0).stream();
 	}
 
 	@Override
 	public Stream<Sign> listSignsByUser(User user) {
 		final String query = "SELECT s FROM Sign s, Radiograph r, Exploration e " +
-			"WHERE s.radiograph.id=r.id AND r.exploration.id=e.id AND :login=e.user.login";
+			"WHERE s.radiograph.id=r.id AND r.exploration.id=e.id AND :login=e.user.login AND s.deleted=0";
 
 		return this.em.createQuery(query, Sign.class).setParameter("login", user.getLogin()).getResultList().stream();
 	}

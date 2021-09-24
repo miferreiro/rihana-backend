@@ -64,7 +64,7 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 
 	@Override
 	public Exploration getExploration(String id) {
-		return this.dh.get(id)
+		return this.dh.get(id).filter(e -> !e.isDeleted())
 			.orElseThrow(() -> new IllegalArgumentException("Unknown exploration: " + id));
 	}
 
@@ -75,12 +75,13 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 
 	@Override
 	public int countExplorations() {
-		return dh.list().size();
+		return dh.listBy("deleted", 0).size();
 	}
 
 	@Override
 	public int countExplorationsByUser(User user) {
-		return dh.listBy("user", user).size();
+		String queryString = "SELECT e FROM Exploration e LEFT JOIN e.user u WHERE e.deleted=0 AND u.login=:login";
+		return em.createQuery(queryString).setParameter("login", user.getLogin()).getResultList().size();
 	}
 
 	@Override
@@ -100,7 +101,8 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 
 	@Override
 	public void delete(Exploration exploration) {
-		this.dh.remove(exploration);
+		exploration.setDeleted(true);
+		this.dh.update(exploration);
 	}
 
 	private List<Exploration> listExplorations(Integer page, Integer pageSize, User user, List<SignType> signTypeList) {
@@ -110,7 +112,7 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 
 			StringBuilder stringBuilder = new StringBuilder("");
 			int count = 0;
-			String querySignType = "select tt.code from Exploration ee LEFT JOIN ee.radiographs rr LEFT JOIN rr.signs ss LEFT JOIN ss.type tt WHERE ee.id=e.id";
+			String querySignType = "SELECT tt.code from Exploration ee LEFT JOIN ee.radiographs rr LEFT JOIN rr.signs ss LEFT JOIN ss.type tt WHERE ee.id=e.id";
 
 			if (signTypeList.size() > 0) {
 				stringBuilder.append(" AND (");
@@ -135,7 +137,7 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 			if (user != null) {
 				queryExplorations = "SELECT e " +
 					"FROM Exploration e LEFT JOIN e.radiographs r LEFT JOIN r.signs s LEFT JOIN s.type t " +
-					"WHERE e.user.login=:login" +
+					"WHERE e.user.login=:login AND e.deleted=0" +
 					stringBuilder +
 					" GROUP BY e.id ORDER BY e.creationDate";
 
@@ -144,7 +146,7 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 			} else {
 				queryExplorations = "SELECT e " +
 					"FROM Exploration e LEFT JOIN e.radiographs r LEFT JOIN r.signs s LEFT JOIN s.type t " +
-					"WHERE " +
+					"WHERE e.deleted=0 " +
 					stringBuilder +
 					" GROUP BY e.id ORDER BY e.creationDate";
 

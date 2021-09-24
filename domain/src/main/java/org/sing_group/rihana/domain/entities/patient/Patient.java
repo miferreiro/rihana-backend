@@ -80,6 +80,12 @@ public class Patient implements Identifiable {
 	@Column(name = "update_date", columnDefinition = "DATETIME(3)")
 	private Timestamp updateDate;
 
+	@Column(name = "deleted", columnDefinition="BIT(1) DEFAULT FALSE")
+	private boolean deleted;
+
+	@Column(name = "delete_date", columnDefinition = "DATETIME(3)")
+	private Timestamp deleteDate;
+
 	Patient() { }
 
 	public Patient(String patientID, SEX sex, Date birthdate) {
@@ -88,6 +94,8 @@ public class Patient implements Identifiable {
 		this.setSex(sex);
 		this.setBirthdate(birthdate);
 		this.creationDate = this.updateDate = new Timestamp(System.currentTimeMillis());
+		this.setDeleted(false);
+		this.deleteDate = null;
 	}
 
 	@Override
@@ -138,5 +146,19 @@ public class Patient implements Identifiable {
 
 	public void removeExploration(Exploration exploration) {
 		exploration.setPatient(null);
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+
+		if(this.deleted) {
+			this.deleteDate = new Timestamp(System.currentTimeMillis());;
+		} else {
+			this.deleteDate = null;
+		}
 	}
 }

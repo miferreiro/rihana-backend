@@ -5,6 +5,8 @@ CREATE TABLE `user` (
     `login`         varchar(100) NOT NULL,
     `password`      varchar(32)  NOT NULL,
     `role`          varchar(255) NOT NULL,
+    `deleted`       bit(1)       DEFAULT b'0',
+    `delete_date`   datetime(3)  DEFAULT NULL,
     PRIMARY KEY (`login`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -18,6 +20,8 @@ CREATE TABLE `patient` (
     `sex`           varchar(255)    NOT NULL,
     `creation_date` datetime(3)     DEFAULT NULL,
     `update_date`   datetime(3)     DEFAULT NULL,
+    `deleted`       bit(1)          DEFAULT b'0',
+    `delete_date`   datetime(3)     DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY (`patientID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -32,6 +36,8 @@ CREATE TABLE `exploration` (
     `patient_id`    varchar(255)    DEFAULT NULL,
     `creation_date` datetime(3)     DEFAULT NULL,
     `update_date`   datetime(3)     DEFAULT NULL,
+    `deleted`       bit(1)          DEFAULT b'0',
+    `delete_date`   datetime(3)     DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY (`title`),
     CONSTRAINT FOREIGN KEY (`user_login`) REFERENCES `user` (`login`),
@@ -55,6 +61,8 @@ CREATE TABLE `report` (
     `exploration_id`    varchar(255)    DEFAULT NULL,
     `creation_date`     datetime(3)     DEFAULT NULL,
     `update_date`       datetime(3)     DEFAULT NULL,
+    `deleted`       bit(1)              DEFAULT b'0',
+    `delete_date`   datetime(3)         DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY (`reportN`),
     CONSTRAINT FOREIGN KEY (`exploration_id`) REFERENCES `exploration` (`id`)
@@ -66,6 +74,8 @@ CREATE TABLE `report` (
 CREATE TABLE `explorationcode` (
     `code`              varchar(255)    NOT NULL,
     `description`       varchar(255)    NOT NULL,
+    `deleted`           bit(1)          DEFAULT b'0',
+    `delete_date`       datetime(3)     DEFAULT NULL,
     PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -108,6 +118,8 @@ CREATE TABLE `radiograph` (
     `exploration_id`    varchar(255)    NOT NULL,
     `creation_date`     datetime(3)     DEFAULT NULL,
     `update_date`       datetime(3)     DEFAULT NULL,
+    `deleted`           bit(1)          DEFAULT b'0',
+    `delete_date`       datetime(3)     DEFAULT NULL,
     PRIMARY KEY (`id`),
     CONSTRAINT FOREIGN KEY (`exploration_id`) REFERENCES `exploration` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -120,6 +132,8 @@ CREATE TABLE `signtype` (
     `name`          varchar(255)    NOT NULL,
     `description`   varchar(255)    NOT NULL,
     `target`        int             NOT NULL,
+    `deleted`       bit(1)          DEFAULT b'0',
+    `delete_date`   datetime(3)     DEFAULT NULL,
     PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -129,11 +143,13 @@ CREATE TABLE `signtype` (
 CREATE TABLE `sign` (
     `id`                varchar(255)    NOT NULL,
     `signtype_code`     varchar(255)    NOT NULL,
-    `radiograph_id`    varchar(255)    NOT NULL,
+    `radiograph_id`     varchar(255)    NOT NULL,
     `brightness`        int             NOT NULL,
     `contrast`          int             NOT NULL,
     `creation_date`     datetime(3)     DEFAULT NULL,
     `update_date`       datetime(3)     DEFAULT NULL,
+    `deleted`           bit(1)          DEFAULT b'0',
+    `delete_date`       datetime(3)     DEFAULT NULL,
     PRIMARY KEY (`id`),
     CONSTRAINT FOREIGN KEY (`signtype_code`) REFERENCES `signtype` (`code`),
     CONSTRAINT FOREIGN KEY (`radiograph_id`) REFERENCES `radiograph` (`id`)

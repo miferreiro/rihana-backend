@@ -57,7 +57,7 @@ public class DefaultReportDAO implements ReportDAO {
 
 	@Override
 	public Report get(String id) {
-		return this.dh.get(id)
+		return this.dh.get(id).filter(e -> !e.isDeleted())
 			.orElseThrow(() -> new IllegalArgumentException("Unknown report: " + id));
 	}
 }

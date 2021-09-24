@@ -67,12 +67,12 @@ public class DefaultPatientDAO implements PatientDAO {
 
 	@Override
 	public Stream<Patient> getPatients() {
-		return this.dh.list().stream();
+		return this.dh.listBy("deleted", 0).stream();
 	}
 
 	@Override
 	public Patient get(String id) {
-		return this.dh.get(id)
+		return this.dh.get(id).filter(e -> !e.isDeleted())
 			.orElseThrow(() -> new IllegalArgumentException("Unknown patient: " + id));
 	}
 
@@ -80,7 +80,7 @@ public class DefaultPatientDAO implements PatientDAO {
 	public Patient getPatientBy(String patientID) {
 		patientID = encrypt(patientID);
 		return this.em
-			.createQuery("SELECT p FROM Patient p WHERE p.patientID=:patientID", Patient.class)
+			.createQuery("SELECT p FROM Patient p WHERE p.patientID=:patientID AND p.deleted=0", Patient.class)
 			.setParameter("patientID", patientID).getSingleResult();
 	}
 
@@ -92,7 +92,8 @@ public class DefaultPatientDAO implements PatientDAO {
 
 	@Override
 	public void delete(Patient patient) {
-		this.dh.remove(patient);
+		patient.setDeleted(true);
+		this.dh.update(patient);
 	}
 
 	private String encrypt(String patientID) {

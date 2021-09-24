@@ -71,6 +71,12 @@ public class Sign implements Identifiable {
 	@Column(name = "update_date", columnDefinition = "DATETIME(3)")
 	private Timestamp updateDate;
 
+	@Column(name = "deleted", columnDefinition="BIT(1) DEFAULT FALSE")
+	private boolean deleted;
+
+	@Column(name = "delete_date", columnDefinition = "DATETIME(3)")
+	private Timestamp deleteDate;
+
 	Sign() { }
 
 	public Sign(SignType type, int brightness, int contrast) {
@@ -79,6 +85,8 @@ public class Sign implements Identifiable {
 		this.brightness = brightness;
 		this.contrast = contrast;
 		this.creationDate = this.updateDate = new Timestamp(System.currentTimeMillis());
+		this.setDeleted(false);
+		this.deleteDate = null;
 	}
 
 	@Override
@@ -136,5 +144,13 @@ public class Sign implements Identifiable {
 		if (radiograph != null) {
 			this.radiograph.internalAddSign(this);
 		}
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 }

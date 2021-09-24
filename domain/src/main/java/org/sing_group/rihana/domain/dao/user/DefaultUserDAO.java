@@ -58,7 +58,7 @@ public class DefaultUserDAO implements UserDAO {
 
 	@Override
 	public User get(String login) {
-		return dh.get(login)
+		return dh.get(login).filter(e -> !e.isDeleted())
 			.orElseThrow(() -> new IllegalArgumentException("Unknown user: " + login));
 	}
 
@@ -74,11 +74,12 @@ public class DefaultUserDAO implements UserDAO {
 
 	@Override
 	public void delete(User user) {
-		this.dh.remove(user);
+		user.setDeleted(true);
+		this.dh.update(user);
 	}
 
 	@Override
 	public Stream<User> getUsers() {
-		return this.dh.list().stream();
+		return this.dh.listBy("deleted", 0).stream();
 	}
 }

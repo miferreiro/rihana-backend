@@ -84,6 +84,12 @@ public class Exploration implements Identifiable {
 	@Column(name = "update_date", columnDefinition = "DATETIME(3)")
 	private Timestamp updateDate;
 
+	@Column(name = "deleted", columnDefinition="BIT(1) DEFAULT FALSE")
+	private boolean deleted;
+
+	@Column(name = "delete_date", columnDefinition = "DATETIME(3)")
+	private Timestamp deleteDate;
+
 	Exploration() { }
 
 	public Exploration(String title, Date date, User user, Patient patient, Report report) {
@@ -94,6 +100,8 @@ public class Exploration implements Identifiable {
 		this.setPatient(patient);
 		this.setReport(report);
 		this.creationDate = this.updateDate = new Timestamp(System.currentTimeMillis());
+		this.setDeleted(false);
+		this.deleteDate = null;
 	}
 
 	public Exploration(String title, User user, Patient patient, Report report, List<Radiograph> radiographs) {
@@ -104,6 +112,8 @@ public class Exploration implements Identifiable {
 		this.setReport(report);
 		this.radiographs = radiographs;
 		this.creationDate = this.updateDate = new Timestamp(System.currentTimeMillis());
+		this.setDeleted(false);
+		this.deleteDate = null;
 	}
 
 	@Override
@@ -175,5 +185,18 @@ public class Exploration implements Identifiable {
 
 	public List<Radiograph> getRadiographs() {
 		return radiographs;
+	}
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+		if(this.deleted) {
+			this.deleteDate = new Timestamp(System.currentTimeMillis());;
+		} else {
+			this.deleteDate = null;
+		}
 	}
 }

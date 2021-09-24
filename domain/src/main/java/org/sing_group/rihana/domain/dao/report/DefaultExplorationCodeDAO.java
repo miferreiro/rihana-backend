@@ -57,7 +57,7 @@ public class DefaultExplorationCodeDAO implements ExplorationCodeDAO {
 
 	@Override
 	public ExplorationCode getExplorationCode(String code) {
-		return this.dh.get(code)
+		return this.dh.get(code).filter(e -> !e.isDeleted())
 			.orElseThrow(() -> new IllegalArgumentException("Unknown exploration code: " + code));
 	}
 }
