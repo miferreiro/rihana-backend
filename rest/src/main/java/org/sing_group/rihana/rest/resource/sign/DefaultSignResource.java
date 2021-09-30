@@ -56,7 +56,7 @@ import org.sing_group.rihana.service.spi.sign.SignTypeService;
 import org.sing_group.rihana.service.spi.user.UserService;
 
 @RolesAllowed({
-	"ADMIN", "USER", "RADIOLOGIST"
+	"ADMIN", "USER", "RADIOLOGIST", "SENIORRADIOLOGIST"
 })
 @Path("sign")
 @Produces({

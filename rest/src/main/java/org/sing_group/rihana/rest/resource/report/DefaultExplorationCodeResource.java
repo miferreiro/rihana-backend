@@ -51,7 +51,7 @@ import org.sing_group.rihana.service.spi.report.ExplorationCodeService;
 
 
 @RolesAllowed({
-	"ADMIN", "USER", "RADIOLOGIST"
+	"ADMIN", "USER", "RADIOLOGIST", "SENIORRADIOLOGIST"
 })
 @Path("explorationcode")
 @Produces({
