@@ -55,7 +55,7 @@ public class Sign implements Identifiable {
 	@JoinColumn(name = "radiograph_id")
 	private Radiograph radiograph;
 
-	@OneToOne(mappedBy = "sign", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "sign", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL, optional = false)
 	private SignLocation signLocation;
 
 	@Column(name = "brightness")

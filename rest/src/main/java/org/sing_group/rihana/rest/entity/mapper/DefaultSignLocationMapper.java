@@ -33,7 +33,11 @@ public class DefaultSignLocationMapper implements SignLocationMapper {
 
 	@Override
 	public SignLocationData toSignLocationData(SignLocation signLocation) {
-		return new SignLocationData(signLocation.getX(), signLocation.getY(),
-			signLocation.getWidth(), signLocation.getHeight());
+		if (signLocation == null) {
+			return null;
+		} else {
+			return new SignLocationData(signLocation.getX(), signLocation.getY(),
+				signLocation.getWidth(), signLocation.getHeight());
+		}
 	}
 }
