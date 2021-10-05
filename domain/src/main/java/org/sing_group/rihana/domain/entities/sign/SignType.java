@@ -123,5 +123,10 @@ public class SignType implements Serializable {
 
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
+		if(this.deleted) {
+			this.deleteDate = new Timestamp(System.currentTimeMillis());
+		} else {
+			this.deleteDate = null;
+		}
 	}
 }
