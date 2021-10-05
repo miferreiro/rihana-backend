@@ -33,9 +33,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import io.swagger.annotations.ApiModel;
 import org.sing_group.rihana.domain.entities.patient.Patient.SEX;
 
-@XmlRootElement(name = "Patient-data", namespace = "http://entity.resource.rest.rihana.sing-group.org")
+@XmlRootElement(name = "patient-data", namespace = "http://entity.resource.rest.rihana.sing-group.org")
 @XmlAccessorType(XmlAccessType.FIELD)
-@ApiModel(value = "Patient-data", description = "Information of a patient.")
+@ApiModel(value = "patient-data", description = "Information of a patient.")
 public class PatientData implements Serializable {
 	private static final long serialVersionUID = 1L;
 

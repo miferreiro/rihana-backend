@@ -34,9 +34,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import io.swagger.annotations.ApiModel;
 import org.sing_group.rihana.rest.entity.UuidAndUri;
 
-@XmlRootElement(name = "Report-data", namespace = "http://entity.resource.rest.rihana.sing-group.org")
+@XmlRootElement(name = "report-data", namespace = "http://entity.resource.rest.rihana.sing-group.org")
 @XmlAccessorType(XmlAccessType.FIELD)
-@ApiModel(value = "Report-data", description = "Information of a report.")
+@ApiModel(value = "report-data", description = "Information of a report.")
 public class ReportData implements Serializable {
 	private static final long serialVersionUID = 1L;
 

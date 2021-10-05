@@ -35,9 +35,9 @@ import io.swagger.annotations.ApiModel;
 import org.sing_group.rihana.domain.entities.user.User;
 import org.sing_group.rihana.rest.entity.UuidAndUri;
 
-@XmlRootElement(name = "Exploration-data", namespace = "http://entity.resource.rest.rihana.sing-group.org")
+@XmlRootElement(name = "exploration-data", namespace = "http://entity.resource.rest.rihana.sing-group.org")
 @XmlAccessorType(XmlAccessType.FIELD)
-@ApiModel(value = "Exploration-data", description = "Information of an exploration.")
+@ApiModel(value = "exploration-data", description = "Information of an exploration.")
 public class ExplorationData implements Serializable {
 	private static final long serialVersionUID = 1L;
 

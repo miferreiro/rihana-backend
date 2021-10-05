@@ -32,9 +32,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import io.swagger.annotations.ApiModel;
 import org.sing_group.rihana.domain.entities.user.Role;
 
-@XmlRootElement(name = "User-edition-data", namespace = "http://entity.resource.rest.rihana.sing-group.org")
+@XmlRootElement(name = "user-edition-data", namespace = "http://entity.resource.rest.rihana.sing-group.org")
 @XmlAccessorType(XmlAccessType.FIELD)
-@ApiModel(value = "User-edition-data", description = "Information of a user for edition.")
+@ApiModel(value = "user-edition-data", description = "Information of a user for edition.")
 public class UserEditionData implements Serializable {
 	private static final long serialVersionUID = 1L;
 

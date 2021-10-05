@@ -31,9 +31,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import io.swagger.annotations.ApiModel;
 
-@XmlRootElement(name = "Sign-type-data", namespace = "http://entity.resource.rest.rihana.sing-group.org")
+@XmlRootElement(name = "sign-type-data", namespace = "http://entity.resource.rest.rihana.sing-group.org")
 @XmlAccessorType(XmlAccessType.FIELD)
-@ApiModel(value = "Sign-type-data", description = "Information of a sign type.")
+@ApiModel(value = "sign-type-data", description = "Information of a sign type.")
 public class SignTypeData implements Serializable {
 	private static final long serialVersionUID = 1L;
 

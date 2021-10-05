@@ -32,9 +32,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import io.swagger.annotations.ApiModel;
 
-@XmlRootElement(name = "Exploration-edition-data", namespace = "http://entity.resource.rest.rihana.sing-group.org")
+@XmlRootElement(name = "exploration-edition-data", namespace = "http://entity.resource.rest.rihana.sing-group.org")
 @XmlAccessorType(XmlAccessType.FIELD)
-@ApiModel(value = "Exploration-edition-data", description = "Information of an exploration for edition.")
+@ApiModel(value = "exploration-edition-data", description = "Information of an exploration for edition.")
 public class ExplorationEditionData implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -45,7 +45,7 @@ public class ExplorationEditionData implements Serializable {
 	private String title;
 
 	@XmlElement(name = "explorationDate", required = true)
-	private Date exporationDate;
+	private Date explorationDate;
 
 	@XmlElement(name = "user")
 	private String user;
@@ -61,7 +61,7 @@ public class ExplorationEditionData implements Serializable {
 	public ExplorationEditionData(String id, String title, Date explorationDate) {
 		this.id = id;
 		this.title = title;
-		this.exporationDate = explorationDate;
+		this.explorationDate = explorationDate;
 	}
 
 	public String getId() {
@@ -73,11 +73,11 @@ public class ExplorationEditionData implements Serializable {
 	}
 
 	public Date getExplorationDate() {
-		return this.exporationDate;
+		return this.explorationDate;
 	}
 
 	public void setExplorationDate(Date explorationDate) {
-		this.exporationDate = explorationDate;
+		this.explorationDate = explorationDate;
 	}
 
 	public String getUser() {

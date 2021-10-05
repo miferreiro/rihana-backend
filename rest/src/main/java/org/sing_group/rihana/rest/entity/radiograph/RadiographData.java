@@ -35,9 +35,9 @@ import org.sing_group.rihana.domain.entities.radiograph.RadiographType;
 import org.sing_group.rihana.rest.entity.sign.SignData;
 import org.sing_group.rihana.rest.entity.UuidAndUri;
 
-@XmlRootElement(name = "Radiograph-data", namespace = "http://entity.resource.rest.rihana.sing-group.org")
+@XmlRootElement(name = "radiograph-data", namespace = "http://entity.resource.rest.rihana.sing-group.org")
 @XmlAccessorType(XmlAccessType.FIELD)
-@ApiModel(value = "Radiograph-data", description = "Information of a radiograph.")
+@ApiModel(value = "radiograph-data", description = "Information of a radiograph.")
 public class RadiographData implements Serializable {
 	private static final long serialVersionUID = 1L;
 

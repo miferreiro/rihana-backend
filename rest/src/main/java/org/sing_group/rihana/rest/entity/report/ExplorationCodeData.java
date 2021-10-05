@@ -31,9 +31,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import io.swagger.annotations.ApiModel;
 
-@XmlRootElement(name = "Exploration-code-data", namespace = "http://entity.resource.rest.rihana.sing-group.org")
+@XmlRootElement(name = "exploration-code-data", namespace = "http://entity.resource.rest.rihana.sing-group.org")
 @XmlAccessorType(XmlAccessType.FIELD)
-@ApiModel(value = "Exploration-code-data", description = "Information of an exploration code.")
+@ApiModel(value = "exploration-code-data", description = "Information of an exploration code.")
 public class ExplorationCodeData implements Serializable {
 
 	private static final long serialVersionUID = 1L;
