@@ -112,7 +112,7 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 
 			StringBuilder stringBuilder = new StringBuilder("");
 			int count = 0;
-			String querySignType = "SELECT tt.code from Exploration ee LEFT JOIN ee.radiographs rr LEFT JOIN rr.signs ss LEFT JOIN ss.type tt WHERE ee.id=e.id";
+			String querySignType = "SELECT tt.code from Exploration ee LEFT JOIN ee.radiographs rr LEFT JOIN rr.signs ss LEFT JOIN ss.type tt WHERE ee.id=e.id AND ee.deleted=0";
 
 			if (signTypeList.size() > 0) {
 				stringBuilder.append(" AND (");
@@ -167,21 +167,19 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 		} else {
 
 			if (user != null) {
+				String queryString = "SELECT e FROM Exploration e LEFT JOIN e.user u WHERE e.deleted=0 AND u.login=:login ORDER BY e.creationDate DESC";
 				if (page != null && pageSize != null) {
-					final ListingOptions listingOptions = ListingOptions.forPage(page, pageSize)
-						.sortedBy(ListingOptions.SortField.descending("creationDate"));
-					return dh.listBy("user", user, listingOptions);
+					return em.createQuery(queryString).setParameter("login", user.getLogin()).setFirstResult((page - 1) * pageSize).setMaxResults(pageSize).getResultList();
 				} else {
-					return dh.listBy("user", user);
+					return em.createQuery(queryString).setParameter("login", user.getLogin()).getResultList();
 				}
 
 			} else {
+				String queryString = "SELECT e FROM Exploration e WHERE e.deleted=0 ORDER BY e.creationDate DESC";
 				if (page != null && pageSize != null) {
-					final ListingOptions listingOptions = ListingOptions.forPage(page, pageSize)
-						.sortedBy(ListingOptions.SortField.descending("creationDate"));
-					return dh.list(listingOptions);
+					return em.createQuery(queryString).setFirstResult((page - 1) * pageSize).setMaxResults(pageSize).getResultList();
 				} else {
-					return dh.list();
+					return em.createQuery(queryString).getResultList();
 				}
 			}
 		}
