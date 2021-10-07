@@ -24,8 +24,11 @@ package org.sing_group.rihana.rest.entity.mapper.spi;
 
 import org.sing_group.rihana.domain.entities.sign.SignType;
 import org.sing_group.rihana.rest.entity.sign.SignTypeData;
+import org.sing_group.rihana.rest.entity.sign.SignTypeEditionData;
 
 public interface SignTypeMapper {
 
 	SignTypeData toSignTypeData(SignType signType);
+
+	void assignSignTypeEditionData(SignType signType, SignTypeEditionData signTypeEditionData);
 }

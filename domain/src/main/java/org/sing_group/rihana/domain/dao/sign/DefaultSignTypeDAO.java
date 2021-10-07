@@ -64,6 +64,22 @@ public class DefaultSignTypeDAO implements SignTypeDAO {
 	}
 
 	@Override
+	public SignType create(SignType signType) {
+		return this.dh.persist(signType);
+	}
+
+	@Override
+	public SignType edit(SignType signType) {
+		return this.dh.update(signType);
+	}
+
+	@Override
+	public void delete(SignType signType) {
+		signType.setDeleted(true);
+		this.dh.update(signType);
+	}
+
+	@Override
 	public Stream<SignType> listSignTypes() {
 		return dh.listBy("deleted", 0).stream();
 	}

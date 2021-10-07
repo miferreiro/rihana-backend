@@ -30,5 +30,11 @@ public interface SignTypeDAO {
 
 	SignType get(String code);
 
+	SignType create(SignType signType);
+
+	SignType edit(SignType signType);
+
+	void delete(SignType signType);
+
 	Stream<SignType> listSignTypes();
 }

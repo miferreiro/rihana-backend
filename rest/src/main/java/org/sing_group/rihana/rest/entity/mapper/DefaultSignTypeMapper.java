@@ -25,8 +25,9 @@ package org.sing_group.rihana.rest.entity.mapper;
 import javax.enterprise.inject.Default;
 
 import org.sing_group.rihana.domain.entities.sign.SignType;
-import org.sing_group.rihana.rest.entity.sign.SignTypeData;
 import org.sing_group.rihana.rest.entity.mapper.spi.SignTypeMapper;
+import org.sing_group.rihana.rest.entity.sign.SignTypeData;
+import org.sing_group.rihana.rest.entity.sign.SignTypeEditionData;
 
 @Default
 public class DefaultSignTypeMapper implements SignTypeMapper {
@@ -34,5 +35,13 @@ public class DefaultSignTypeMapper implements SignTypeMapper {
 	@Override
 	public SignTypeData toSignTypeData(SignType signType) {
 		return new SignTypeData(signType.getCode(), signType.getName(), signType.getDescription(), signType.getTarget());
+	}
+
+	@Override
+	public void assignSignTypeEditionData(SignType signType, SignTypeEditionData signTypeEditionData) {
+		signType.setCode(signTypeEditionData.getCode());
+		signType.setName(signTypeEditionData.getName());
+		signType.setDescription(signTypeEditionData.getDescription());
+		signType.setTarget(signTypeEditionData.getTarget());
 	}
 }

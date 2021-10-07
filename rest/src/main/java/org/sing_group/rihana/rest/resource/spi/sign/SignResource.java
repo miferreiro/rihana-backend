@@ -25,10 +25,18 @@ package org.sing_group.rihana.rest.resource.spi.sign;
 import javax.ejb.Local;
 import javax.ws.rs.core.Response;
 
+import org.sing_group.rihana.rest.entity.sign.SignTypeEditionData;
+
 @Local
 public interface SignResource {
 
 	Response listSigns(String userId);
 
 	Response listSignTypes();
+
+	Response createSignType(SignTypeEditionData signTypeEditionData);
+
+	Response editSignType(String code, SignTypeEditionData signTypeEditionData);
+
+	Response deleteSignType(String code);
 }

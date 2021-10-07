@@ -34,21 +34,31 @@ import javax.ejb.Stateless;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.sing_group.rihana.domain.entities.sign.Sign;
+import org.sing_group.rihana.domain.entities.sign.SignType;
 import org.sing_group.rihana.rest.entity.mapper.spi.SignMapper;
 import org.sing_group.rihana.rest.entity.mapper.spi.SignTypeMapper;
 import org.sing_group.rihana.rest.entity.sign.SignData;
 import org.sing_group.rihana.rest.entity.sign.SignTypeData;
+import org.sing_group.rihana.rest.entity.sign.SignTypeEditionData;
+import org.sing_group.rihana.rest.entity.user.UserData;
 import org.sing_group.rihana.rest.filter.CrossDomain;
 import org.sing_group.rihana.rest.resource.spi.sign.SignResource;
 import org.sing_group.rihana.service.spi.sign.SignService;
@@ -122,5 +132,53 @@ public class DefaultSignResource implements SignResource {
 			this.signTypeService.listSignTypes()
 				.map(this.signTypeMapper::toSignTypeData).toArray(SignTypeData[]::new)
 		).build();
+	}
+
+	@POST
+	@Path("type")
+	@RolesAllowed("ADMIN")
+	@ApiOperation(
+		value = "Creates a new sign type.", response = SignTypeData.class, code = 201
+	)
+	@ApiResponses(
+		@ApiResponse(code = 400, message = "Entity already exists")
+	)
+	@Override
+	public Response createSignType(SignTypeEditionData signTypeEditionData) {
+		SignType signType = new SignType(signTypeEditionData.getCode(), signTypeEditionData.getName(), signTypeEditionData.getDescription(), signTypeEditionData.getTarget());
+		signType = this.signTypeService.create(signType);
+		return Response.created(UriBuilder.fromResource(DefaultSignResource.class).path("type/"+ signType.getCode()).build())
+			.entity(signTypeMapper.toSignTypeData(signType)).build();
+	}
+
+	@PUT
+	@Path("type/{code}")
+	@RolesAllowed({
+		"ADMIN"
+	})
+	@ApiOperation(
+		value = "Modifies an existing sign type", response = UserData.class, code = 200
+	)
+	@Override
+	public Response editSignType(@PathParam("code") String code, SignTypeEditionData signTypeEditionData) {
+		SignType signType = this.signTypeService.get(code);
+		this.signTypeMapper.assignSignTypeEditionData(signType, signTypeEditionData);
+		return Response.ok(this.signTypeMapper.toSignTypeData(this.signTypeService.edit(signType))).build();
+	}
+
+	@DELETE
+	@Path("type/{code}")
+	@RolesAllowed("ADMIN")
+	@ApiOperation(
+		value = "Deletes an existing sign type.", code = 200
+	)
+	@ApiResponses(
+		@ApiResponse(code = 400, message = "Unknown sign type: {code}")
+	)
+	@Override
+	public Response deleteSignType(@PathParam("code") String code) {
+		SignType signType = this.signTypeService.get(code);
+		this.signTypeService.delete(signType);
+		return Response.ok().build();
 	}
 }

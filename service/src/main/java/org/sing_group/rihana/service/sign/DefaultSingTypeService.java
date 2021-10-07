@@ -41,6 +41,21 @@ public class DefaultSingTypeService implements SignTypeService {
 	}
 
 	@Override
+	public SignType create(SignType signType) {
+		return signTypeDAO.create(signType);
+	}
+
+	@Override
+	public SignType edit(SignType signType) {
+		return signTypeDAO.edit(signType);
+	}
+
+	@Override
+	public void delete(SignType signType) {
+		signTypeDAO.delete(signType);
+	}
+
+	@Override
 	public Stream<SignType> listSignTypes() {
 		return signTypeDAO.listSignTypes();
 	}
