@@ -33,6 +33,4 @@ public interface ExplorationMapper {
 	void setRequestURI(UriInfo requestURI);
 
 	ExplorationData toExplorationData(Exploration exploration);
-
-	void assignExplorationEditData(Exploration exploration, ExplorationEditionData explorationEditionData);
 }

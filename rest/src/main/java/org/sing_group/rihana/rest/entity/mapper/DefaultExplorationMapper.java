@@ -55,9 +55,4 @@ public class DefaultExplorationMapper implements ExplorationMapper {
 			fromEntities(requestURI, exploration.getRadiographs(), DefaultRadiographResource.class)
 		);
 	}
-
-	@Override
-	public void assignExplorationEditData(Exploration exploration, ExplorationEditionData explorationEditionData) {
-		exploration.setTitle(explorationEditionData.getTitle());
-	}
 }
