@@ -62,8 +62,7 @@ public class Radiograph implements Identifiable {
 	@Column(name = "observations")
 	private String observations;
 
-	@ManyToOne
-	@JoinColumn(name = "exploration_id")
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
 	private Exploration exploration;
 
 	@OneToMany(mappedBy = "radiograph", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
