@@ -64,7 +64,26 @@ public class Patient implements Identifiable {
 	private SEX sex;
 
 	public enum SEX {
-		MALE, FEMALE
+		MALE("Male"),
+		FEMALE("Female");
+
+		public final String label;
+
+		private SEX(String label) {
+			this.label = label;
+		}
+
+		public String getSEX(){
+			return label;
+		}
+
+		public String toString() {
+			return this.label;
+		}
+
+		public String getString() {
+			return this.label;
+		}
 	}
 
 	@Column(name = "birthdate")
