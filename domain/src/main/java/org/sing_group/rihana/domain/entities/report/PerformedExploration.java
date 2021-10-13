@@ -23,6 +23,7 @@
 package org.sing_group.rihana.domain.entities.report;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -60,13 +61,13 @@ public class PerformedExploration implements Identifiable {
 
 	PerformedExploration() { }
 
-	public PerformedExploration(Timestamp date, String portable, String surgery, Report report, ExplorationCode explorationCode) {
+	public PerformedExploration(Date date, String portable, String surgery, Report report, ExplorationCode explorationCode) {
 		this.id = UUID.randomUUID().toString();
-		this.date = date;
-		this.portable = portable;
-		this.surgery = surgery;
-		this.report = report;
-		this.explorationCode = explorationCode;
+		this.setDate(date);
+		this.setPortable(portable);
+		this.setSurgery(surgery);
+		this.setReport(report);
+		this.setExplorationCode(explorationCode);
 	}
 
 	@Override
@@ -78,8 +79,8 @@ public class PerformedExploration implements Identifiable {
 		return date;
 	}
 
-	public void setDate(Timestamp date) {
-		this.date = date;
+	public void setDate(Date date) {
+		this.date = new Timestamp(date.getDate());
 	}
 
 	public String getPortable() {

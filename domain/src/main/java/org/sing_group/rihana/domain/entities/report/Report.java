@@ -27,6 +27,7 @@ import static org.sing_group.fluent.checker.Checks.checkArgument;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -105,19 +106,18 @@ public class Report implements Identifiable {
 
 	Report() { }
 
-	public Report(String reportN, Timestamp completionDate, String applicant, String priority, String status,
-				  String bed, String clinicalData, String findings, String conclusions, Exploration exploration) {
+	public Report(String reportN, Date completionDate, String applicant, String priority, String status,
+				  String bed, String clinicalData, String findings, String conclusions) {
 		this.id = UUID.randomUUID().toString();
-		this.reportN = reportN;
-		this.completionDate = completionDate;
-		this.applicant = applicant;
-		this.priority = priority;
-		this.status = status;
-		this.bed = bed;
-		this.clinicalData = clinicalData;
-		this.findings = findings;
-		this.conclusions = conclusions;
-		this.exploration = exploration;
+		this.setReportN(reportN);
+		this.setCompletionDate(completionDate);
+		this.setApplicant(applicant);
+		this.setPriority(priority);
+		this.setStatus(status);
+		this.setBed(bed);
+		this.setClinicalData(clinicalData);
+		this.setFindings(findings);
+		this.setConclusions(conclusions);
 		this.creationDate = this.updateDate = new Timestamp(System.currentTimeMillis());
 		this.setDeleted(false);
 		this.deleteDate = null;
@@ -141,8 +141,8 @@ public class Report implements Identifiable {
 		return completionDate;
 	}
 
-	public void setCompletionDate(Timestamp completionDate) {
-		this.completionDate = completionDate;
+	public void setCompletionDate(Date completionDate) {
+		this.completionDate = new Timestamp(completionDate.getDate());
 	}
 
 	public String getApplicant() {
