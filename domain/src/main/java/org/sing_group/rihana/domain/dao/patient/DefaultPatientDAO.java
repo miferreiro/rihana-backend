@@ -85,6 +85,14 @@ public class DefaultPatientDAO implements PatientDAO {
 	}
 
 	@Override
+	public boolean existsPatientBy(String patientID) {
+		patientID = encrypt(patientID);
+		return this.em
+			.createQuery("SELECT p FROM Patient p WHERE p.patientID=:patientID", Patient.class)
+			.setParameter("patientID", patientID).getResultList().size() != 0;
+	}
+
+	@Override
 	public Patient edit(Patient patient) {
 		patient.setPatientID(encrypt(patient.getPatientID()));
 		return this.dh.update(patient);

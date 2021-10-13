@@ -36,6 +36,8 @@ public interface PatientDAO {
 
 	Patient getPatientBy(String patientID);
 
+	boolean existsPatientBy(String patientID);
+
 	Patient edit(Patient patient);
 
 	void delete(Patient patient);

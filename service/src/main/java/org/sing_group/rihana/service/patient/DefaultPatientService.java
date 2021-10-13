@@ -60,6 +60,11 @@ public class DefaultPatientService implements PatientService {
 	}
 
 	@Override
+	public boolean existsPatientBy(String patientID) {
+		return patientDAO.existsPatientBy(patientID);
+	}
+
+	@Override
 	public Patient edit(Patient patient) {
 		return patientDAO.edit(patient);
 	}
