@@ -30,4 +30,6 @@ import org.sing_group.rihana.domain.entities.report.Report;
 public interface ReportService {
 
 	Report getReport(String id);
+
+	Report create(Report report);
 }

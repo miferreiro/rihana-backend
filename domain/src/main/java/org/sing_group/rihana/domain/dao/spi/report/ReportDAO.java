@@ -27,4 +27,6 @@ import org.sing_group.rihana.domain.entities.report.Report;
 public interface ReportDAO {
 
 	Report get(String id);
+
+	Report create(Report report);
 }

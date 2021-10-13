@@ -41,4 +41,9 @@ public class DefaultReportService implements ReportService {
 	public Report getReport(String id) {
 		return reportDAO.get(id);
 	}
+
+	@Override
+	public Report create(Report report) {
+		return reportDAO.create(report);
+	}
 }
