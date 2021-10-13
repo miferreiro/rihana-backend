@@ -70,4 +70,9 @@ public class DefaultSignDAO implements SignDAO {
 
 		return this.em.createQuery(query, Sign.class).setParameter("login", user.getLogin()).getResultList().stream();
 	}
+
+	@Override
+	public Sign create(Sign sign) {
+		return this.dh.persist(sign);
 	}
+}

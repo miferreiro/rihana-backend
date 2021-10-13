@@ -45,4 +45,9 @@ public class DefaultSignService implements SignService {
 	public Stream<Sign> listSignsByUser(User user) {
 		return signDAO.listSignsByUser(user);
 	}
+
+	@Override
+	public Sign create(Sign sign) {
+		return signDAO.create(sign);
+	}
 }

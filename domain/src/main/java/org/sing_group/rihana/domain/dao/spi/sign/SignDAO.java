@@ -32,4 +32,6 @@ public interface SignDAO {
 	Stream<Sign> listSigns();
 
 	Stream<Sign> listSignsByUser(User user);
+
+	Sign create(Sign sign);
 }
