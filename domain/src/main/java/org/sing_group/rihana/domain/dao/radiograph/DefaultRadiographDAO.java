@@ -60,4 +60,9 @@ public class DefaultRadiographDAO implements RadiographDAO {
 		return this.dh.get(id).filter(e -> !e.isDeleted())
 			.orElseThrow(() -> new IllegalArgumentException("Unknown radiograph: " + id));
 	}
+
+	@Override
+	public Radiograph create(Radiograph radiograph) {
+		return this.dh.persist(radiograph);
+	}
 }

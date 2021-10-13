@@ -30,4 +30,6 @@ import org.sing_group.rihana.domain.entities.radiograph.Radiograph;
 public interface RadiographService {
 
 	Radiograph getRadiograph(String id);
+
+	Radiograph create(Radiograph radiograph);
 }

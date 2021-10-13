@@ -41,4 +41,9 @@ public class DefaultRadiographService implements RadiographService {
 	public Radiograph getRadiograph(String id) {
 		return radiographDAO.get(id);
 	}
+
+	@Override
+	public Radiograph create(Radiograph radiograph) {
+		return radiographDAO.create(radiograph);
+	}
 }

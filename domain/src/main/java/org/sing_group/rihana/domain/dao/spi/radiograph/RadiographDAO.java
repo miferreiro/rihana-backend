@@ -27,4 +27,6 @@ import org.sing_group.rihana.domain.entities.radiograph.Radiograph;
 public interface RadiographDAO {
 
 	Radiograph get(String id);
+
+	Radiograph create(Radiograph radiograph);
 }
