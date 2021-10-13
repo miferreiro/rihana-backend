@@ -92,21 +92,21 @@ public class Exploration implements Identifiable {
 
 	Exploration() { }
 
-	public Exploration(String title, Date date, User user, Patient patient, Report report) {
+	public Exploration(String title, Date date, User user, Patient patient) {
 		id = UUID.randomUUID().toString();
 		this.setTitle(title);
 		this.setDate(date);
 		this.setUser(user);
 		this.setPatient(patient);
-		this.setReport(report);
 		this.creationDate = this.updateDate = new Timestamp(System.currentTimeMillis());
 		this.setDeleted(false);
 		this.deleteDate = null;
 	}
 
-	public Exploration(String title, User user, Patient patient, Report report, List<Radiograph> radiographs) {
+	public Exploration(String title, Date date, User user, Patient patient, Report report, List<Radiograph> radiographs) {
 		id = UUID.randomUUID().toString();
 		this.setTitle(title);
+		this.setDate(date);
 		this.setUser(user);
 		this.setPatient(patient);
 		this.setReport(report);
