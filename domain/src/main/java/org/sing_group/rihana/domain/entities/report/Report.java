@@ -206,6 +206,13 @@ public class Report implements Identifiable {
 	}
 
 	public void setExploration(Exploration exploration) {
+		if (exploration == null) {
+			if (this.exploration != null) {
+				this.exploration.setReport(null);
+			}
+		} else {
+			exploration.setReport(this);
+		}
 		this.exploration = exploration;
 	}
 
