@@ -400,7 +400,7 @@
         <subsystem xmlns="urn:jboss:domain:undertow:3.1">
             <buffer-cache name="default"/>
             <server name="default-server">
-                <http-listener name="default" socket-binding="http" redirect-socket="https" enable-http2="true"/>
+                <http-listener name="default" max-post-size="104857600" socket-binding="http" redirect-socket="https" enable-http2="true"/>
                 <https-listener name="https" socket-binding="https" security-realm="ApplicationRealm" enable-http2="true"/>
                 <host name="default-host" alias="localhost">
                     <location name="/" handler="welcome-content"/>

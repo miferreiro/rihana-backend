@@ -53,6 +53,11 @@ public class DefaultExplorationService implements ExplorationService {
 	}
 
 	@Override
+	public int countAllExplorations() {
+		return explorationDao.countAllExplorations();
+	}
+
+	@Override
 	public int countExplorations() {
 		return explorationDao.countExplorations();
 	}

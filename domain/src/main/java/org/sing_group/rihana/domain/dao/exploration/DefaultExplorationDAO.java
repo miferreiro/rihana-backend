@@ -33,7 +33,6 @@ import javax.persistence.Query;
 import javax.transaction.Transactional;
 
 import org.sing_group.rihana.domain.dao.DAOHelper;
-import org.sing_group.rihana.domain.dao.ListingOptions;
 import org.sing_group.rihana.domain.dao.spi.exploration.ExplorationDAO;
 import org.sing_group.rihana.domain.entities.exploration.Exploration;
 import org.sing_group.rihana.domain.entities.sign.SignType;
@@ -71,6 +70,11 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 	@Override
 	public Stream<Exploration> listExplorationsByUser(Integer page, Integer pageSize, User user, List<SignType> signTypeList) {
 		return this.listExplorations(page, pageSize, user, signTypeList).stream();
+	}
+
+	@Override
+	public int countAllExplorations() {
+		return dh.list().size();
 	}
 
 	@Override

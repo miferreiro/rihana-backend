@@ -144,7 +144,11 @@ public class Patient implements Identifiable {
 	}
 
 	public void setBirthdate(Date birthdate) {
-		this.birthdate = new Timestamp(birthdate.getTime());
+		if (birthdate == null) {
+			this.birthdate = null;
+		} else {
+			this.birthdate = new Timestamp(birthdate.getTime());
+		}
 	}
 
 	public void internalRemoveExploration(Exploration exploration) {

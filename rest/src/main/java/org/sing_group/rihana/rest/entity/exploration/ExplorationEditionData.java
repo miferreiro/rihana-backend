@@ -24,6 +24,7 @@ package org.sing_group.rihana.rest.entity.exploration;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -31,6 +32,14 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import io.swagger.annotations.ApiModel;
+import org.sing_group.rihana.domain.entities.patient.Patient;
+import org.sing_group.rihana.domain.entities.radiograph.Radiograph;
+import org.sing_group.rihana.domain.entities.report.Report;
+import org.sing_group.rihana.rest.entity.UuidAndUri;
+import org.sing_group.rihana.rest.entity.patient.PatientEditionData;
+import org.sing_group.rihana.rest.entity.radiograph.RadiographEditionData;
+import org.sing_group.rihana.rest.entity.report.ReportData;
+import org.sing_group.rihana.rest.entity.report.ReportEditionData;
 
 @XmlRootElement(name = "exploration-edition-data", namespace = "http://entity.resource.rest.rihana.sing-group.org")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -38,38 +47,35 @@ import io.swagger.annotations.ApiModel;
 public class ExplorationEditionData implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@XmlElement(name = "id", required = true)
-	private String id;
-
-	@XmlElement(name = "title", required = true)
-	private String title;
-
 	@XmlElement(name = "explorationDate", required = true)
 	private Date explorationDate;
 
-	@XmlElement(name = "user")
+	@XmlElement(name = "user", required = true)
 	private String user;
 
-	@XmlElement(name = "patient")
-	private String patient;
+	@XmlElement(name = "patient", required = true)
+	private PatientEditionData patient;
 
-	@XmlElement(name = "report")
-	private String report;
+	@XmlElement(name = "report", required = true)
+	private ReportEditionData report;
+
+	@XmlElement(name = "radiographs", required = true)
+	private List<RadiographEditionData> radiographs;
 
 	public ExplorationEditionData() { }
 
-	public ExplorationEditionData(String id, String title, Date explorationDate) {
-		this.id = id;
-		this.title = title;
-		this.explorationDate = explorationDate;
+	public ExplorationEditionData(Date explorationDate, String user, PatientEditionData patient, List<RadiographEditionData> radiographs) {
+		this.setExplorationDate(explorationDate);
+		this.setUser(user);
+		this.setPatient(patient);
+		this.setRadiographs(radiographs);
 	}
 
-	public String getId() {
-		return id;
-	}
-
-	public String getTitle() {
-		return title;
+	public ExplorationEditionData(Date explorationDate, String user, PatientEditionData patient, Report report, List<RadiographEditionData> radiographs) {
+		this.setExplorationDate(explorationDate);
+		this.setUser(user);
+		this.setPatient(patient);
+		this.setRadiographs(radiographs);
 	}
 
 	public Date getExplorationDate() {
@@ -88,19 +94,27 @@ public class ExplorationEditionData implements Serializable {
 		this.user = user;
 	}
 
-	public String getPatient() {
+	public PatientEditionData getPatient() {
 		return patient;
 	}
 
-	public void setPatient(String patient) {
+	public void setPatient(PatientEditionData patient) {
 		this.patient = patient;
 	}
 
-	public String getReport() {
+	public ReportEditionData getReport() {
 		return report;
 	}
 
-	public void setReport(String report) {
+	public void setReport(ReportEditionData report) {
 		this.report = report;
+	}
+
+	public List<RadiographEditionData> getRadiographs() {
+		return radiographs;
+	}
+
+	public void setRadiographs(List<RadiographEditionData> radiographs) {
+		this.radiographs = radiographs;
 	}
 }

@@ -30,7 +30,6 @@ import javax.ws.rs.core.UriInfo;
 
 import org.sing_group.rihana.domain.entities.exploration.Exploration;
 import org.sing_group.rihana.rest.entity.exploration.ExplorationData;
-import org.sing_group.rihana.rest.entity.exploration.ExplorationEditionData;
 import org.sing_group.rihana.rest.entity.mapper.spi.ExplorationMapper;
 import org.sing_group.rihana.rest.resource.patient.DefaultPatientResource;
 import org.sing_group.rihana.rest.resource.radiograph.DefaultRadiographResource;

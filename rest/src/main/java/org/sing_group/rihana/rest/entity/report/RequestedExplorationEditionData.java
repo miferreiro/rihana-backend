@@ -9,18 +9,18 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.rihana.rest.entity.patient;
+package org.sing_group.rihana.rest.entity.report;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -31,50 +31,51 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import io.swagger.annotations.ApiModel;
-import org.sing_group.rihana.domain.entities.patient.Patient.SEX;
 
-@XmlRootElement(name = "patient-edition-data", namespace = "http://entity.resource.rest.rihana.sing-group.org")
+@XmlRootElement(name = "requested-exploration-edition-data", namespace = "http://entity.resource.rest.rihana.sing-group.org")
 @XmlAccessorType(XmlAccessType.FIELD)
-@ApiModel(value = "patient-edition-data", description = "Information of a patient for edition.")
-public class PatientEditionData implements Serializable {
+@ApiModel(value = "requested-exploration-edition-data", description = "Information of a requested exploration for edition.")
+public class RequestedExplorationEditionData implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@XmlElement(name = "patientID", required = true)
-	private String patientID;
-	@XmlElement(name = "sex")
-	private SEX sex;
-	@XmlElement(name = "birthdate")
-	private Date birthdate;
+	@XmlElement(name = "date", required = true)
+	private Date date;
 
-	public PatientEditionData() { }
+	@XmlElement(name = "code", required = true)
+	private String code;
 
-	public PatientEditionData(String patientID, SEX sex, Date birthdate) {
-		this.patientID = patientID;
-		this.sex = sex;
-		this.birthdate = birthdate;
+	@XmlElement(name = "description", required = true)
+	private String description;
+
+	public RequestedExplorationEditionData() { }
+
+	public RequestedExplorationEditionData(Date date, String code, String description) {
+		this.date = date;
+		this.code = code;
+		this.description = description;
 	}
 
-	public String getPatientID() {
-		return patientID;
+	public Date getDate() {
+		return date;
 	}
 
-	public void setPatientID(String patientID) {
-		this.patientID = patientID;
+	public void setDate(Date date) {
+		this.date = date;
 	}
 
-	public SEX getSex() {
-		return sex;
+	public String getCode() {
+		return code;
 	}
 
-	public void setSex(SEX sex) {
-		this.sex = sex;
+	public void setCode(String code) {
+		this.code = code;
 	}
 
-	public Date getBirthdate() {
-		return birthdate;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setBirthdate(Date birthdate) {
-		this.birthdate = birthdate;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

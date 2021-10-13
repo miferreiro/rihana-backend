@@ -35,6 +35,8 @@ public interface ExplorationDAO {
 
 	Stream<Exploration> listExplorationsByUser(Integer page, Integer pageSize, User user, List<SignType> signTypeList);
 
+	int countAllExplorations();
+
 	int countExplorations();
 
 	int countExplorationsByUser(User user);

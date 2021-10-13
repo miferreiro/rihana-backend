@@ -37,12 +37,14 @@ import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import io.swagger.annotations.Api;
@@ -50,14 +52,34 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.sing_group.rihana.domain.entities.exploration.Exploration;
+import org.sing_group.rihana.domain.entities.patient.Patient;
+import org.sing_group.rihana.domain.entities.radiograph.Radiograph;
+import org.sing_group.rihana.domain.entities.report.ExplorationCode;
+import org.sing_group.rihana.domain.entities.report.PerformedExploration;
+import org.sing_group.rihana.domain.entities.report.Report;
+import org.sing_group.rihana.domain.entities.report.RequestedExploration;
+import org.sing_group.rihana.domain.entities.sign.Sign;
+import org.sing_group.rihana.domain.entities.sign.SignLocation;
 import org.sing_group.rihana.domain.entities.sign.SignType;
 import org.sing_group.rihana.domain.entities.user.User;
 import org.sing_group.rihana.rest.entity.exploration.ExplorationData;
+import org.sing_group.rihana.rest.entity.exploration.ExplorationEditionData;
 import org.sing_group.rihana.rest.entity.mapper.spi.ExplorationMapper;
+import org.sing_group.rihana.rest.entity.patient.PatientEditionData;
+import org.sing_group.rihana.rest.entity.radiograph.RadiographEditionData;
+import org.sing_group.rihana.rest.entity.report.PerformedExplorationEditionData;
+import org.sing_group.rihana.rest.entity.report.ReportEditionData;
+import org.sing_group.rihana.rest.entity.report.RequestedExplorationEditionData;
+import org.sing_group.rihana.rest.entity.sign.SignData;
 import org.sing_group.rihana.rest.filter.CrossDomain;
 import org.sing_group.rihana.rest.mapper.SecurityExceptionMapper;
 import org.sing_group.rihana.rest.resource.spi.exploration.ExplorationResource;
 import org.sing_group.rihana.service.spi.exploration.ExplorationService;
+import org.sing_group.rihana.service.spi.patient.PatientService;
+import org.sing_group.rihana.service.spi.radiograph.RadiographService;
+import org.sing_group.rihana.service.spi.report.ExplorationCodeService;
+import org.sing_group.rihana.service.spi.report.ReportService;
+import org.sing_group.rihana.service.spi.sign.SignService;
 import org.sing_group.rihana.service.spi.sign.SignTypeService;
 import org.sing_group.rihana.service.spi.user.UserService;
 
@@ -88,10 +110,27 @@ public class DefaultExplorationResource implements ExplorationResource {
 	private SignTypeService signTypeService;
 
 	@Inject
+	private PatientService patientService;
+
+	@Inject
+	private ReportService reportService;
+
+	@Inject
+	private ExplorationCodeService explorationCodeService;
+
+	@Inject
+	private RadiographService radiographService;
+
+	@Inject
+	private SignService signService;
+
+	@Inject
 	private ExplorationMapper explorationMapper;
 
 	@Context
 	private UriInfo uriInfo;
+
+	public DefaultExplorationResource() {}
 
 	@PostConstruct
 	public void init() {
@@ -131,6 +170,112 @@ public class DefaultExplorationResource implements ExplorationResource {
 			this.service.listExplorationsByUser(page, pageSize, user, signTypeList)
 				.map(this.explorationMapper::toExplorationData).toArray(ExplorationData[]::new)
 		).header("X-Pagination-Total-Items", countExplorations).build();
+	}
+
+	@POST
+	@ApiOperation(
+		value = "Creates a new exploration.", response = ExplorationData.class, code = 201
+	)
+	@ApiResponses(
+		@ApiResponse(code = 400, message = "Unknown exploration: {id}")
+	)
+	@Override
+	public Response create(ExplorationEditionData explorationEditionData) {
+
+		User user = this.userService.get(explorationEditionData.getUser());
+
+		Patient patient;
+
+		if  (explorationEditionData.getPatient() != null) {
+			PatientEditionData patientEditionData = explorationEditionData.getPatient();
+
+			if (!this.patientService.existsPatientBy(patientEditionData.getPatientID())) {
+				patient = this.patientService.create(
+					new Patient(patientEditionData.getPatientID(),
+						patientEditionData.getSex(),
+						patientEditionData.getBirthdate()));
+			} else {
+				patient = this.patientService.getPatientBy(patientEditionData.getPatientID());
+			}
+		} else {
+			patient = null;
+		}
+
+		String title = "Exploration " + (this.service.countAllExplorations() + 1);
+		Exploration exploration = new Exploration(
+			title,
+			explorationEditionData.getExplorationDate(),
+			user,
+			patient
+		);
+
+		if (explorationEditionData.getReport() != null) {
+			ReportEditionData reportEditionData = explorationEditionData.getReport();
+			Report report = new Report(reportEditionData.getReportN(),
+				reportEditionData.getCompletion_date(),
+				reportEditionData.getApplicant(),
+				reportEditionData.getPriority(),
+				reportEditionData.getStatus(),
+				reportEditionData.getBed(),
+				reportEditionData.getClinical_data(),
+				reportEditionData.getFindings(),
+				reportEditionData.getConclusions());
+
+			for (RequestedExplorationEditionData r : reportEditionData.getRequestedExplorations()) {
+
+				ExplorationCode explorationCode;
+				if (!this.explorationCodeService.existsExplorationCodeBy(r.getCode())) {
+					explorationCode = new ExplorationCode(r.getCode(), r.getDescription());
+				} else {
+					explorationCode = this.explorationCodeService.getExplorationCode(r.getCode());
+				}
+
+				RequestedExploration requestedExploration = new RequestedExploration(r.getDate(), report, explorationCode);
+				report.internalAddRequestedExploration(requestedExploration);
+			}
+
+			for (PerformedExplorationEditionData p : reportEditionData.getPerformedExplorations()) {
+
+				ExplorationCode explorationCode;
+				if (!this.explorationCodeService.existsExplorationCodeBy(p.getCode())) {
+					explorationCode = new ExplorationCode(p.getCode(), p.getDescription());
+				} else {
+					explorationCode = this.explorationCodeService.getExplorationCode(p.getCode());
+				}
+
+				PerformedExploration performedExploration = new PerformedExploration(p.getDate(), p.getPortable(), p.getSurgery(), report, explorationCode);
+				report.internalAddPerformedExploration(performedExploration);
+			}
+
+			report.setExploration(exploration);
+
+			this.reportService.create(report);
+		}
+
+		List<RadiographEditionData> radiographEditionDataList = explorationEditionData.getRadiographs();
+
+		for(RadiographEditionData r: radiographEditionDataList) {
+			Radiograph radiograph = new Radiograph(r.getSource(), r.getType(), r.getObservations());
+			radiograph.setExploration(exploration);
+
+			this.radiographService.create(radiograph);
+
+			for(SignData s: r.getSigns()) {
+				SignType signType = this.signTypeService.get(s.getType().getCode());
+
+				Sign sign = new Sign(signType, s.getBrightness(), s.getContrast(), radiograph);
+				this.signService.create(sign);
+				if (s.getLocation() != null) {
+					new SignLocation(s.getLocation().getX(), s.getLocation().getY(), s.getLocation().getWidth(),
+						s.getLocation().getHeight(), sign);
+				}
+			}
+		}
+
+		exploration = this.service.create(exploration);
+
+		return Response.created(UriBuilder.fromResource(DefaultExplorationResource.class).path(exploration.getId()).build())
+			.entity(explorationMapper.toExplorationData(exploration)).build();
 	}
 
 	@DELETE

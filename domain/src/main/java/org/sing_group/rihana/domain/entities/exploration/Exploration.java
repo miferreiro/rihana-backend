@@ -68,10 +68,10 @@ public class Exploration implements Identifiable {
 	@ManyToOne(optional = false)
 	private User user;
 
-	@ManyToOne
+	@ManyToOne(optional = false)
 	private Patient patient;
 
-	@OneToOne(mappedBy = "exploration", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "exploration", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL, optional = false)
 	private Report report;
 
 	@OneToMany(mappedBy = "exploration", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

@@ -27,10 +27,14 @@ import java.util.List;
 import javax.ejb.Local;
 import javax.ws.rs.core.Response;
 
+import org.sing_group.rihana.rest.entity.exploration.ExplorationEditionData;
+
 @Local
 public interface ExplorationResource {
 
 	Response listExplorations(String userId, int page, int pageSize, List<String> signTypes);
+
+	Response create(ExplorationEditionData explorationEditionData);
 
 	Response delete(String id);
 }

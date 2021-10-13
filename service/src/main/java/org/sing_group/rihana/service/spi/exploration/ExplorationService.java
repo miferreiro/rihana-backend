@@ -38,6 +38,8 @@ public interface ExplorationService {
 
 	Stream<Exploration> listExplorationsByUser(int page, int pageSize, User user, List<SignType> signTypeList);
 
+	int countAllExplorations();
+
 	int countExplorations();
 
 	int countExplorationsByUser(User user);
