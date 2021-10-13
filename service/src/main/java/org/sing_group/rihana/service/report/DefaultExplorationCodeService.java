@@ -41,4 +41,9 @@ public class DefaultExplorationCodeService implements ExplorationCodeService {
 	public ExplorationCode getExplorationCode(String code) {
 		return explorationCodeDao.getExplorationCode(code);
 	}
+
+	@Override
+	public boolean existsExplorationCodeBy(String code) {
+		return explorationCodeDao.existsExplorationCodeBy(code);
+	}
 }

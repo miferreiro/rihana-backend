@@ -60,4 +60,11 @@ public class DefaultExplorationCodeDAO implements ExplorationCodeDAO {
 		return this.dh.get(code).filter(e -> !e.isDeleted())
 			.orElseThrow(() -> new IllegalArgumentException("Unknown exploration code: " + code));
 	}
+
+	@Override
+	public boolean existsExplorationCodeBy(String code) {
+		return this.em
+			.createQuery("SELECT e FROM ExplorationCode e WHERE e.code=:code", ExplorationCode.class)
+			.setParameter("code", code).getResultList().size() != 0;
+	}
 }

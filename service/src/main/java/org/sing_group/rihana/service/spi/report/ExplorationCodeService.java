@@ -30,4 +30,6 @@ import org.sing_group.rihana.domain.entities.report.ExplorationCode;
 public interface ExplorationCodeService {
 
 	ExplorationCode getExplorationCode(String code);
+
+	boolean existsExplorationCodeBy(String code);
 }

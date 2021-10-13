@@ -27,4 +27,6 @@ import org.sing_group.rihana.domain.entities.report.ExplorationCode;
 public interface ExplorationCodeDAO {
 
 	ExplorationCode getExplorationCode(String code);
+
+	boolean existsExplorationCodeBy(String code);
 }
