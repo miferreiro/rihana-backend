@@ -114,7 +114,7 @@ CREATE TABLE `radiograph` (
     `id`                varchar(255)    NOT NULL,
     `source`            varchar(255)    NOT NULL,
     `type`              varchar(255)    NOT NULL,
-    `observations`      varchar(3000)   NOT NULL,
+    `observations`      varchar(3000)   DEFAULT NULL,
     `exploration_id`    varchar(255)    NOT NULL,
     `creation_date`     datetime(3)     DEFAULT NULL,
     `update_date`       datetime(3)     DEFAULT NULL,
