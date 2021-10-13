@@ -43,13 +43,13 @@ public class SignData implements Serializable {
 	@XmlElement(name = "type", required = true)
 	private SignTypeData type;
 
-	@XmlElement(name = "location", required = true)
+	@XmlElement(name = "location")
 	private SignLocationData location;
 
-	@XmlElement(name = "brightness", required = true)
+	@XmlElement(name = "brightness")
 	private Integer brightness;
 
-	@XmlElement(name = "contrast", required = true)
+	@XmlElement(name = "contrast")
 	private Integer contrast;
 
 	public SignData() { }

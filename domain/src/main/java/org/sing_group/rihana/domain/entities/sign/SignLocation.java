@@ -43,6 +43,7 @@ import org.sing_group.rihana.domain.entities.Identifiable;
 public class SignLocation implements Identifiable {
 
 	@Id
+	@Column(name = "id")
 	private String id;
 
 	@Column(name = "x", nullable = false)
@@ -65,12 +66,13 @@ public class SignLocation implements Identifiable {
 
 	SignLocation() { }
 
-	public SignLocation(int x, int y, int width, int height) {
+	public SignLocation(int x, int y, int width, int height, Sign sign) {
 		this.id = UUID.randomUUID().toString();
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
+		this.setX(x);
+		this.setY(y);
+		this.setWidth(width);
+		this.setHeight(height);
+		this.setSign(sign);
 		this.creationDate = new Timestamp(System.currentTimeMillis());
 	}
 

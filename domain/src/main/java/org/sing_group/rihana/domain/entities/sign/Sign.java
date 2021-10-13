@@ -55,14 +55,14 @@ public class Sign implements Identifiable {
 	@JoinColumn(name = "radiograph_id")
 	private Radiograph radiograph;
 
-	@OneToOne(mappedBy = "sign", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL, optional = false)
+	@OneToOne(mappedBy = "sign", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL, optional = true)
 	private SignLocation signLocation;
 
 	@Column(name = "brightness")
-	private int brightness;
+	private Integer brightness;
 
 	@Column(name = "contrast")
-	private int contrast;
+	private Integer contrast;
 
 	@Column(name = "creation_date", columnDefinition = "DATETIME(3)")
 	private Timestamp creationDate;
@@ -79,14 +79,24 @@ public class Sign implements Identifiable {
 
 	Sign() { }
 
-	public Sign(SignType type, int brightness, int contrast) {
+	public Sign(SignType type, Integer brightness, Integer contrast) {
 		this.id = UUID.randomUUID().toString();
-		this.type = type;
-		this.brightness = brightness;
-		this.contrast = contrast;
+		this.setType(type);
+		this.setBrightness(brightness);
+		this.setContrast(contrast);
 		this.creationDate = this.updateDate = new Timestamp(System.currentTimeMillis());
 		this.setDeleted(false);
 		this.deleteDate = null;
+	}
+
+	public Sign(SignType type, Integer brightness, Integer contrast, Radiograph radiograph) {
+		this.id = UUID.randomUUID().toString();
+		this.setType(type);
+		this.setBrightness(brightness);
+		this.setContrast(contrast);
+		this.setRadiograph(radiograph);
+		this.creationDate = this.updateDate = new Timestamp(System.currentTimeMillis());
+		this.setDeleted(false);
 	}
 
 	@Override
@@ -116,19 +126,19 @@ public class Sign implements Identifiable {
 		this.signLocation = signLocation;
 	}
 
-	public int getBrightness() {
+	public Integer getBrightness() {
 		return brightness;
 	}
 
-	public void setBrightness(int brightness) {
+	public void setBrightness(Integer brightness) {
 		this.brightness = brightness;
 	}
 
-	public int getContrast() {
+	public Integer getContrast() {
 		return contrast;
 	}
 
-	public void setContrast(int contrast) {
+	public void setContrast(Integer contrast) {
 		this.contrast = contrast;
 	}
 
