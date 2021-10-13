@@ -65,7 +65,7 @@ public class Exploration implements Identifiable {
 	@Column(name = "date", nullable = false)
 	private Timestamp date;
 
-	@ManyToOne
+	@ManyToOne(optional = false)
 	private User user;
 
 	@ManyToOne
