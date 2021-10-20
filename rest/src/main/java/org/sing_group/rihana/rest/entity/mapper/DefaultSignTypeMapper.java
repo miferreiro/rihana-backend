@@ -34,7 +34,8 @@ public class DefaultSignTypeMapper implements SignTypeMapper {
 
 	@Override
 	public SignTypeData toSignTypeData(SignType signType) {
-		return new SignTypeData(signType.getCode(), signType.getName(), signType.getDescription(), signType.getTarget());
+		return new SignTypeData(signType.getCode(), signType.getName(), signType.getDescription(), signType.getTarget(),
+			signType.getPrimaryColor(), signType.getSecondaryColor());
 	}
 
 	@Override
@@ -43,5 +44,7 @@ public class DefaultSignTypeMapper implements SignTypeMapper {
 		signType.setName(signTypeEditionData.getName());
 		signType.setDescription(signTypeEditionData.getDescription());
 		signType.setTarget(signTypeEditionData.getTarget());
+		signType.setPrimaryColor(signTypeEditionData.getPrimaryColor());
+		signType.setSecondaryColor(signTypeEditionData.getSecondaryColor());
 	}
 }

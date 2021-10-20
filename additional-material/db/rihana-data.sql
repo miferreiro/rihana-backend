@@ -123,17 +123,17 @@ VALUES
 --
 -- Data for table `Sign type`
 --
-INSERT INTO `signtype` (`code`, `name`, `description`, `target`, `deleted`, `delete_date`)
+INSERT INTO `signtype` (`code`, `name`, `description`, `target`, `primaryColor`, `secondaryColor`, `deleted`, `delete_date`)
 VALUES
-    ('CAR', 'Cardiomegaly', 'Cardiomegaly', '1500', 0, null),
-    ('CON', 'Condensation', 'Condensation', '1500', 0, null),
-    ('MAS', 'Masses', 'Masses', '1500', 0, null),
-    ('NOD', 'Nodules', 'Nodules', '1500', 0, null),
-    ('PLE', 'Pleural effusion', 'Pleural effusion', '1500', 0, null),
-    ('PNE', 'Pneumothorax', 'Pneumothorax', '1500', 0, null),
-    ('RED', 'Redistribution', 'Redistribution', '1500', 0, null),
-    ('NOF', 'No findings', 'No findings', '1500', 0, null),
-    ('NON', 'Non-normal', 'Non-normal findings', '1500', 0, null);
+    ('CAR', 'Cardiomegaly', 'Cardiomegaly', '1500', '#E6B8B8', '#990F0B', 0, null),
+    ('CON', 'Condensation', 'Condensation', '1500', '#A4FFAF', '#0E5102', 0, null),
+    ('MAS', 'Masses', 'Masses', '1500', '#B5FCFF', '#024045', 0, null),
+    ('NOD', 'Nodules', 'Nodules', '1500', '#70ACFF', '#091365', 0, null),
+    ('PLE', 'Pleural effusion', 'Pleural effusion', '1500', '#F6A9FF', '#5609A9', 0, null),
+    ('PNE', 'Pneumothorax', 'Pneumothorax', '1500', '#A1887F', '#4E342E', 0, null),
+    ('RED', 'Redistribution', 'Redistribution', '1500', '#FFC37D', '#843E04', 0, null),
+    ('NOF', 'No findings', 'No findings', '1500', '#000000', '#FFFFFF', 0, null),
+    ('NON', 'Non-normal', 'Non-normal findings', '1500', '#D0BDF6', '#6F44C7', 0, null);
 
 --
 -- Data for table `sign`

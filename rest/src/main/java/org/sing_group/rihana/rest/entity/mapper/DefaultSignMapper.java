@@ -45,13 +45,14 @@ public class DefaultSignMapper implements SignMapper {
 	public SignData toSignData(Sign sign) {
 		if (sign.getSignLocation() == null) {
 			return new SignData(sign.getId(), new SignTypeData(sign.getType().getCode(), sign.getType().getName(),
-				sign.getType().getDescription(), sign.getType().getTarget()), null, sign.getBrightness(),
-				sign.getContrast());
+				sign.getType().getDescription(), sign.getType().getTarget(), sign.getType().getPrimaryColor(),
+				sign.getType().getSecondaryColor()), null, sign.getBrightness(), sign.getContrast());
 		} else {
 			return new SignData(sign.getId(), new SignTypeData(sign.getType().getCode(), sign.getType().getName(),
-				sign.getType().getDescription(), sign.getType().getTarget()), new SignLocationData(
-				sign.getSignLocation().getX(), sign.getSignLocation().getY(), sign.getSignLocation().getWidth(),
-				sign.getSignLocation().getHeight()), sign.getBrightness(), sign.getContrast());
+				sign.getType().getDescription(), sign.getType().getTarget(), sign.getType().getPrimaryColor(),
+				sign.getType().getSecondaryColor()), new SignLocationData(sign.getSignLocation().getX(),
+				sign.getSignLocation().getY(), sign.getSignLocation().getWidth(), sign.getSignLocation().getHeight()),
+				sign.getBrightness(), sign.getContrast());
 		}
 	}
 }

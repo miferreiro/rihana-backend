@@ -128,12 +128,14 @@ CREATE TABLE `radiograph` (
 -- Table structure for table `signtype`
 --
 CREATE TABLE `signtype` (
-    `code`          varchar(255)    NOT NULL,
-    `name`          varchar(255)    NOT NULL,
-    `description`   varchar(255)    NOT NULL,
-    `target`        int             NOT NULL,
-    `deleted`       bit(1)          DEFAULT b'0',
-    `delete_date`   datetime(3)     DEFAULT NULL,
+    `code`              varchar(255)    NOT NULL,
+    `name`              varchar(255)    NOT NULL,
+    `description`       varchar(255)    NOT NULL,
+    `target`            int             NOT NULL,
+    `primaryColor`      varchar(8)      NOT NULL,
+    `secondaryColor`    varchar(8)      NOT NULL,
+    `deleted`           bit(1)          DEFAULT b'0',
+    `delete_date`       datetime(3)     DEFAULT NULL,
     PRIMARY KEY (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

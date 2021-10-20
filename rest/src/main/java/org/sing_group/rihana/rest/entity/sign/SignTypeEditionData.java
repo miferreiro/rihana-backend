@@ -51,13 +51,21 @@ public class SignTypeEditionData implements Serializable {
 	@XmlElement(name = "target", required = true)
 	private Integer target;
 
+	@XmlElement(name = "primaryColor", required = true)
+	private String primaryColor;
+
+	@XmlElement(name = "secondaryColor", required = true)
+	private String secondaryColor;
+
 	public SignTypeEditionData() { }
 
-	public SignTypeEditionData(String code, String name, String description, Integer target) {
+	public SignTypeEditionData(String code, String name, String description, Integer target, String primaryColor, String secondaryColor) {
 		this.code = code;
 		this.name = name;
 		this.description = description;
 		this.target = target;
+		this.primaryColor = primaryColor;
+		this.secondaryColor = secondaryColor;
 	}
 
 	public String getCode() {
@@ -74,5 +82,13 @@ public class SignTypeEditionData implements Serializable {
 
 	public Integer getTarget() {
 		return target;
+	}
+
+	public String getPrimaryColor() {
+		return primaryColor;
+	}
+
+	public String getSecondaryColor() {
+		return secondaryColor;
 	}
 }

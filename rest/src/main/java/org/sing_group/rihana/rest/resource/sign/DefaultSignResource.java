@@ -145,7 +145,9 @@ public class DefaultSignResource implements SignResource {
 	)
 	@Override
 	public Response createSignType(SignTypeEditionData signTypeEditionData) {
-		SignType signType = new SignType(signTypeEditionData.getCode(), signTypeEditionData.getName(), signTypeEditionData.getDescription(), signTypeEditionData.getTarget());
+		SignType signType = new SignType(signTypeEditionData.getCode(), signTypeEditionData.getName(),
+			signTypeEditionData.getDescription(), signTypeEditionData.getTarget(), signTypeEditionData.getPrimaryColor(),
+			signTypeEditionData.getSecondaryColor());
 		signType = this.signTypeService.create(signType);
 		return Response.created(UriBuilder.fromResource(DefaultSignResource.class).path("type/"+ signType.getCode()).build())
 			.entity(signTypeMapper.toSignTypeData(signType)).build();

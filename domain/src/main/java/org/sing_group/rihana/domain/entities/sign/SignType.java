@@ -41,17 +41,24 @@ public class SignType implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "code")
+	@Column(name = "code", nullable = false)
 	private String code;
 
-	@Column(name = "name")
+	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column(name = "description")
+	@Column(name = "description", nullable = false)
 	private String description;
 
-	@Column(name = "target")
+	@Column(name = "target", nullable = false)
 	private int target;
+
+	@Column(name = "primaryColor", length = 8, nullable = false)
+
+					private String primaryColor;
+
+	@Column(name = "secondaryColor", length = 8, nullable = false)
+	private String secondaryColor;
 
 	@OneToMany(mappedBy = "type", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Sign> signs = new ArrayList<>();
@@ -64,11 +71,13 @@ public class SignType implements Serializable {
 
 	SignType() { }
 
-	public SignType(String code, String name, String description, int target) {
+	public SignType(String code, String name, String description, int target, String primaryColor, String secondaryColor) {
 		this.setCode(code);
 		this.setName(name);
 		this.setDescription(description);
 		this.setTarget(target);
+		this.setPrimaryColor(primaryColor);
+		this.setSecondaryColor(secondaryColor);
 		this.setDeleted(false);
 		this.deleteDate = null;
 	}
@@ -103,6 +112,22 @@ public class SignType implements Serializable {
 
 	public void setTarget(int target) {
 		this.target = target;
+	}
+
+	public String getPrimaryColor() {
+		return primaryColor;
+	}
+
+	public void setPrimaryColor(String primaryColor) {
+		this.primaryColor = primaryColor;
+	}
+
+	public String getSecondaryColor() {
+		return secondaryColor;
+	}
+
+	public void setSecondaryColor(String secondaryColor) {
+		this.secondaryColor = secondaryColor;
 	}
 
 	public void internalRemoveSign(Sign sign) {
