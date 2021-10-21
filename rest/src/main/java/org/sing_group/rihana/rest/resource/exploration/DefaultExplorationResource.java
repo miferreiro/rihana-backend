@@ -61,7 +61,9 @@ import org.sing_group.rihana.domain.entities.report.RequestedExploration;
 import org.sing_group.rihana.domain.entities.sign.Sign;
 import org.sing_group.rihana.domain.entities.sign.SignLocation;
 import org.sing_group.rihana.domain.entities.sign.SignType;
+import org.sing_group.rihana.domain.entities.user.Role;
 import org.sing_group.rihana.domain.entities.user.User;
+import org.sing_group.rihana.rest.entity.exploration.ExplorationAdminData;
 import org.sing_group.rihana.rest.entity.exploration.ExplorationData;
 import org.sing_group.rihana.rest.entity.exploration.ExplorationEditionData;
 import org.sing_group.rihana.rest.entity.mapper.spi.ExplorationMapper;
@@ -163,13 +165,24 @@ public class DefaultExplorationResource implements ExplorationResource {
 			countExplorations = this.service.countExplorations();
 		} else {
 			user = this.userService.get(userId);
-			countExplorations = this.service.countExplorationsByUserAndSignTypes(user, signTypeList);
+			if (user.getRole() == Role.ADMIN) {
+				countExplorations = this.service.countExplorations();
+			} else {
+				countExplorations = this.service.countExplorationsByUserAndSignTypes(user, signTypeList);
+			}
 		}
 
-		return Response.ok(
-			this.service.listExplorationsByUser(page, pageSize, user, signTypeList)
-				.map(this.explorationMapper::toExplorationData).toArray(ExplorationData[]::new)
-		).header("X-Pagination-Total-Items", countExplorations).build();
+		if (userId != null && !userId.equals("") && user.getRole() == Role.ADMIN) {
+			return Response.ok(
+				this.service.listExplorationsByUser(page, pageSize, user, signTypeList)
+					.map(this.explorationMapper::toExplorationAdminData).toArray(ExplorationAdminData[]::new)
+			).header("X-Pagination-Total-Items", countExplorations).build();
+		} else {
+			return Response.ok(
+				this.service.listExplorationsByUser(page, pageSize, user, signTypeList)
+					.map(this.explorationMapper::toExplorationData).toArray(ExplorationData[]::new)
+			).header("X-Pagination-Total-Items", countExplorations).build();
+		}
 	}
 
 	@POST

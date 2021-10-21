@@ -36,6 +36,7 @@ import org.sing_group.rihana.domain.dao.DAOHelper;
 import org.sing_group.rihana.domain.dao.spi.exploration.ExplorationDAO;
 import org.sing_group.rihana.domain.entities.exploration.Exploration;
 import org.sing_group.rihana.domain.entities.sign.SignType;
+import org.sing_group.rihana.domain.entities.user.Role;
 import org.sing_group.rihana.domain.entities.user.User;
 
 @Default
@@ -116,7 +117,11 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 
 			StringBuilder stringBuilder = new StringBuilder("");
 			int count = 0;
-			String querySignType = "SELECT tt.code from Exploration ee LEFT JOIN ee.radiographs rr LEFT JOIN rr.signs ss LEFT JOIN ss.type tt WHERE ee.id=e.id AND ee.deleted=0";
+			String conditionDeletedSignType = " AND ee.deleted=0";
+			if (user != null && user.getRole() == Role.ADMIN) {
+				conditionDeletedSignType = "";
+			}
+			String querySignType = "SELECT tt.code from Exploration ee LEFT JOIN ee.radiographs rr LEFT JOIN rr.signs ss LEFT JOIN ss.type tt WHERE ee.id=e.id" + conditionDeletedSignType;
 
 			if (signTypeList.size() > 0) {
 				stringBuilder.append(" AND (");
@@ -138,7 +143,7 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 			String queryExplorations;
 			Query query;
 
-			if (user != null) {
+			if (user != null && user.getRole() != Role.ADMIN) {
 				queryExplorations = "SELECT e " +
 					"FROM Exploration e LEFT JOIN e.radiographs r LEFT JOIN r.signs s LEFT JOIN s.type t " +
 					"WHERE e.user.login=:login AND e.deleted=0" +
@@ -148,9 +153,15 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 				query = this.em.createQuery(queryExplorations, Exploration.class);
 				query.setParameter("login", user.getLogin());
 			} else {
+				String conditionDeleted = "e.deleted=0 ";
+				if (user != null && user.getRole() == Role.ADMIN) {
+					conditionDeleted = "";
+					stringBuilder.delete(0, 5);
+				}
+
 				queryExplorations = "SELECT e " +
 					"FROM Exploration e LEFT JOIN e.radiographs r LEFT JOIN r.signs s LEFT JOIN s.type t " +
-					"WHERE e.deleted=0 " +
+					"WHERE " + conditionDeleted +
 					stringBuilder +
 					" GROUP BY e.id ORDER BY e.creationDate";
 
@@ -170,7 +181,7 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 			}
 		} else {
 
-			if (user != null) {
+			if (user != null && user.getRole() != Role.ADMIN) {
 				String queryString = "SELECT e FROM Exploration e LEFT JOIN e.user u WHERE e.deleted=0 AND u.login=:login ORDER BY e.creationDate DESC";
 				if (page != null && pageSize != null) {
 					return em.createQuery(queryString).setParameter("login", user.getLogin()).setFirstResult((page - 1) * pageSize).setMaxResults(pageSize).getResultList();
@@ -179,7 +190,11 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 				}
 
 			} else {
-				String queryString = "SELECT e FROM Exploration e WHERE e.deleted=0 ORDER BY e.creationDate DESC";
+				String conditionDeleted = "WHERE e.deleted=0 ";
+				if (user != null && user.getRole() == Role.ADMIN) {
+					conditionDeleted = "";
+				}
+				String queryString = "SELECT e FROM Exploration e " + conditionDeleted + "ORDER BY e.creationDate DESC";
 				if (page != null && pageSize != null) {
 					return em.createQuery(queryString).setFirstResult((page - 1) * pageSize).setMaxResults(pageSize).getResultList();
 				} else {

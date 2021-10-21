@@ -25,6 +25,7 @@ package org.sing_group.rihana.rest.entity.mapper.spi;
 import javax.ws.rs.core.UriInfo;
 
 import org.sing_group.rihana.domain.entities.exploration.Exploration;
+import org.sing_group.rihana.rest.entity.exploration.ExplorationAdminData;
 import org.sing_group.rihana.rest.entity.exploration.ExplorationData;
 
 public interface ExplorationMapper {
@@ -32,4 +33,6 @@ public interface ExplorationMapper {
 	void setRequestURI(UriInfo requestURI);
 
 	ExplorationData toExplorationData(Exploration exploration);
+
+	ExplorationAdminData toExplorationAdminData(Exploration exploration);
 }

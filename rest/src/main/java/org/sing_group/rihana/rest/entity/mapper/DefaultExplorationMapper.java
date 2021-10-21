@@ -29,6 +29,7 @@ import javax.enterprise.inject.Default;
 import javax.ws.rs.core.UriInfo;
 
 import org.sing_group.rihana.domain.entities.exploration.Exploration;
+import org.sing_group.rihana.rest.entity.exploration.ExplorationAdminData;
 import org.sing_group.rihana.rest.entity.exploration.ExplorationData;
 import org.sing_group.rihana.rest.entity.mapper.spi.ExplorationMapper;
 import org.sing_group.rihana.rest.resource.patient.DefaultPatientResource;
@@ -52,6 +53,16 @@ public class DefaultExplorationMapper implements ExplorationMapper {
 			fromEntity(requestURI, exploration.getPatient(), DefaultPatientResource.class),
 			fromEntity(requestURI, exploration.getReport(), DefaultReportResource.class),
 			fromEntities(requestURI, exploration.getRadiographs(), DefaultRadiographResource.class)
+		);
+	}
+	@Override
+	public ExplorationAdminData toExplorationAdminData(Exploration exploration) {
+		return new ExplorationAdminData(
+			exploration.getId(), exploration.getTitle(), exploration.getDate(), exploration.getUser(),
+			fromEntity(requestURI, exploration.getPatient(), DefaultPatientResource.class),
+			fromEntity(requestURI, exploration.getReport(), DefaultReportResource.class),
+			fromEntities(requestURI, exploration.getRadiographs(), DefaultRadiographResource.class),
+			exploration.isDeleted()
 		);
 	}
 }
