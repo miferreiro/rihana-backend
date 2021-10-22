@@ -69,6 +69,12 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 	}
 
 	@Override
+	public Exploration getExplorationDeleted(String id) {
+		return this.dh.get(id).filter(e -> e.isDeleted())
+			.orElseThrow(() -> new IllegalArgumentException("Unknown deleted exploration: " + id));
+	}
+
+	@Override
 	public Stream<Exploration> listExplorationsByUser(Integer page, Integer pageSize, User user, List<SignType> signTypeList) {
 		return this.listExplorations(page, pageSize, user, signTypeList).stream();
 	}
@@ -107,6 +113,12 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 	@Override
 	public void delete(Exploration exploration) {
 		exploration.setDeleted(true);
+		this.dh.update(exploration);
+	}
+
+	@Override
+	public void recover(Exploration exploration) {
+		exploration.setDeleted(false);
 		this.dh.update(exploration);
 	}
 

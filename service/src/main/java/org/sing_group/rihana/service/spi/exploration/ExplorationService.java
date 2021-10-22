@@ -36,6 +36,8 @@ public interface ExplorationService {
 
 	Exploration getExploration(String id);
 
+	Exploration getExplorationDeleted(String id);
+
 	Stream<Exploration> listExplorationsByUser(int page, int pageSize, User user, List<SignType> signTypeList);
 
 	int countAllExplorations();
@@ -51,4 +53,6 @@ public interface ExplorationService {
 	Exploration edit(Exploration exploration);
 
 	void delete(Exploration exploration);
+
+	void recover(Exploration exploration);
 }

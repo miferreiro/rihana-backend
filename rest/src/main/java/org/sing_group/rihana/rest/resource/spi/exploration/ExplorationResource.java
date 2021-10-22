@@ -37,4 +37,6 @@ public interface ExplorationResource {
 	Response create(ExplorationEditionData explorationEditionData);
 
 	Response delete(String id);
+
+	Response recover(String id);
 }

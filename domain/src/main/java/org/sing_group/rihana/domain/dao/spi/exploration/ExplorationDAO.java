@@ -33,6 +33,8 @@ public interface ExplorationDAO {
 
 	Exploration getExploration(String id);
 
+	Exploration getExplorationDeleted(String id);
+
 	Stream<Exploration> listExplorationsByUser(Integer page, Integer pageSize, User user, List<SignType> signTypeList);
 
 	int countAllExplorations();
@@ -48,4 +50,6 @@ public interface ExplorationDAO {
 	Exploration edit(Exploration exploration);
 
 	void delete(Exploration exploration);
+
+	void recover(Exploration exploration);
 }

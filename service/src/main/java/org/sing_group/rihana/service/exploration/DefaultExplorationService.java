@@ -48,6 +48,11 @@ public class DefaultExplorationService implements ExplorationService {
 	}
 
 	@Override
+	public Exploration getExplorationDeleted(String id) {
+		return explorationDao.getExplorationDeleted(id);
+	}
+
+	@Override
 	public Stream<Exploration> listExplorationsByUser(int page, int pageSize, User user, List<SignType> signTypeList) {
 		return explorationDao.listExplorationsByUser(page, pageSize, user, signTypeList);
 	}
@@ -85,5 +90,10 @@ public class DefaultExplorationService implements ExplorationService {
 	@Override
 	public void delete(Exploration exploration) {
 		explorationDao.delete(exploration);
+	}
+
+	@Override
+	public void recover(Exploration exploration) {
+		explorationDao.recover(exploration);
 	}
 }
