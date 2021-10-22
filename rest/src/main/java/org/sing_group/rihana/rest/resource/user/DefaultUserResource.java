@@ -55,7 +55,7 @@ import org.sing_group.rihana.rest.resource.spi.user.UserResource;
 import org.sing_group.rihana.service.spi.user.UserService;
 
 @RolesAllowed({
-	"ADMIN", "USER", "RADIOLOGIST", "SENIORRADIOLOGIST"
+	"ADMIN", "USER", "RADIOLOGIST", "SUPERVISOR"
 })
 @Path("user")
 @Produces({
@@ -146,7 +146,7 @@ public class DefaultUserResource implements UserResource {
 	@PUT
 	@Path("{login}")
 	@RolesAllowed({
-		"ADMIN", "USER", "RADIOLOGIST", "SENIORRADIOLOGIST"
+		"ADMIN", "USER", "RADIOLOGIST", "SUPERVISOR"
 	})
 	@ApiOperation(
 		value = "Modifies an existing user", response = UserData.class, code = 200

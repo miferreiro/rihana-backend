@@ -50,7 +50,7 @@ import org.sing_group.rihana.rest.resource.spi.radiograph.RadiographResource;
 import org.sing_group.rihana.service.spi.radiograph.RadiographService;
 
 @RolesAllowed({
-	"ADMIN", "USER", "RADIOLOGIST", "SENIORRADIOLOGIST"
+	"ADMIN", "USER", "RADIOLOGIST", "SUPERVISOR"
 })
 @Path("radiograph")
 @Produces({

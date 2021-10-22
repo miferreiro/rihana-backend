@@ -23,5 +23,5 @@
 package org.sing_group.rihana.domain.entities.user;
 
 public enum Role {
-	ADMIN, USER, RADIOLOGIST, SENIORRADIOLOGIST
+	ADMIN, USER, RADIOLOGIST, SUPERVISOR
 }

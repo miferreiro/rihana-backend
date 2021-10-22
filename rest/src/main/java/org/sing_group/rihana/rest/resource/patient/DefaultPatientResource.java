@@ -56,7 +56,7 @@ import org.sing_group.rihana.rest.resource.spi.patient.PatientResource;
 import org.sing_group.rihana.service.spi.patient.PatientService;
 
 @RolesAllowed({
-	"ADMIN", "USER", "RADIOLOGIST", "SENIORRADIOLOGIST"
+	"ADMIN", "USER", "RADIOLOGIST", "SUPERVISOR"
 })
 @Path("patient")
 @Produces({
