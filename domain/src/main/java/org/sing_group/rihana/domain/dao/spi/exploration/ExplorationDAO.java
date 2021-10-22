@@ -41,8 +41,6 @@ public interface ExplorationDAO {
 
 	int countExplorations();
 
-	int countExplorationsByUser(User user);
-
 	int countExplorationsByUserAndSignTypes(User user, List<SignType> signTypeList);
 
 	Exploration create(Exploration exploration);

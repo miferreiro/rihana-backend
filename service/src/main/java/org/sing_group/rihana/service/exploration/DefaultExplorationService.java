@@ -68,11 +68,6 @@ public class DefaultExplorationService implements ExplorationService {
 	}
 
 	@Override
-	public int countExplorationsByUser(User user) {
-		return explorationDao.countExplorationsByUser(user);
-	}
-
-	@Override
 	public int countExplorationsByUserAndSignTypes(User user, List<SignType> signTypeList) {
 		return explorationDao.countExplorationsByUserAndSignTypes(user, signTypeList);
 	}

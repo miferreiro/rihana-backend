@@ -142,7 +142,7 @@ public class DefaultExplorationResource implements ExplorationResource {
 
 	@GET
 	@ApiOperation(
-		value = "Return the data of all explorations or explorations of a specified user. In addition, can be filtered by the sign types detected in the explorations",
+		value = "Return the data of all explorations or explorations of a specified user. In addition, can be filtered by the sign types detected in the explorations.",
 		response = ExplorationData.class, responseContainer = "List", code = 200
 	)
 	@ApiResponses(

@@ -90,12 +90,6 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 	}
 
 	@Override
-	public int countExplorationsByUser(User user) {
-		String queryString = "SELECT e FROM Exploration e LEFT JOIN e.user u WHERE e.deleted=0 AND u.login=:login";
-		return em.createQuery(queryString).setParameter("login", user.getLogin()).getResultList().size();
-	}
-
-	@Override
 	public int countExplorationsByUserAndSignTypes(User user, List<SignType> signTypeList) {
 		return this.listExplorations(null,null, user, signTypeList).size();
 	}
