@@ -167,7 +167,7 @@ public class DefaultExplorationResource implements ExplorationResource {
 		} else {
 			user = this.userService.get(userId);
 			if (user.getRole() == Role.ADMIN) {
-				countExplorations = this.service.countExplorations();
+				countExplorations = this.service.countExplorationsByUserAndSignTypes(null, signTypeList);
 			} else {
 				countExplorations = this.service.countExplorationsByUserAndSignTypes(user, signTypeList);
 			}
