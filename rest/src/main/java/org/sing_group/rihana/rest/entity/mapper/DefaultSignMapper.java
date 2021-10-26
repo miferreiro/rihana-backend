@@ -44,11 +44,11 @@ public class DefaultSignMapper implements SignMapper {
 	@Override
 	public SignData toSignData(Sign sign) {
 		if (sign.getSignLocation() == null) {
-			return new SignData(sign.getId(), new SignTypeData(sign.getType().getCode(), sign.getType().getName(),
+			return new SignData(new SignTypeData(sign.getType().getCode(), sign.getType().getName(),
 				sign.getType().getDescription(), sign.getType().getTarget(), sign.getType().getPrimaryColor(),
 				sign.getType().getSecondaryColor()), null, sign.getBrightness(), sign.getContrast());
 		} else {
-			return new SignData(sign.getId(), new SignTypeData(sign.getType().getCode(), sign.getType().getName(),
+			return new SignData(new SignTypeData(sign.getType().getCode(), sign.getType().getName(),
 				sign.getType().getDescription(), sign.getType().getTarget(), sign.getType().getPrimaryColor(),
 				sign.getType().getSecondaryColor()), new SignLocationData(sign.getSignLocation().getX(),
 				sign.getSignLocation().getY(), sign.getSignLocation().getWidth(), sign.getSignLocation().getHeight()),

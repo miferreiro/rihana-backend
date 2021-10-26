@@ -37,9 +37,6 @@ import io.swagger.annotations.ApiModel;
 public class SignData implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@XmlElement(name = "id", required = true)
-	private String id;
-
 	@XmlElement(name = "type", required = true)
 	private SignTypeData type;
 
@@ -54,16 +51,11 @@ public class SignData implements Serializable {
 
 	public SignData() { }
 
-	public SignData(String id, SignTypeData type, SignLocationData location, Integer brightness, Integer contrast) {
-		this.id = id;
+	public SignData(SignTypeData type, SignLocationData location, Integer brightness, Integer contrast) {
 		this.type = type;
 		this.location = location;
 		this.brightness = brightness;
 		this.contrast = contrast;
-	}
-
-	public String getId() {
-		return id;
 	}
 
 	public SignTypeData getType() {
