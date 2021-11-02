@@ -140,6 +140,23 @@ public class DefaultExplorationResource implements ExplorationResource {
 		this.explorationMapper.setRequestURI(this.uriInfo);
 	}
 
+	@Path("{id}")
+	@GET
+	@ApiOperation(
+		value = "Return the data of an exploration.", response = ExplorationData.class, code = 200
+	)
+	@ApiResponses(
+		@ApiResponse(code = 400, message = "Unknown exploration: {id}")
+	)
+	@Override
+	public Response getExploration(
+		@PathParam("id") String id
+	) {
+		return Response
+			.ok(this.explorationMapper.toExplorationData(this.service.getExploration(id)))
+			.build();
+	}
+
 	@GET
 	@ApiOperation(
 		value = "Return the data of all explorations or explorations of a specified user. In addition, can be filtered by the sign types detected in the explorations.",

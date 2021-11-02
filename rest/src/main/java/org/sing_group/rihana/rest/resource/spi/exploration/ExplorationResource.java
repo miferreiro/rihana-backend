@@ -32,6 +32,8 @@ import org.sing_group.rihana.rest.entity.exploration.ExplorationEditionData;
 @Local
 public interface ExplorationResource {
 
+	Response getExploration(String id);
+
 	Response listExplorations(String userId, int page, int pageSize, List<String> signTypes);
 
 	Response create(ExplorationEditionData explorationEditionData);
