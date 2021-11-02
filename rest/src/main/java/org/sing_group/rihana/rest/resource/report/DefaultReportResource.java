@@ -54,10 +54,10 @@ import org.sing_group.rihana.service.spi.report.ReportService;
 })
 @Path("report")
 @Produces({
-	APPLICATION_JSON + ";charset=iso-8859-1", APPLICATION_XML + ";charset=iso-8859-1"
+	APPLICATION_JSON, APPLICATION_XML
 })
 @Consumes({
-	APPLICATION_JSON + ";charset=iso-8859-1", APPLICATION_XML + ";charset=iso-8859-1"
+	APPLICATION_JSON, APPLICATION_XML
 })
 @Api(value = "report")
 @Stateless
