@@ -112,7 +112,7 @@ CREATE TABLE `performedexploration` (
 --
 CREATE TABLE `radiograph` (
     `id`                varchar(255)    NOT NULL,
-    `source`            longtext        NOT NULL,
+    `source`            varchar(255)    NOT NULL,
     `type`              varchar(255)    NOT NULL,
     `observations`      varchar(3000)   DEFAULT NULL,
     `exploration_id`    varchar(255)    NOT NULL,

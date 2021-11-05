@@ -319,6 +319,7 @@
                 <simple name="java:global/rihana/swagger/schemes" value="http" type="java.lang.String"/>
                 <simple name="java:global/rihana/swagger/host" value="localhost:8080" type="java.lang.String"/>
                 <simple name="java:global/rihana/swagger/basePath" value="/rihana-backend/rest/api" type="java.lang.String"/>
+                <simple name="java:global/rihana/defaultexplorationstorage/path" value="/rihana-files/explorations" type="java.lang.String"/>
             </bindings>
             <remote-naming/>
         </subsystem>

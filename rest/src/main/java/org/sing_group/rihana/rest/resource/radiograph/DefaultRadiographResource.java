@@ -25,6 +25,9 @@ package org.sing_group.rihana.rest.resource.radiograph;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.APPLICATION_XML;
 
+import java.io.IOException;
+import java.util.Set;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
@@ -43,11 +46,14 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.apache.commons.io.IOUtils;
+import org.sing_group.rihana.domain.entities.radiograph.Radiograph;
 import org.sing_group.rihana.rest.entity.mapper.spi.RadiographMapper;
-import org.sing_group.rihana.rest.entity.report.ReportData;
+import org.sing_group.rihana.rest.entity.radiograph.RadiographData;
 import org.sing_group.rihana.rest.filter.CrossDomain;
 import org.sing_group.rihana.rest.resource.spi.radiograph.RadiographResource;
 import org.sing_group.rihana.service.spi.radiograph.RadiographService;
+import org.sing_group.rihana.service.spi.radiograph.RadiographStorage;
 
 @RolesAllowed({
 	"ADMIN", "USER", "RADIOLOGIST", "SUPERVISOR"
@@ -71,6 +77,9 @@ public class DefaultRadiographResource implements RadiographResource {
 	@Inject
 	private RadiographMapper radiographMapper;
 
+	@Inject
+	private RadiographStorage fileStorage;
+
 	@Context
 	private UriInfo uriInfo;
 
@@ -79,10 +88,10 @@ public class DefaultRadiographResource implements RadiographResource {
 		this.radiographMapper.setRequestURI(this.uriInfo);
 	}
 
-	@Path("{id}")
+	@Path("{id}/metadata")
 	@GET
 	@ApiOperation(
-		value = "Return the data of a radiograph.", response = ReportData.class, code = 200
+		value = "Return the data of a radiograph.", response = RadiographData.class, code = 200
 	)
 	@ApiResponses(
 		@ApiResponse(code = 400, message = "Unknown radiograph: {id}")
@@ -94,5 +103,34 @@ public class DefaultRadiographResource implements RadiographResource {
 		return Response
 			.ok(this.radiographMapper.toRadiographData(this.service.getRadiograph(id)))
 			.build();
+	}
+
+	@Path("{id}")
+	@GET
+	@ApiOperation(
+		value = "Return the bytes of a radiograph.", response = byte[].class, code = 200
+	)
+	@ApiResponses(
+		@ApiResponse(code = 400, message = "Unknown radiograph: {id}")
+	)
+	@Override
+	public Response getRadiographSource(
+		@PathParam("id") String id
+	) {
+
+		Radiograph radiograph = this.service.getRadiograph(id);
+		Set<String> formats = this.fileStorage.getFormatsForType(radiograph);
+
+		if (formats.size() == 0) {
+			throw new IllegalArgumentException("Unknown radiograph: " + radiograph.getId());
+		}
+
+		try {
+			return Response.ok(IOUtils.toByteArray(this.fileStorage.retrieve(radiograph)))
+				.header("Content-Type", "image/png")
+				.build();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

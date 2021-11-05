@@ -1,6 +1,6 @@
 /*-
  * #%L
- * REST
+ * Service
  * %%
  * Copyright (C) 2021 David A. Ruano Ordás, José Ramón Méndez Reboredo,
  * 		Miguel Ferreiro Díaz
@@ -20,14 +20,19 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.rihana.rest.resource.spi.radiograph;
+package org.sing_group.rihana.service.spi.radiograph;
 
-import javax.ejb.Local;
-import javax.ws.rs.core.Response;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.Set;
 
-@Local
-public interface RadiographResource {
-	Response getRadiograph(String id);
+import org.sing_group.rihana.domain.entities.radiograph.Radiograph;
 
-	Response getRadiographSource(String id);
+public interface RadiographStorage {
+
+	String store(Radiograph radiograph, InputStream data);
+
+	FileInputStream retrieve(Radiograph radiograph);
+
+	Set<String> getFormatsForType(Radiograph radiograph);
 }

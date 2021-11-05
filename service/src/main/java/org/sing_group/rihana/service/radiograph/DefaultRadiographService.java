@@ -22,13 +22,24 @@
  */
 package org.sing_group.rihana.service.radiograph;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.Base64;
+
 import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
+import javax.imageio.ImageIO;
 import javax.inject.Inject;
 
 import org.sing_group.rihana.domain.dao.spi.radiograph.RadiographDAO;
 import org.sing_group.rihana.domain.entities.radiograph.Radiograph;
 import org.sing_group.rihana.service.spi.radiograph.RadiographService;
+import org.sing_group.rihana.service.spi.radiograph.RadiographStorage;
 
 @Stateless
 @PermitAll
@@ -37,6 +48,9 @@ public class DefaultRadiographService implements RadiographService {
 	@Inject
 	private RadiographDAO radiographDAO;
 
+	@Inject
+	private RadiographStorage radiographStorage;
+
 	@Override
 	public Radiograph getRadiograph(String id) {
 		return radiographDAO.get(id);
@@ -44,6 +58,35 @@ public class DefaultRadiographService implements RadiographService {
 
 	@Override
 	public Radiograph create(Radiograph radiograph) {
+
+		InputStream data = sourceToInputStream(radiograph);
+
+		String filePath = radiographStorage.store(radiograph, data);
+		radiograph.setSource(filePath);
+
 		return radiographDAO.create(radiograph);
+	}
+
+	private InputStream sourceToInputStream(Radiograph radiograph) {
+
+		String b64Data = radiograph.getSource().split(",")[1];
+
+		byte[] decodedString = new byte[0];
+		try {
+			decodedString = Base64.getDecoder().decode(b64Data.getBytes("UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+
+		FileInputStream fileInputStream = null;
+		try {
+			BufferedImage bufImg = ImageIO.read(new ByteArrayInputStream(decodedString));
+			File imgOutFile = new File(radiograph.getType().name() + ".png");
+			ImageIO.write(bufImg, "png", imgOutFile);
+			fileInputStream = new FileInputStream(imgOutFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return fileInputStream;
 	}
 }
