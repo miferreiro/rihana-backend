@@ -47,6 +47,8 @@ public class UserData implements Serializable {
 	@XmlElement(name = "role", required = true)
 	private Role role;
 
+	public UserData() { }
+
 	public UserData(String login, String password, Role role) {
 		this.login = login;
 		this.password = password;
