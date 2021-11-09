@@ -38,8 +38,8 @@ import javax.inject.Inject;
 
 import org.sing_group.rihana.domain.dao.spi.radiograph.RadiographDAO;
 import org.sing_group.rihana.domain.entities.radiograph.Radiograph;
+import org.sing_group.rihana.service.spi.exploration.ExplorationStorage;
 import org.sing_group.rihana.service.spi.radiograph.RadiographService;
-import org.sing_group.rihana.service.spi.radiograph.RadiographStorage;
 
 @Stateless
 @PermitAll
@@ -49,7 +49,7 @@ public class DefaultRadiographService implements RadiographService {
 	private RadiographDAO radiographDAO;
 
 	@Inject
-	private RadiographStorage radiographStorage;
+	private ExplorationStorage explorationStorage;
 
 	@Override
 	public Radiograph getRadiograph(String id) {
@@ -61,7 +61,7 @@ public class DefaultRadiographService implements RadiographService {
 
 		InputStream data = sourceToInputStream(radiograph);
 
-		String filePath = radiographStorage.store(radiograph, data);
+		String filePath = explorationStorage.storeRadiograph(radiograph, data);
 		radiograph.setSource(filePath);
 
 		return radiographDAO.create(radiograph);

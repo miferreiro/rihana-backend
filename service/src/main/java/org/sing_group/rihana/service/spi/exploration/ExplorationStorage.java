@@ -20,7 +20,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.rihana.service.spi.radiograph;
+package org.sing_group.rihana.service.spi.exploration;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -28,11 +28,11 @@ import java.util.Set;
 
 import org.sing_group.rihana.domain.entities.radiograph.Radiograph;
 
-public interface RadiographStorage {
+public interface ExplorationStorage {
 
-	String store(Radiograph radiograph, InputStream data);
+	String storeRadiograph(Radiograph radiograph, InputStream data);
 
-	FileInputStream retrieve(Radiograph radiograph);
+	FileInputStream retrieveRadiograph(Radiograph radiograph);
 
-	Set<String> getFormatsForType(Radiograph radiograph);
+	Set<String> getFormatsForRadiographType(Radiograph radiograph);
 }

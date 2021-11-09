@@ -52,8 +52,8 @@ import org.sing_group.rihana.rest.entity.mapper.spi.RadiographMapper;
 import org.sing_group.rihana.rest.entity.radiograph.RadiographData;
 import org.sing_group.rihana.rest.filter.CrossDomain;
 import org.sing_group.rihana.rest.resource.spi.radiograph.RadiographResource;
+import org.sing_group.rihana.service.spi.exploration.ExplorationStorage;
 import org.sing_group.rihana.service.spi.radiograph.RadiographService;
-import org.sing_group.rihana.service.spi.radiograph.RadiographStorage;
 
 @RolesAllowed({
 	"ADMIN", "USER", "RADIOLOGIST", "SUPERVISOR"
@@ -78,7 +78,7 @@ public class DefaultRadiographResource implements RadiographResource {
 	private RadiographMapper radiographMapper;
 
 	@Inject
-	private RadiographStorage fileStorage;
+	private ExplorationStorage explorationStorage;
 
 	@Context
 	private UriInfo uriInfo;
@@ -119,14 +119,14 @@ public class DefaultRadiographResource implements RadiographResource {
 	) {
 
 		Radiograph radiograph = this.service.getRadiograph(id);
-		Set<String> formats = this.fileStorage.getFormatsForType(radiograph);
+		Set<String> formats = this.explorationStorage.getFormatsForRadiographType(radiograph);
 
 		if (formats.size() == 0) {
 			throw new IllegalArgumentException("Unknown radiograph: " + radiograph.getId());
 		}
 
 		try {
-			return Response.ok(IOUtils.toByteArray(this.fileStorage.retrieve(radiograph)))
+			return Response.ok(IOUtils.toByteArray(this.explorationStorage.retrieveRadiograph(radiograph)))
 				.header("Content-Type", "image/png")
 				.build();
 		} catch (IOException e) {

@@ -43,24 +43,24 @@ import javax.annotation.Resource;
 import javax.enterprise.inject.Default;
 
 import org.sing_group.rihana.domain.entities.radiograph.Radiograph;
-import org.sing_group.rihana.service.spi.radiograph.RadiographStorage;
+import org.sing_group.rihana.service.spi.exploration.ExplorationStorage;
 
 @Default
-public class DefaultRadiographStorage implements RadiographStorage {
+public class DefaultExplorationStorage implements ExplorationStorage {
 
 	private static final String PATH_CONFIG_NAME = "java:global/rihana/defaultexplorationstorage/path";
 
 	@Resource(name = PATH_CONFIG_NAME)
 	private String path;
 
-	public DefaultRadiographStorage() {}
+	public DefaultExplorationStorage() {}
 
-	public DefaultRadiographStorage(String path) {
+	public DefaultExplorationStorage(String path) {
 		this.path = path;
 	}
 
 	@Override
-	public String store(Radiograph radiograph, InputStream data) {
+	public String storeRadiograph(Radiograph radiograph, InputStream data) {
 		Path file = getExplorationFolderForId(radiograph.getExploration().getId());
 
 		file = file.resolve(radiograph.getType().name() + ".png");
@@ -102,7 +102,7 @@ public class DefaultRadiographStorage implements RadiographStorage {
 	}
 
 	@Override
-	public FileInputStream retrieve(Radiograph radiograph) {
+	public FileInputStream retrieveRadiograph(Radiograph radiograph) {
 		Path filePath = getExplorationFolderForId(radiograph.getExploration().getId());
 		filePath = filePath.resolve(radiograph.getType().name() + ".png");
 
@@ -120,7 +120,7 @@ public class DefaultRadiographStorage implements RadiographStorage {
 	}
 
 	@Override
-	public Set<String> getFormatsForType(Radiograph radiograph) {
+	public Set<String> getFormatsForRadiographType(Radiograph radiograph) {
 		return walkOverFilesWithId(radiograph.getType().name())
 			.map(path -> getExtension(path.toFile().getName()))
 			.collect(toSet());
