@@ -65,4 +65,9 @@ public class DefaultRadiographDAO implements RadiographDAO {
 	public Radiograph create(Radiograph radiograph) {
 		return this.dh.persist(radiograph);
 	}
+
+	@Override
+	public void delete(Radiograph radiograph) {
+		this.dh.remove(radiograph);
+	}
 }

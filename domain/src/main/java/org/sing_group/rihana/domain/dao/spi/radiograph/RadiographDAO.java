@@ -29,4 +29,6 @@ public interface RadiographDAO {
 	Radiograph get(String id);
 
 	Radiograph create(Radiograph radiograph);
+
+	void delete(Radiograph radiograph);
 }

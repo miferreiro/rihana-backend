@@ -32,4 +32,6 @@ public interface ReportService {
 	Report getReport(String id);
 
 	Report create(Report report);
+
+	void delete(Report report);
 }

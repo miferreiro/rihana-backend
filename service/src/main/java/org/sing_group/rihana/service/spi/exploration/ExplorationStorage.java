@@ -26,6 +26,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Set;
 
+import org.sing_group.rihana.domain.entities.exploration.Exploration;
 import org.sing_group.rihana.domain.entities.radiograph.Radiograph;
 
 public interface ExplorationStorage {
@@ -33,6 +34,8 @@ public interface ExplorationStorage {
 	String storeRadiograph(Radiograph radiograph, InputStream data);
 
 	FileInputStream retrieveRadiograph(Radiograph radiograph);
+
+	void deleteRadiographsExploration(Exploration exploration);
 
 	Set<String> getFormatsForRadiographType(Radiograph radiograph);
 }

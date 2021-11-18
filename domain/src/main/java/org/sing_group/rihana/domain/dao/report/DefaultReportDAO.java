@@ -65,4 +65,9 @@ public class DefaultReportDAO implements ReportDAO {
 	public Report create(Report report) {
 		return this.dh.persist(report);
 	}
+
+	@Override
+	public void delete(Report report) {
+		this.dh.remove(report);
+	}
 }

@@ -78,6 +78,7 @@ import org.sing_group.rihana.rest.filter.CrossDomain;
 import org.sing_group.rihana.rest.mapper.SecurityExceptionMapper;
 import org.sing_group.rihana.rest.resource.spi.exploration.ExplorationResource;
 import org.sing_group.rihana.service.spi.exploration.ExplorationService;
+import org.sing_group.rihana.service.spi.exploration.ExplorationStorage;
 import org.sing_group.rihana.service.spi.patient.PatientService;
 import org.sing_group.rihana.service.spi.radiograph.RadiographService;
 import org.sing_group.rihana.service.spi.report.ExplorationCodeService;
@@ -123,6 +124,9 @@ public class DefaultExplorationResource implements ExplorationResource {
 
 	@Inject
 	private RadiographService radiographService;
+
+	@Inject
+	ExplorationStorage explorationStorage;
 
 	@Inject
 	private SignService signService;
@@ -215,7 +219,7 @@ public class DefaultExplorationResource implements ExplorationResource {
 
 		User user = this.userService.get(explorationEditionData.getUser());
 
-		Patient patient;
+		Patient patient = null;
 
 		if  (explorationEditionData.getPatient() != null) {
 			PatientEditionData patientEditionData = explorationEditionData.getPatient();
@@ -228,8 +232,6 @@ public class DefaultExplorationResource implements ExplorationResource {
 			} else {
 				patient = this.patientService.getPatientBy(patientEditionData.getPatientID());
 			}
-		} else {
-			patient = null;
 		}
 
 		String title = "Exploration " + (this.service.countAllExplorations() + 1);
@@ -251,6 +253,9 @@ public class DefaultExplorationResource implements ExplorationResource {
 				reportEditionData.getClinical_data(),
 				reportEditionData.getFindings(),
 				reportEditionData.getConclusions());
+
+			report.setExploration(exploration);
+			this.reportService.create(report);
 
 			for (RequestedExplorationEditionData r : reportEditionData.getRequestedExplorations()) {
 
@@ -277,10 +282,6 @@ public class DefaultExplorationResource implements ExplorationResource {
 				PerformedExploration performedExploration = new PerformedExploration(p.getDate(), p.getPortable(), p.getSurgery(), report, explorationCode);
 				report.internalAddPerformedExploration(performedExploration);
 			}
-
-			report.setExploration(exploration);
-
-			this.reportService.create(report);
 		}
 
 		List<RadiographEditionData> radiographEditionDataList = explorationEditionData.getRadiographs();
@@ -307,6 +308,36 @@ public class DefaultExplorationResource implements ExplorationResource {
 
 		return Response.created(UriBuilder.fromResource(DefaultExplorationResource.class).path(exploration.getId()).build())
 			.entity(explorationMapper.toExplorationData(exploration)).build();
+	}
+
+
+	@PUT
+	@Path("{id}")
+	@ApiOperation(
+		value = "Modifies an existing exploration.", response = ExplorationData.class, code = 200
+	)
+	@ApiResponses({
+		@ApiResponse(code = 400, message = "Unknown exploration: {id}"),
+		@ApiResponse(code = 430, message = SecurityExceptionMapper.FORBIDDEN_MESSAGE)
+	})
+	@Override
+	public Response edit(@PathParam("id") String id, ExplorationEditionData explorationEditionData) {
+		Exploration exploration = this.service.getExploration(id);
+
+		this.reportService.delete(exploration.getReport());
+
+		this.explorationStorage.deleteRadiographsExploration(exploration);
+
+		exploration.getRadiographs().stream().forEach(radiograph -> {
+			this.radiographService.delete(radiograph);
+		});
+		exploration.setRadiographs(new ArrayList<>());
+
+		this.explorationMapper.assignExplorationEditData(exploration, explorationEditionData);
+
+		exploration = this.service.edit(exploration);
+
+		return Response.ok(this.explorationMapper.toExplorationData(exploration)).build();
 	}
 
 	@DELETE

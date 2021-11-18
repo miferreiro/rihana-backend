@@ -67,6 +67,11 @@ public class DefaultRadiographService implements RadiographService {
 		return radiographDAO.create(radiograph);
 	}
 
+	@Override
+	public void delete(Radiograph radiograph) {
+		radiographDAO.delete(radiograph);
+	}
+
 	private InputStream sourceToInputStream(Radiograph radiograph) {
 
 		String b64Data = radiograph.getSource().split(",")[1];

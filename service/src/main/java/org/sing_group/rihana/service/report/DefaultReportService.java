@@ -46,4 +46,9 @@ public class DefaultReportService implements ReportService {
 	public Report create(Report report) {
 		return reportDAO.create(report);
 	}
+
+	@Override
+	public void delete(Report report) {
+		reportDAO.delete(report);
+	}
 }

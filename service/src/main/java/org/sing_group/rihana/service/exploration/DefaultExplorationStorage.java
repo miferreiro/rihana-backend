@@ -20,7 +20,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.rihana.service.radiograph;
+package org.sing_group.rihana.service.exploration;
 
 import static java.nio.file.Files.copy;
 import static java.nio.file.Files.exists;
@@ -34,14 +34,19 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Set;
 import java.util.stream.Stream;
 
 import javax.annotation.Resource;
 import javax.enterprise.inject.Default;
 
+import org.sing_group.rihana.domain.entities.exploration.Exploration;
 import org.sing_group.rihana.domain.entities.radiograph.Radiograph;
 import org.sing_group.rihana.service.spi.exploration.ExplorationStorage;
 
@@ -116,6 +121,36 @@ public class DefaultExplorationStorage implements ExplorationStorage {
 			return new FileInputStream(file);
 		} catch (FileNotFoundException e) {
 			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public void deleteRadiographsExploration(Exploration exploration) {
+
+		for (Radiograph radiograph: exploration.getRadiographs()) {
+			Path filePath = getExplorationFolderForId(radiograph.getExploration().getId());
+			filePath = filePath.resolve(radiograph.getType().name() + ".png");
+
+			if (!exists(filePath)) {
+				throw new IllegalArgumentException("Cannot find file for id: " + filePath);
+			}
+
+			Path backupPath = getBasePath()
+				.resolve("backup")
+				.resolve(exploration.getId());
+
+			if (!exists(backupPath) || !isDirectory(backupPath)) {
+				new File(backupPath.toString()).mkdirs();
+			}
+
+			backupPath = backupPath.resolve(new SimpleDateFormat("'" + radiograph.getType().name() + "'-yyyyMMddHHmm'.png'")
+				.format(new Date()));
+
+			try {
+				Files.move(filePath, backupPath, StandardCopyOption.REPLACE_EXISTING);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
 		}
 	}
 

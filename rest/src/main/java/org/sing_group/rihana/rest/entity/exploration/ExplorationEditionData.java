@@ -47,6 +47,9 @@ import org.sing_group.rihana.rest.entity.report.ReportEditionData;
 public class ExplorationEditionData implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@XmlElement(name = "id")
+	private String id;
+
 	@XmlElement(name = "explorationDate", required = true)
 	private Date explorationDate;
 
@@ -71,11 +74,29 @@ public class ExplorationEditionData implements Serializable {
 		this.setRadiographs(radiographs);
 	}
 
-	public ExplorationEditionData(Date explorationDate, String user, PatientEditionData patient, Report report, List<RadiographEditionData> radiographs) {
+	public ExplorationEditionData(Date explorationDate, String user, PatientEditionData patient, ReportEditionData reportEditionData, List<RadiographEditionData> radiographs) {
 		this.setExplorationDate(explorationDate);
 		this.setUser(user);
 		this.setPatient(patient);
+		this.setReport(reportEditionData);
 		this.setRadiographs(radiographs);
+	}
+
+	public ExplorationEditionData(String id, Date explorationDate, String user, PatientEditionData patient, ReportEditionData reportEditionData, List<RadiographEditionData> radiographs) {
+		this.setId(id);
+		this.setExplorationDate(explorationDate);
+		this.setUser(user);
+		this.setPatient(patient);
+		this.setReport(reportEditionData);
+		this.setRadiographs(radiographs);
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public Date getExplorationDate() {

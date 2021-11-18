@@ -187,6 +187,10 @@ public class Exploration implements Identifiable {
 		return radiographs;
 	}
 
+	public void setRadiographs(List<Radiograph> radiographs) {
+		this.radiographs = radiographs;
+	}
+
 	public boolean isDeleted() {
 		return deleted;
 	}

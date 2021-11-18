@@ -38,6 +38,8 @@ public interface ExplorationResource {
 
 	Response create(ExplorationEditionData explorationEditionData);
 
+	Response edit(String id, ExplorationEditionData explorationEditionData);
+
 	Response delete(String id);
 
 	Response recover(String id);

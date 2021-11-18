@@ -29,4 +29,6 @@ public interface ReportDAO {
 	Report get(String id);
 
 	Report create(Report report);
+
+	void delete(Report report);
 }
