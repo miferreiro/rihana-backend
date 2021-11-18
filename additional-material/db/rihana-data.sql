@@ -103,22 +103,22 @@ VALUES
 --
 INSERT INTO `radiograph` (`id`, `source`, `type`, `observations`, `exploration_id`, `creation_date`, `update_date`, `deleted`, `delete_date`)
 VALUES
-    ('1', '1/PA.png', 'PA', 'Example of observations', '1', '2018-12-12 23:00:00', '2020-02-24 17:21:58', 0, null),
-    ('2', '1/LAT.png', 'LAT', 'Example of observations', '1', '2018-12-12 23:00:00', '2020-02-24 17:21:58', 0, null),
-    ('3', '2/PA.png', 'PA', 'Example of observations', '2', '2019-09-24 22:00:00', '2020-02-24 17:21:58', 0, null),
-    ('4', '2/LAT.png', 'LAT', 'Example of observations', '2', '2019-09-24 22:00:00', '2020-02-24 17:21:58', 0, null),
-    ('5', '3/AP.png', 'AP', 'Example of observations', '3', '2019-02-19 23:00:00', '2020-02-24 17:22:00', 0, null),
-    ('6', '4/PA.png', 'PA', 'Example of observations', '4', '2019-09-09 22:00:00', '2020-02-24 17:22:01', 0, null),
-    ('7', '4/LAT.png', 'LAT', 'Example of observations', '4', '2019-09-09 22:00:00', '2020-02-24 17:22:01', 0, null),
-    ('8', '5/AP.png', 'AP', 'Example of observations', '5', '2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
-    ('9', '6/AP.png', 'AP', 'Example of observations', '6', '2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
-    ('10', '7/AP.png', 'AP', 'Example of observations', '7', '2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
-    ('11', '8/AP.png', 'AP', 'Example of observations', '8', '2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
-    ('12', '9/AP.png', 'AP', 'Example of observations', '9', '2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
-    ('13', '10/AP.png', 'AP', 'Example of observations', '10', '2019-02-27 10:00:00', '2019-02-27 10:00:00', 0, null),
-    ('14', '11/AP.png', 'AP', 'Example of observations', '11', '2020-01-27 23:00:00', '2020-01-27 23:00:00', 0, null),
-    ('15', '12/PA.png', 'PA', 'Example of observations', '12', '2021-01-27 00:00:00', '2021-01-27 00:00:00', 0, null),
-    ('16', '12/LAT.png', 'LAT', 'Example of observations', '12', '2021-01-27 00:00:00', '2021-01-27 00:00:00', 0, null);
+    ('1', '/rihana-files/explorations/1/PA.png', 'PA', 'Example of observations', '1', '2018-12-12 23:00:00', '2020-02-24 17:21:58', 0, null),
+    ('2', '/rihana-files/explorations/1/LAT.png', 'LAT', 'Example of observations', '1', '2018-12-12 23:00:00', '2020-02-24 17:21:58', 0, null),
+    ('3', '/rihana-files/explorations/2/PA.png', 'PA', 'Example of observations', '2', '2019-09-24 22:00:00', '2020-02-24 17:21:58', 0, null),
+    ('4', '/rihana-files/explorations/2/LAT.png', 'LAT', 'Example of observations', '2', '2019-09-24 22:00:00', '2020-02-24 17:21:58', 0, null),
+    ('5', '/rihana-files/explorations/3/AP.png', 'AP', 'Example of observations', '3', '2019-02-19 23:00:00', '2020-02-24 17:22:00', 0, null),
+    ('6', '/rihana-files/explorations/4/PA.png', 'PA', 'Example of observations', '4', '2019-09-09 22:00:00', '2020-02-24 17:22:01', 0, null),
+    ('7', '/rihana-files/explorations/4/LAT.png', 'LAT', 'Example of observations', '4', '2019-09-09 22:00:00', '2020-02-24 17:22:01', 0, null),
+    ('8', '/rihana-files/explorations/5/AP.png', 'AP', 'Example of observations', '5', '2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
+    ('9', '/rihana-files/explorations/6/AP.png', 'AP', 'Example of observations', '6', '2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
+    ('10', '/rihana-files/explorations/7/AP.png', 'AP', 'Example of observations', '7', '2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
+    ('11', '/rihana-files/explorations/8/AP.png', 'AP', 'Example of observations', '8', '2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
+    ('12', '/rihana-files/explorations/9/AP.png', 'AP', 'Example of observations', '9', '2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
+    ('13', '/rihana-files/explorations/10/AP.png', 'AP', 'Example of observations', '10', '2019-02-27 10:00:00', '2019-02-27 10:00:00', 0, null),
+    ('14', '/rihana-files/explorations/11/AP.png', 'AP', 'Example of observations', '11', '2020-01-27 23:00:00', '2020-01-27 23:00:00', 0, null),
+    ('15', '/rihana-files/explorations/12/PA.png', 'PA', 'Example of observations', '12', '2021-01-27 00:00:00', '2021-01-27 00:00:00', 0, null),
+    ('16', '/rihana-files/explorations/12/LAT.png', 'LAT', 'Example of observations', '12', '2021-01-27 00:00:00', '2021-01-27 00:00:00', 0, null);
 
 --
 -- Data for table `Sign type`
