@@ -27,6 +27,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_XML;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -134,6 +135,9 @@ public class DefaultExplorationResource implements ExplorationResource {
 	@Inject
 	private ExplorationMapper explorationMapper;
 
+	@Inject
+	private DateFormatter dateFormatter;
+
 	@Context
 	private UriInfo uriInfo;
 
@@ -171,11 +175,24 @@ public class DefaultExplorationResource implements ExplorationResource {
 	)
 	@Override
 	public Response listExplorations(
-		@QueryParam("user") String userId, @QueryParam("page") int page, @QueryParam("pageSize") int pageSize, @QueryParam("signType") List<String> signTypes
+		@QueryParam("user") String userId,
+		@QueryParam("page") int page, @QueryParam("pageSize") int pageSize,
+		@QueryParam("initialDate") String initialDateStr, @QueryParam("finalDate") String finalDateStr,
+		@QueryParam("signType") List<String> signTypes
 	) {
 		User user = null;
 		int countExplorations;
 		List<SignType> signTypeList;
+		Date initialDate = null;
+		Date finalDate = null;
+
+		if (initialDateStr != null && !initialDateStr.isEmpty() && initialDateStr != "") {
+			initialDate = dateFormatter.getDateInitialDayTime(initialDateStr);
+		}
+
+		if (finalDateStr != null && !finalDateStr.isEmpty() && finalDateStr != "") {
+			finalDate = dateFormatter.getDateFinalDayTime(finalDateStr);
+		}
 
 		if (signTypes == null || signTypes.size() == 0) {
 			signTypeList = new ArrayList<>();
@@ -184,24 +201,24 @@ public class DefaultExplorationResource implements ExplorationResource {
 		}
 
 		if (userId == null || userId.equals("")) {
-			countExplorations = this.service.countExplorations();
+			countExplorations = this.service.countExplorationsByUserAndSignTypesInDateRange(null, initialDate, finalDate, signTypeList);
 		} else {
 			user = this.userService.get(userId);
 			if (user.getRole() == Role.ADMIN) {
-				countExplorations = this.service.countExplorationsByUserAndSignTypes(null, signTypeList);
+				countExplorations = this.service.countExplorationsByUserAndSignTypesInDateRange(null, initialDate, finalDate, signTypeList);
 			} else {
-				countExplorations = this.service.countExplorationsByUserAndSignTypes(user, signTypeList);
+				countExplorations = this.service.countExplorationsByUserAndSignTypesInDateRange(user, initialDate, finalDate, signTypeList);
 			}
 		}
 
 		if (userId != null && !userId.equals("") && user.getRole() == Role.ADMIN) {
 			return Response.ok(
-				this.service.listExplorationsByUser(page, pageSize, user, signTypeList)
+				this.service.listExplorationsByUserInDateRange(page, pageSize, user, initialDate, finalDate, signTypeList)
 					.map(this.explorationMapper::toExplorationAdminData).toArray(ExplorationAdminData[]::new)
 			).header("X-Pagination-Total-Items", countExplorations).build();
 		} else {
 			return Response.ok(
-				this.service.listExplorationsByUser(page, pageSize, user, signTypeList)
+				this.service.listExplorationsByUserInDateRange(page, pageSize, user, initialDate, finalDate, signTypeList)
 					.map(this.explorationMapper::toExplorationData).toArray(ExplorationData[]::new)
 			).header("X-Pagination-Total-Items", countExplorations).build();
 		}

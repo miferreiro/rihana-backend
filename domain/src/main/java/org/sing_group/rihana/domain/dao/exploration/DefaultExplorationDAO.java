@@ -22,6 +22,7 @@
  */
 package org.sing_group.rihana.domain.dao.exploration;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -70,13 +71,15 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 
 	@Override
 	public Exploration getExplorationDeleted(String id) {
-		return this.dh.get(id).filter(e -> e.isDeleted())
+		return this.dh.get(id).filter(Exploration::isDeleted)
 			.orElseThrow(() -> new IllegalArgumentException("Unknown deleted exploration: " + id));
 	}
 
 	@Override
-	public Stream<Exploration> listExplorationsByUser(Integer page, Integer pageSize, User user, List<SignType> signTypeList) {
-		return this.listExplorations(page, pageSize, user, signTypeList).stream();
+	public Stream<Exploration> listExplorationsByUserInDateRange(Integer page, Integer pageSize, User user,
+																 Date initialDate, Date finalDate,
+																 List<SignType> signTypeList) {
+		return this.listExplorations(page, pageSize, user, initialDate, finalDate, signTypeList).stream();
 	}
 
 	@Override
@@ -85,13 +88,9 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 	}
 
 	@Override
-	public int countExplorations() {
-		return dh.listBy("deleted", 0).size();
-	}
-
-	@Override
-	public int countExplorationsByUserAndSignTypes(User user, List<SignType> signTypeList) {
-		return this.listExplorations(null,null, user, signTypeList).size();
+	public int countExplorationsByUserAndSignTypesInDateRange(User user, Date initialDate, Date finalDate,
+															  List<SignType> signTypeList) {
+		return this.listExplorations(null,null, user, initialDate, finalDate, signTypeList).size();
 	}
 
 	@Override
@@ -116,97 +115,113 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 		this.dh.update(exploration);
 	}
 
-	private List<Exploration> listExplorations(Integer page, Integer pageSize, User user, List<SignType> signTypeList) {
-
-		// Checks if a user is sent
-		if (signTypeList.size() > 0) {
-
-			StringBuilder stringBuilder = new StringBuilder("");
-			int count = 0;
-			String conditionDeletedSignType = " AND ee.deleted=0";
-			if (user != null && user.getRole() == Role.ADMIN) {
-				conditionDeletedSignType = "";
-			}
-			String querySignType = "SELECT tt.code from Exploration ee LEFT JOIN ee.radiographs rr LEFT JOIN rr.signs ss LEFT JOIN ss.type tt WHERE ee.id=e.id" + conditionDeletedSignType;
-
-			if (signTypeList.size() > 0) {
-				stringBuilder.append(" AND (");
-			}
-
-			for (SignType signType: signTypeList) {
-				stringBuilder.append("?").append(count).append(" IN (").append(querySignType).append(")");
-
-				count++;
-				if (count < signTypeList.size()) {
-					stringBuilder.append(" AND ");
+	private List listExplorations(Integer page, Integer pageSize, User user, Date initialDate, Date finalDate,
+								  List<SignType> signTypeList) {
+		String queryInDateRange = "";
+		if (initialDate != null && finalDate != null) {
+			queryInDateRange = "e.date >= :initialDate AND e.date <= :finalDate ";
+		} else {
+			if (initialDate != null) {
+				  queryInDateRange = "e.date >= :initialDate ";
+			} else {
+				if (finalDate != null) {
+					queryInDateRange = "e.date >= :finalDate ";
 				}
 			}
+		}
 
-			if (signTypeList.size() > 0) {
-				stringBuilder.append(")");
-			}
+		Query query;
+		String queryExplorations;
+		String conditionDeleted = "e.deleted=0 ";
 
-			String queryExplorations;
-			Query query;
+		if (signTypeList.size() > 0) {
+			StringBuilder stringBuilder = new StringBuilder("");
+		 	String querySignType = "SELECT tt.code " +
+				"FROM Exploration ee LEFT JOIN ee.radiographs rr LEFT JOIN rr.signs ss LEFT JOIN ss.type tt " +
+				"WHERE ee.id=e.id";
+
+		 	if (user == null || user.getRole() != Role.ADMIN) querySignType += " AND ee.deleted=0";
+
+			stringBuilder.append("(");
+			for (int count = 0; count < signTypeList.size(); count++) {
+				stringBuilder.append("?")
+					.append(count)
+					.append(" IN (")
+					.append(querySignType)
+					.append(")");
+				if (count + 1 < signTypeList.size()) stringBuilder.append(" AND ");
+		  	}
+			stringBuilder.append(") ");
 
 			if (user != null && user.getRole() != Role.ADMIN) {
+				if (queryInDateRange != "") queryInDateRange= "AND " + queryInDateRange;
 				queryExplorations = "SELECT e " +
 					"FROM Exploration e LEFT JOIN e.radiographs r LEFT JOIN r.signs s LEFT JOIN s.type t " +
-					"WHERE e.user.login=:login AND e.deleted=0" +
-					stringBuilder +
-					" GROUP BY e.id ORDER BY e.creationDate";
+					"WHERE e.user.login=:login AND e.deleted=0 " + queryInDateRange + " AND " + stringBuilder +
+					"GROUP BY e.id ORDER BY e.date DESC";
 
 				query = this.em.createQuery(queryExplorations, Exploration.class);
 				query.setParameter("login", user.getLogin());
 			} else {
-				String conditionDeleted = "e.deleted=0 ";
-				if (user != null && user.getRole() == Role.ADMIN) {
-					conditionDeleted = "";
-					stringBuilder.delete(0, 5);
-				}
+				if (queryInDateRange != "") conditionDeleted = "AND e.deleted=0 ";
+				if (user != null && user.getRole() == Role.ADMIN) conditionDeleted = "";
+				if (queryInDateRange != "" || conditionDeleted != "") stringBuilder.insert(0, "AND ");
 
 				queryExplorations = "SELECT e " +
 					"FROM Exploration e LEFT JOIN e.radiographs r LEFT JOIN r.signs s LEFT JOIN s.type t " +
-					"WHERE " + conditionDeleted +
-					stringBuilder +
-					" GROUP BY e.id ORDER BY e.creationDate";
+					"WHERE " + queryInDateRange + conditionDeleted + stringBuilder +
+					"GROUP BY e.id ORDER BY e.date DESC";
 
 				query = this.em.createQuery(queryExplorations, Exploration.class);
 			}
 
-			count = 0;
-			for (SignType signType: signTypeList) {
+			int count = 0;
+			for (SignType signType : signTypeList) {
 				query.setParameter(count, signType.getCode());
 				count++;
 			}
 
 			if (page != null && pageSize != null) {
-				return query.setFirstResult((page - 1) * pageSize).setMaxResults(pageSize).getResultList();
-			} else {
-				return query.getResultList();
+				query = query.setFirstResult((page - 1) * pageSize)
+					.setMaxResults(pageSize);
+			}
+		} else if (user != null && user.getRole() != Role.ADMIN) {
+			if (queryInDateRange != "") queryInDateRange= "AND " + queryInDateRange;
+			queryExplorations = "SELECT e " +
+				"FROM Exploration e " +
+				"WHERE e.deleted=0 AND e.user.login=:login " + queryInDateRange +
+				"ORDER BY e.date DESC";
+
+		 	query = this.em.createQuery(queryExplorations, Exploration.class);
+		 	query.setParameter("login", user.getLogin());
+
+			if (initialDate != null) query.setParameter("initialDate", initialDate);
+			if (finalDate != null) query.setParameter("finalDate", finalDate);
+
+			if (page != null && pageSize != null) {
+				query = query.setFirstResult((page - 1) * pageSize)
+					.setMaxResults(pageSize);
 			}
 		} else {
+		 	if (queryInDateRange != "") {
+		 		conditionDeleted = " AND e.deleted=0 ";
+		 	}
+		 	queryExplorations = "SELECT e " +
+				"FROM Exploration e " +
+				"WHERE " + queryInDateRange + conditionDeleted +
+				"ORDER BY e.date DESC";
 
-			if (user != null && user.getRole() != Role.ADMIN) {
-				String queryString = "SELECT e FROM Exploration e LEFT JOIN e.user u WHERE e.deleted=0 AND u.login=:login ORDER BY e.creationDate DESC";
-				if (page != null && pageSize != null) {
-					return em.createQuery(queryString).setParameter("login", user.getLogin()).setFirstResult((page - 1) * pageSize).setMaxResults(pageSize).getResultList();
-				} else {
-					return em.createQuery(queryString).setParameter("login", user.getLogin()).getResultList();
-				}
+		 	query = this.em.createQuery(queryExplorations, Exploration.class);
 
-			} else {
-				String conditionDeleted = "WHERE e.deleted=0 ";
-				if (user != null && user.getRole() == Role.ADMIN) {
-					conditionDeleted = "";
-				}
-				String queryString = "SELECT e FROM Exploration e " + conditionDeleted + "ORDER BY e.creationDate DESC";
-				if (page != null && pageSize != null) {
-					return em.createQuery(queryString).setFirstResult((page - 1) * pageSize).setMaxResults(pageSize).getResultList();
-				} else {
-					return em.createQuery(queryString).getResultList();
-				}
+			if (page != null && pageSize != null) {
+				query = query.setFirstResult((page - 1) * pageSize)
+					.setMaxResults(pageSize);
 			}
 		}
+
+		if (initialDate != null) query.setParameter("initialDate", initialDate);
+		if (finalDate != null) query.setParameter("finalDate", finalDate);
+
+		return query.getResultList();
 	}
 }

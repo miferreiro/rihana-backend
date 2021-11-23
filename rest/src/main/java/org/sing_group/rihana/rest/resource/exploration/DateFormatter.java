@@ -20,29 +20,32 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.rihana.rest.resource.spi.exploration;
+package org.sing_group.rihana.rest.resource.exploration;
 
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import javax.ejb.Local;
-import javax.ws.rs.core.Response;
+public class DateFormatter {
 
-import org.sing_group.rihana.rest.entity.exploration.ExplorationEditionData;
+	private final String DATE_FORMAT = "dd/MM/yyyy_HH:mm:ss";
 
-@Local
-public interface ExplorationResource {
+	public DateFormatter() {
+	}
 
-	Response getExploration(String id);
+	public Date getDateInitialDayTime(String partialDate) {
+		try {
+			return new SimpleDateFormat(this.DATE_FORMAT).parse(partialDate + "_00:00:00");
+		} catch (ParseException e) {
+			return new Date();
+		}
+	}
 
-	Response listExplorations(String userId, int page, int pageSize,
-							  String initialDateStr, String finalDateStr,
-							  List<String> signTypes);
-
-	Response create(ExplorationEditionData explorationEditionData);
-
-	Response edit(String id, ExplorationEditionData explorationEditionData);
-
-	Response delete(String id);
-
-	Response recover(String id);
+	public Date getDateFinalDayTime(String partialDate) {
+		try {
+			return new SimpleDateFormat(this.DATE_FORMAT).parse(partialDate + "_23:59:59");
+		} catch (ParseException e) {
+			return new Date();
+		}
+	}
 }

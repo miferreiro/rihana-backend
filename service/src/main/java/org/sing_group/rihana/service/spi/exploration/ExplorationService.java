@@ -22,6 +22,7 @@
  */
 package org.sing_group.rihana.service.spi.exploration;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -38,13 +39,16 @@ public interface ExplorationService {
 
 	Exploration getExplorationDeleted(String id);
 
-	Stream<Exploration> listExplorationsByUser(int page, int pageSize, User user, List<SignType> signTypeList);
+	Stream<Exploration> listExplorationsByUserInDateRange(int page, int pageSize,
+														  User user,
+														  Date initialDate, Date finalDate,
+														  List<SignType> signTypeList);
 
 	int countAllExplorations();
 
-	int countExplorations();
-
-	int countExplorationsByUserAndSignTypes(User user, List<SignType> signTypeList);
+	int countExplorationsByUserAndSignTypesInDateRange(User user,
+													   Date initialDate, Date finalDate,
+													   List<SignType> signTypeList);
 
 	Exploration create(Exploration exploration);
 

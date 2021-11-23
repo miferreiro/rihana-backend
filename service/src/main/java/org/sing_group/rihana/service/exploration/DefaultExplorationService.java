@@ -22,6 +22,7 @@
  */
 package org.sing_group.rihana.service.exploration;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -53,8 +54,8 @@ public class DefaultExplorationService implements ExplorationService {
 	}
 
 	@Override
-	public Stream<Exploration> listExplorationsByUser(int page, int pageSize, User user, List<SignType> signTypeList) {
-		return explorationDao.listExplorationsByUser(page, pageSize, user, signTypeList);
+	public Stream<Exploration> listExplorationsByUserInDateRange(int page, int pageSize, User user, Date initialDate, Date finalDate, List<SignType> signTypeList) {
+		return explorationDao.listExplorationsByUserInDateRange(page, pageSize, user, initialDate, finalDate, signTypeList);
 	}
 
 	@Override
@@ -63,13 +64,8 @@ public class DefaultExplorationService implements ExplorationService {
 	}
 
 	@Override
-	public int countExplorations() {
-		return explorationDao.countExplorations();
-	}
-
-	@Override
-	public int countExplorationsByUserAndSignTypes(User user, List<SignType> signTypeList) {
-		return explorationDao.countExplorationsByUserAndSignTypes(user, signTypeList);
+	public int countExplorationsByUserAndSignTypesInDateRange(User user, Date initialDate, Date finalDate, List<SignType> signTypeList) {
+		return explorationDao.countExplorationsByUserAndSignTypesInDateRange(user, initialDate, finalDate, signTypeList);
 	}
 
 	@Override
