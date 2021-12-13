@@ -29,15 +29,15 @@ import org.sing_group.rihana.rest.entity.patient.PatientEditionData;
 
 @Local
 public interface PatientResource {
-	public Response getPatient(String id);
+	Response getPatient(String id);
 
-	public Response getPatientBy(String patientID);
+	Response getPatientBy(String patientID);
 
-	public Response listPatients();
+	Response listPatients();
 
-	public Response create(PatientEditionData patientEditionData);
+	Response create(PatientEditionData patientEditionData);
 
-	public Response edit(String id, PatientEditionData patientEditionData);
+	Response edit(String id, PatientEditionData patientEditionData);
 
-	public Response delete(String id);
+	Response delete(String id);
 }
