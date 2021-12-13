@@ -1,5 +1,5 @@
 --
--- Table structure for table `user`
+-- Table structure for table `User`
 --
 CREATE TABLE `user` (
     `login`         varchar(100) NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Table structure for table `patient`
+-- Table structure for table `Patient`
 --
 CREATE TABLE `patient` (
     `id`            varchar(255)    NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE `patient` (
     UNIQUE KEY (`patientID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 --
--- Table structure for table `exploration`
+-- Table structure for table `Exploration`
 --
 CREATE TABLE `exploration` (
     `id`            varchar(255)    NOT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE `exploration` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Table structure for table `report`
+-- Table structure for table `Report`
 --
 CREATE TABLE `report` (
     `id`                varchar(255)    NOT NULL,
@@ -61,15 +61,15 @@ CREATE TABLE `report` (
     `exploration_id`    varchar(255)    NOT NULL,
     `creation_date`     datetime(3)     DEFAULT NULL,
     `update_date`       datetime(3)     DEFAULT NULL,
-    `deleted`       bit(1)              DEFAULT b'0',
-    `delete_date`   datetime(3)         DEFAULT NULL,
+    `deleted`           bit(1)          DEFAULT b'0',
+    `delete_date`       datetime(3)     DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY (`reportN`),
     CONSTRAINT FOREIGN KEY (`exploration_id`) REFERENCES `exploration` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Table structure for table `explorationcode`
+-- Table structure for table `Exploration code`
 --
 CREATE TABLE `explorationcode` (
     `code`              varchar(255)    NOT NULL,
@@ -80,7 +80,7 @@ CREATE TABLE `explorationcode` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Table structure for table `requestedexploration`
+-- Table structure for table `Requested exploration`
 --
 CREATE TABLE `requestedexploration` (
     `id`                varchar(255)    NOT NULL,
@@ -93,7 +93,7 @@ CREATE TABLE `requestedexploration` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Table structure for table `performedexploration`
+-- Table structure for table `Performed exploration`
 --
 CREATE TABLE `performedexploration` (
     `id`                varchar(255)    NOT NULL,
@@ -108,7 +108,7 @@ CREATE TABLE `performedexploration` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Table structure for table `radiograph`
+-- Table structure for table `Radiograph`
 --
 CREATE TABLE `radiograph` (
     `id`                varchar(255)    NOT NULL,
@@ -125,7 +125,7 @@ CREATE TABLE `radiograph` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Table structure for table `signtype`
+-- Table structure for table `Sign type`
 --
 CREATE TABLE `signtype` (
     `code`              varchar(255)    NOT NULL,
@@ -140,7 +140,7 @@ CREATE TABLE `signtype` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Table structure for table `sign`
+-- Table structure for table `Sign`
 --
 CREATE TABLE `sign` (
     `id`                varchar(255)    NOT NULL,
@@ -158,7 +158,7 @@ CREATE TABLE `sign` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Table structure for table `signlocation`
+-- Table structure for table `Sign location`
 --
 CREATE TABLE `signlocation` (
     `id`            varchar(255)    NOT NULL,
