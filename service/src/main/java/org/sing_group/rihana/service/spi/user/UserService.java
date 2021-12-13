@@ -33,7 +33,7 @@ public interface UserService {
 
 	User getCurrentUser();
 
-	User get(String id);
+	User get(String login);
 
 	User create(User user);
 
