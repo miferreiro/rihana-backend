@@ -32,13 +32,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import io.swagger.annotations.ApiModel;
-import org.sing_group.rihana.domain.entities.patient.Patient;
-import org.sing_group.rihana.domain.entities.radiograph.Radiograph;
-import org.sing_group.rihana.domain.entities.report.Report;
-import org.sing_group.rihana.rest.entity.UuidAndUri;
 import org.sing_group.rihana.rest.entity.patient.PatientEditionData;
 import org.sing_group.rihana.rest.entity.radiograph.RadiographEditionData;
-import org.sing_group.rihana.rest.entity.report.ReportData;
 import org.sing_group.rihana.rest.entity.report.ReportEditionData;
 
 @XmlRootElement(name = "exploration-edition-data", namespace = "http://entity.resource.rest.rihana.sing-group.org")
