@@ -22,6 +22,7 @@
  */
 package org.sing_group.rihana.rest.entity.mapper.spi;
 
+import org.sing_group.rihana.domain.entities.acl.role.Role;
 import org.sing_group.rihana.domain.entities.user.User;
 import org.sing_group.rihana.rest.entity.user.UserData;
 import org.sing_group.rihana.rest.entity.user.UserEditionData;
@@ -31,4 +32,6 @@ public interface UserMapper {
 	UserData toUserData(User user);
 
 	void assignUserEditionData(User user, UserEditionData userEditionData);
+
+	void assignUserWithRoleEditionData(User user, UserEditionData userEditionData, Role role);
 }

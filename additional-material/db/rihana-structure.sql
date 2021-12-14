@@ -1,13 +1,91 @@
 --
+-- Table structure for table `action`
+--
+CREATE TABLE `action` (
+    `id`            int(11)    NOT NULL AUTO_INCREMENT,
+    `name`          varchar(255)    NOT NULL,
+    `description`   varchar(255)    NOT NULL,
+    `creation_date` datetime(3)     DEFAULT NULL,
+    `update_date`   datetime(3)     DEFAULT NULL,
+    `deleted`       bit(1)          DEFAULT b'0',
+    `delete_date`   datetime(3)     DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `functionality`
+--
+CREATE TABLE `functionality` (
+    `id`            int(11)    NOT NULL AUTO_INCREMENT,
+    `name`          varchar(255)    NOT NULL,
+    `description`   varchar(255)    NOT NULL,
+    `creation_date` datetime(3)     DEFAULT NULL,
+    `update_date`   datetime(3)     DEFAULT NULL,
+    `deleted`       bit(1)          DEFAULT b'0',
+    `delete_date`   datetime(3)     DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `role`
+--
+CREATE TABLE `role` (
+    `id`            int(11)    NOT NULL AUTO_INCREMENT,
+    `name`          varchar(255)    NOT NULL,
+    `description`   varchar(255)    NOT NULL,
+    `creation_date` datetime(3)     DEFAULT NULL,
+    `update_date`   datetime(3)     DEFAULT NULL,
+    `deleted`       bit(1)          DEFAULT b'0',
+    `delete_date`   datetime(3)     DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
 -- Table structure for table `User`
 --
 CREATE TABLE `user` (
-    `login`         varchar(100) NOT NULL,
-    `password`      varchar(32)  NOT NULL,
-    `role`          varchar(255) NOT NULL,
-    `deleted`       bit(1)       DEFAULT b'0',
-    `delete_date`   datetime(3)  DEFAULT NULL,
-    PRIMARY KEY (`login`)
+    `login`         varchar(100)    NOT NULL,
+    `password`      varchar(32)     NOT NULL,
+    `role_id`       int(11)    NOT NULL,
+    `deleted`       bit(1)          DEFAULT b'0',
+    `delete_date`   datetime(3)     DEFAULT NULL,
+    PRIMARY KEY (`login`),
+    CONSTRAINT FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `Functionality action`
+--
+CREATE TABLE `functionalityaction` (
+    `functionality_id`  int(11)    NOT NULL,
+    `action_id`         int(11)    NOT NULL,
+    `creation_date`     datetime(3)     DEFAULT NULL,
+    `update_date`       datetime(3)     DEFAULT NULL,
+    `deleted`           bit(1)          DEFAULT b'0',
+    `delete_date`       datetime(3)     DEFAULT NULL,
+    PRIMARY KEY (`functionality_id`, `action_id`),
+    CONSTRAINT FOREIGN KEY (`functionality_id`) REFERENCES `functionality` (`id`),
+    CONSTRAINT FOREIGN KEY (`action_id`) REFERENCES `action` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Table structure for table `Permission`
+--
+CREATE TABLE `permission` (
+    `role_id`                   int(11)    NOT NULL,
+    `functionality_id`          int(11)    NOT NULL,
+    `action_id`                 int(11)    NOT NULL,
+    `creation_date`             datetime(3)     DEFAULT NULL,
+    `update_date`               datetime(3)     DEFAULT NULL,
+    `deleted`                   bit(1)          DEFAULT b'0',
+    `delete_date`               datetime(3)     DEFAULT NULL,
+    PRIMARY KEY (`role_id`, `functionality_id`, `action_id`),
+    CONSTRAINT FOREIGN KEY (`role_id`) REFERENCES `role` (`id`),
+    CONSTRAINT FOREIGN KEY (`functionality_id`) REFERENCES `functionalityaction` (`functionality_id`),
+    CONSTRAINT FOREIGN KEY (`action_id`) REFERENCES `functionalityaction` (`action_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --

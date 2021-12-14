@@ -30,7 +30,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import io.swagger.annotations.ApiModel;
-import org.sing_group.rihana.domain.entities.user.Role;
 
 @XmlRootElement(name = "user-edition-data", namespace = "http://entity.resource.rest.rihana.sing-group.org")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -42,12 +41,12 @@ public class UserEditionData implements Serializable {
 	private String login;
 	@XmlElement(name = "password")
 	private String password;
-	@XmlElement(name = "role", required = true)
-	private Role role;
+	@XmlElement(name = "role")
+	private String role;
 
 	UserEditionData() { }
 
-	public UserEditionData(String login, String password, Role role) {
+	public UserEditionData(String login, String password, String role) {
 		this.login = login;
 		this.password = password;
 		this.role = role;
@@ -61,7 +60,7 @@ public class UserEditionData implements Serializable {
 		return password;
 	}
 
-	public Role getRole() {
+	public String getRole() {
 		return role;
 	}
 }

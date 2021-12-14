@@ -1,6 +1,6 @@
 /*-
  * #%L
- * Domain
+ * REST
  * %%
  * Copyright (C) 2021 David A. Ruano Ordás, José Ramón Méndez Reboredo,
  * 		Miguel Ferreiro Díaz
@@ -20,8 +20,19 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.rihana.domain.entities.user;
+package org.sing_group.rihana.rest.entity.mapper.spi;
 
-public enum Role {
-	ADMIN, USER, RADIOLOGIST, SUPERVISOR
+import javax.ws.rs.core.UriInfo;
+
+import org.sing_group.rihana.domain.entities.acl.functionality.Functionality;
+import org.sing_group.rihana.rest.entity.acl.functionality.FunctionalityData;
+import org.sing_group.rihana.rest.entity.acl.functionality.FunctionalityEditionData;
+
+public interface FunctionalityMapper {
+
+	void setRequestURI(UriInfo requestURI);
+
+	FunctionalityData toFunctionalityData(Functionality functionality);
+
+	void assignFunctionalityEditionData(Functionality functionality, FunctionalityEditionData functionalityEditionData);
 }

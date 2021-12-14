@@ -24,10 +24,14 @@ package org.sing_group.rihana.service.sign;
 
 import java.util.stream.Stream;
 
+import javax.annotation.Resource;
+import javax.ejb.EJBAccessException;
+import javax.ejb.SessionContext;
 import javax.inject.Inject;
 
 import org.sing_group.rihana.domain.dao.spi.sign.SignTypeDAO;
 import org.sing_group.rihana.domain.entities.sign.SignType;
+import org.sing_group.rihana.service.spi.acl.permission.PermissionService;
 import org.sing_group.rihana.service.spi.sign.SignTypeService;
 
 public class DefaultSingTypeService implements SignTypeService {
@@ -35,28 +39,89 @@ public class DefaultSingTypeService implements SignTypeService {
 	@Inject
 	private SignTypeDAO signTypeDAO;
 
+	@Inject
+	private PermissionService permissionService;
+
+	@Resource
+	private SessionContext context;
+
 	@Override
 	public SignType get(String code) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"TYPE_SIGN_MANAGEMENT",
+				"SHOW_CURRENT") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
 		return signTypeDAO.get(code);
 	}
 
 	@Override
 	public SignType create(SignType signType) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"TYPE_SIGN_MANAGEMENT",
+				"ADD") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
 		return signTypeDAO.create(signType);
 	}
 
 	@Override
 	public SignType edit(SignType signType) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"TYPE_SIGN_MANAGEMENT",
+				"EDIT") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
 		return signTypeDAO.edit(signType);
 	}
 
 	@Override
 	public void delete(SignType signType) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"TYPE_SIGN_MANAGEMENT",
+				"DELETE") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
 		signTypeDAO.delete(signType);
 	}
 
 	@Override
 	public Stream<SignType> listSignTypes() {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"TYPE_SIGN_MANAGEMENT",
+				"SHOW_ALL") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
 		return signTypeDAO.listSignTypes();
 	}
 }

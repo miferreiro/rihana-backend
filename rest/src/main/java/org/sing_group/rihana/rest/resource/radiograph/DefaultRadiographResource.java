@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
@@ -55,9 +54,6 @@ import org.sing_group.rihana.rest.resource.spi.radiograph.RadiographResource;
 import org.sing_group.rihana.service.spi.exploration.ExplorationStorage;
 import org.sing_group.rihana.service.spi.radiograph.RadiographService;
 
-@RolesAllowed({
-	"ADMIN", "USER", "RADIOLOGIST", "SUPERVISOR"
-})
 @Path("radiograph")
 @Produces({
 	APPLICATION_JSON, APPLICATION_XML
@@ -88,8 +84,8 @@ public class DefaultRadiographResource implements RadiographResource {
 		this.radiographMapper.setRequestURI(this.uriInfo);
 	}
 
-	@Path("{id}/metadata")
 	@GET
+	@Path("{id}/metadata")
 	@ApiOperation(
 		value = "Return the data of a radiograph.", response = RadiographData.class, code = 200
 	)
@@ -105,8 +101,8 @@ public class DefaultRadiographResource implements RadiographResource {
 			.build();
 	}
 
-	@Path("{id}")
 	@GET
+	@Path("{id}")
 	@ApiOperation(
 		value = "Return the bytes of a radiograph.", response = byte[].class, code = 200
 	)

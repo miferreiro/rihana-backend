@@ -30,6 +30,11 @@
 		<web-resource-collection>
 			<web-resource-name>private</web-resource-name>
 			<url-pattern>/api/user/*</url-pattern>
+			<url-pattern>/api/role/*</url-pattern>
+			<url-pattern>/api/action/*</url-pattern>
+			<url-pattern>/api/functionality/*</url-pattern>
+			<url-pattern>/api/functionalityaction/*</url-pattern>
+			<url-pattern>/api/permission/*</url-pattern>
 			<url-pattern>/api/patient/*</url-pattern>
 			<url-pattern>/api/exploration/*</url-pattern>
 			<url-pattern>/api/report/*</url-pattern>
@@ -38,29 +43,7 @@
 			<url-pattern>/api/sign/*</url-pattern>
 			<http-method-omission>OPTIONS</http-method-omission>
 		</web-resource-collection>
-		<auth-constraint>
-			<role-name>ADMIN</role-name>
-			<role-name>USER</role-name>
-			<role-name>RADIOLOGIST</role-name>
-			<role-name>SUPERVISOR</role-name>
-		</auth-constraint>
 	</security-constraint>
-
-	<security-role>
-		<role-name>ADMIN</role-name>
-	</security-role>
-
-	<security-role>
-		<role-name>USER</role-name>
-	</security-role>
-
-	<security-role>
-		<role-name>RADIOLOGIST</role-name>
-	</security-role>
-
-	<security-role>
-		<role-name>SUPERVISOR</role-name>
-	</security-role>
 
 	<login-config>
 		<auth-method>BASIC</auth-method>

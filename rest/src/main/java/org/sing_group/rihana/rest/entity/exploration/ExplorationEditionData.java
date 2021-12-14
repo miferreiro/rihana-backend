@@ -42,7 +42,7 @@ import org.sing_group.rihana.rest.entity.report.ReportEditionData;
 public class ExplorationEditionData implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@XmlElement(name = "id")
+	@XmlElement(name = "id", required = true)
 	private String id;
 
 	@XmlElement(name = "explorationDate", required = true)

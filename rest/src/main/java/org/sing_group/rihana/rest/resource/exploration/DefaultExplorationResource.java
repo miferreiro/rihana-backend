@@ -31,7 +31,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
@@ -63,7 +62,6 @@ import org.sing_group.rihana.domain.entities.report.RequestedExploration;
 import org.sing_group.rihana.domain.entities.sign.Sign;
 import org.sing_group.rihana.domain.entities.sign.SignLocation;
 import org.sing_group.rihana.domain.entities.sign.SignType;
-import org.sing_group.rihana.domain.entities.user.Role;
 import org.sing_group.rihana.domain.entities.user.User;
 import org.sing_group.rihana.rest.entity.exploration.ExplorationAdminData;
 import org.sing_group.rihana.rest.entity.exploration.ExplorationData;
@@ -88,10 +86,6 @@ import org.sing_group.rihana.service.spi.sign.SignService;
 import org.sing_group.rihana.service.spi.sign.SignTypeService;
 import org.sing_group.rihana.service.spi.user.UserService;
 
-
-@RolesAllowed({
-	"ADMIN", "USER", "RADIOLOGIST", "SUPERVISOR"
-})
 @Path("exploration")
 @Produces({
 	APPLICATION_JSON, APPLICATION_XML
@@ -127,7 +121,7 @@ public class DefaultExplorationResource implements ExplorationResource {
 	private RadiographService radiographService;
 
 	@Inject
-	ExplorationStorage explorationStorage;
+	private ExplorationStorage explorationStorage;
 
 	@Inject
 	private SignService signService;
@@ -204,14 +198,14 @@ public class DefaultExplorationResource implements ExplorationResource {
 			countExplorations = this.service.countExplorationsByUserAndSignTypesInDateRange(null, initialDate, finalDate, signTypeList);
 		} else {
 			user = this.userService.get(userId);
-			if (user.getRole() == Role.ADMIN) {
+			if (user.getRole().getName() != "ADMIN") {
 				countExplorations = this.service.countExplorationsByUserAndSignTypesInDateRange(null, initialDate, finalDate, signTypeList);
 			} else {
 				countExplorations = this.service.countExplorationsByUserAndSignTypesInDateRange(user, initialDate, finalDate, signTypeList);
 			}
 		}
 
-		if (userId != null && !userId.equals("") && user.getRole() == Role.ADMIN) {
+		if (userId != null && !userId.equals("") && user.getRole().getName() != "ADMIN") {
 			return Response.ok(
 				this.service.listExplorationsByUserInDateRange(page, pageSize, user, initialDate, finalDate, signTypeList)
 					.map(this.explorationMapper::toExplorationAdminData).toArray(ExplorationAdminData[]::new)
@@ -351,7 +345,6 @@ public class DefaultExplorationResource implements ExplorationResource {
 		exploration.setRadiographs(new ArrayList<>());
 
 		this.explorationMapper.assignExplorationEditData(exploration, explorationEditionData);
-
 		exploration = this.service.edit(exploration);
 
 		return Response.ok(this.explorationMapper.toExplorationData(exploration)).build();
@@ -374,7 +367,6 @@ public class DefaultExplorationResource implements ExplorationResource {
 	}
 
 	@PUT
-	@RolesAllowed("ADMIN")
 	@Path("recover/{id}")
 	@ApiOperation(
 		value = "Recovers an existing deleted exploration.", code = 200

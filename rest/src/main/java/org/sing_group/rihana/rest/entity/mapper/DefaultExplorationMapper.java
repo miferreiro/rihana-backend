@@ -111,7 +111,6 @@ public class DefaultExplorationMapper implements ExplorationMapper {
 
 	@Override
 	public void assignExplorationEditData(Exploration exploration, ExplorationEditionData explorationEditionData) {
-
 		Patient patient = null;
 
 		if  (explorationEditionData.getPatient() != null) {
@@ -142,7 +141,6 @@ public class DefaultExplorationMapper implements ExplorationMapper {
 				reportEditionData.getConclusions());
 
 			report.setExploration(exploration);
-
 			report = this.reportService.create(report);
 			exploration.setReport(report);
 

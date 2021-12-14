@@ -24,11 +24,15 @@ package org.sing_group.rihana.service.sign;
 
 import java.util.stream.Stream;
 
+import javax.annotation.Resource;
+import javax.ejb.EJBAccessException;
+import javax.ejb.SessionContext;
 import javax.inject.Inject;
 
 import org.sing_group.rihana.domain.dao.spi.sign.SignDAO;
 import org.sing_group.rihana.domain.entities.sign.Sign;
 import org.sing_group.rihana.domain.entities.user.User;
+import org.sing_group.rihana.service.spi.acl.permission.PermissionService;
 import org.sing_group.rihana.service.spi.sign.SignService;
 
 public class DefaultSignService implements SignService {
@@ -36,18 +40,57 @@ public class DefaultSignService implements SignService {
 	@Inject
 	private SignDAO signDAO;
 
+	@Inject
+	private PermissionService permissionService;
+
+	@Resource
+	private SessionContext context;
+
 	@Override
 	public Stream<Sign> listSigns() {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"RADIOGRAPH_MANAGEMENT",
+				"SHOW_SIGNS") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
 		return signDAO.listSigns();
 	}
 
 	@Override
 	public Stream<Sign> listSignsByUser(User user) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"RADIOGRAPH_MANAGEMENT",
+				"SHOW_SIGNS") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
 		return signDAO.listSignsByUser(user);
 	}
 
 	@Override
 	public Sign create(Sign sign) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"RADIOGRAPH_MANAGEMENT",
+				"ADD_SIGN") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
 		return signDAO.create(sign);
 	}
 }

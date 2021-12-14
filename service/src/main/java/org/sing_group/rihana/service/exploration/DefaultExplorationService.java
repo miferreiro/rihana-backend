@@ -26,7 +26,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
+import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
+import javax.ejb.EJBAccessException;
+import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
@@ -34,6 +37,7 @@ import org.sing_group.rihana.domain.dao.spi.exploration.ExplorationDAO;
 import org.sing_group.rihana.domain.entities.exploration.Exploration;
 import org.sing_group.rihana.domain.entities.sign.SignType;
 import org.sing_group.rihana.domain.entities.user.User;
+import org.sing_group.rihana.service.spi.acl.permission.PermissionService;
 import org.sing_group.rihana.service.spi.exploration.ExplorationService;
 
 @Stateless
@@ -43,48 +47,161 @@ public class DefaultExplorationService implements ExplorationService {
 	@Inject
 	private ExplorationDAO explorationDao;
 
+	@Inject
+	private PermissionService permissionService;
+
+	@Resource
+	private SessionContext context;
+
 	@Override
 	public Exploration getExploration(String id) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"EXPLORATION_MANAGEMENT",
+				"SHOW_CURRENT") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
 		return explorationDao.getExploration(id);
 	}
 
 	@Override
 	public Exploration getExplorationDeleted(String id) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"EXPLORATION_MANAGEMENT",
+				"RETRIEVE") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
 		return explorationDao.getExplorationDeleted(id);
 	}
 
 	@Override
 	public Stream<Exploration> listExplorationsByUserInDateRange(int page, int pageSize, User user, Date initialDate, Date finalDate, List<SignType> signTypeList) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"EXPLORATION_MANAGEMENT",
+				"SHOW_ALL") &&
+			!this.permissionService.hasPermission(
+				loginLogged,
+				"EXPLORATION_MANAGEMENT",
+				"SHOW_OWN") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
 		return explorationDao.listExplorationsByUserInDateRange(page, pageSize, user, initialDate, finalDate, signTypeList);
 	}
 
 	@Override
 	public int countAllExplorations() {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"EXPLORATION_MANAGEMENT",
+				"SHOW_ALL") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
 		return explorationDao.countAllExplorations();
 	}
 
 	@Override
 	public int countExplorationsByUserAndSignTypesInDateRange(User user, Date initialDate, Date finalDate, List<SignType> signTypeList) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"EXPLORATION_MANAGEMENT",
+				"SHOW_ALL") &&
+			!this.permissionService.hasPermission(
+				loginLogged,
+				"EXPLORATION_MANAGEMENT",
+				"SHOW_OWN") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
 		return explorationDao.countExplorationsByUserAndSignTypesInDateRange(user, initialDate, finalDate, signTypeList);
 	}
 
 	@Override
 	public Exploration create(Exploration exploration) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"EXPLORATION_MANAGEMENT",
+				"ADD") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
 		return explorationDao.create(exploration);
 	}
 
 	@Override
 	public Exploration edit(Exploration exploration) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"EXPLORATION_MANAGEMENT",
+				"EDIT") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
 		return explorationDao.edit(exploration);
 	}
 
 	@Override
 	public void delete(Exploration exploration) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"EXPLORATION_MANAGEMENT",
+				"DELETE") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
 		explorationDao.delete(exploration);
 	}
 
 	@Override
 	public void recover(Exploration exploration) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"EXPLORATION_MANAGEMENT",
+				"RETRIEVE") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
 		explorationDao.recover(exploration);
 	}
 }

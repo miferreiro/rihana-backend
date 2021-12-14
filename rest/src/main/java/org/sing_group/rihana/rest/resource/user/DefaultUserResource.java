@@ -25,7 +25,6 @@ package org.sing_group.rihana.rest.resource.user;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.APPLICATION_XML;
 
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
@@ -44,7 +43,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.sing_group.rihana.domain.entities.user.Role;
+import org.sing_group.rihana.domain.entities.acl.role.Role;
 import org.sing_group.rihana.domain.entities.user.User;
 import org.sing_group.rihana.rest.entity.mapper.spi.UserMapper;
 import org.sing_group.rihana.rest.entity.user.UserData;
@@ -52,11 +51,10 @@ import org.sing_group.rihana.rest.entity.user.UserEditionData;
 import org.sing_group.rihana.rest.filter.CrossDomain;
 import org.sing_group.rihana.rest.mapper.SecurityExceptionMapper;
 import org.sing_group.rihana.rest.resource.spi.user.UserResource;
+import org.sing_group.rihana.service.spi.acl.permission.PermissionService;
+import org.sing_group.rihana.service.spi.acl.role.RoleService;
 import org.sing_group.rihana.service.spi.user.UserService;
 
-@RolesAllowed({
-	"ADMIN", "USER", "RADIOLOGIST", "SUPERVISOR"
-})
 @Path("user")
 @Produces({
 	APPLICATION_JSON, APPLICATION_XML
@@ -76,10 +74,16 @@ public class DefaultUserResource implements UserResource {
 	@Inject
 	private UserMapper userMapper;
 
+	@Inject
+	private PermissionService permissionService;
+
+	@Inject
+	private RoleService roleService;
+
 	@GET
 	@Path("{login}/role")
 	@ApiOperation(
-		value = "Checks the provided credentials", response = Role.class, code = 200
+		value = "Checks the provided credentials", response = String.class, code = 200
 	)
 	@ApiResponses({
 		@ApiResponse(code = 200, message = "successful operation"),
@@ -92,12 +96,11 @@ public class DefaultUserResource implements UserResource {
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
 		return Response.ok(
-			currentUser.getRole()
+			currentUser.getRole().getName()
 		).build();
 	}
 
 	@POST
-	@RolesAllowed("ADMIN")
 	@ApiOperation(
 		value = "Creates a new user.", response = UserData.class, code = 201
 	)
@@ -106,14 +109,13 @@ public class DefaultUserResource implements UserResource {
 	)
 	@Override
 	public Response create(UserEditionData userEditionData) {
-		User user = new User(userEditionData.getLogin(), userEditionData.getPassword(), userEditionData.getRole());
+		User user = new User(userEditionData.getLogin(), userEditionData.getPassword());
 		user = this.userService.create(user);
 		return Response.created(UriBuilder.fromResource(DefaultUserResource.class).path(user.getLogin()).build())
 			.entity(userMapper.toUserData(user)).build();
 	}
 
 	@GET
-	@RolesAllowed("ADMIN")
 	@ApiOperation(
 		value = "Return the data of all users.", response = UserData.class, responseContainer = "List", code = 200
 	)
@@ -136,7 +138,7 @@ public class DefaultUserResource implements UserResource {
 	public Response getUser(@PathParam("login") String login) {
 		User currentUser = this.userService.getCurrentUser();
 		if (!login.equals(currentUser.getLogin())) {
-			if (!currentUser.getRole().equals(Role.ADMIN)) {
+			if (!currentUser.getRole().getName().equals("ADMIN")) {
 				return Response.status(Response.Status.UNAUTHORIZED).build();
 			}
 		}
@@ -145,9 +147,6 @@ public class DefaultUserResource implements UserResource {
 
 	@PUT
 	@Path("{login}")
-	@RolesAllowed({
-		"ADMIN", "USER", "RADIOLOGIST", "SUPERVISOR"
-	})
 	@ApiOperation(
 		value = "Modifies an existing user", response = UserData.class, code = 200
 	)
@@ -155,18 +154,23 @@ public class DefaultUserResource implements UserResource {
 	public Response edit(@PathParam("login") String login, UserEditionData userEditionData) {
 		User currentUser = this.userService.getCurrentUser();
 		if (!login.equals(currentUser.getLogin())) {
-			if(!currentUser.getRole().equals(Role.ADMIN)) {
+			if(!currentUser.getRole().getName().equals("ADMIN")) {
 				return Response.status(Response.Status.UNAUTHORIZED).build();
 			}
 		}
 		User user = this.userService.get(login);
-		this.userMapper.assignUserEditionData(user, userEditionData);
+
+		if (this.permissionService.isAdmin(currentUser.getLogin())) {
+			Role role = this.roleService.getByName(userEditionData.getRole());
+			this.userMapper.assignUserWithRoleEditionData(user, userEditionData, role);
+		} else {
+			this.userMapper.assignUserEditionData(user, userEditionData);
+		}
 		return Response.ok(this.userMapper.toUserData(this.userService.edit(user))).build();
 	}
 
 	@DELETE
 	@Path("{login}")
-	@RolesAllowed("ADMIN")
 	@ApiOperation(
 		value = "Deletes an existing user.", code = 200
 	)

@@ -22,12 +22,16 @@
  */
 package org.sing_group.rihana.service.report;
 
+import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
+import javax.ejb.EJBAccessException;
+import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.sing_group.rihana.domain.dao.spi.report.ExplorationCodeDAO;
 import org.sing_group.rihana.domain.entities.report.ExplorationCode;
+import org.sing_group.rihana.service.spi.acl.permission.PermissionService;
 import org.sing_group.rihana.service.spi.report.ExplorationCodeService;
 
 @Stateless
@@ -37,13 +41,41 @@ public class DefaultExplorationCodeService implements ExplorationCodeService {
 	@Inject
 	private ExplorationCodeDAO explorationCodeDao;
 
+	@Inject
+	private PermissionService permissionService;
+
+	@Resource
+	private SessionContext context;
+
 	@Override
 	public ExplorationCode getExplorationCode(String code) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"REPORT_MANAGEMENT",
+				"SHOW_CURRENT") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
 		return explorationCodeDao.getExplorationCode(code);
 	}
 
 	@Override
 	public boolean existsExplorationCodeBy(String code) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"REPORT_MANAGEMENT",
+				"SHOW_CURRENT") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
 		return explorationCodeDao.existsExplorationCodeBy(code);
 	}
 }

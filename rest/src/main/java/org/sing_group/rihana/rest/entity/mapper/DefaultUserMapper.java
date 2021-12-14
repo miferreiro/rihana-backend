@@ -22,6 +22,7 @@
  */
 package org.sing_group.rihana.rest.entity.mapper;
 
+import org.sing_group.rihana.domain.entities.acl.role.Role;
 import org.sing_group.rihana.domain.entities.user.User;
 import org.sing_group.rihana.rest.entity.mapper.spi.UserMapper;
 import org.sing_group.rihana.rest.entity.user.UserData;
@@ -31,7 +32,15 @@ public class DefaultUserMapper implements UserMapper {
 
 	@Override
 	public UserData toUserData(User user) {
-		return new UserData(user.getLogin(), user.getPassword(), user.getRole());
+		return new UserData(user.getLogin(), user.getPassword(), user.getRole().getName());
+	}
+	@Override
+	public void assignUserWithRoleEditionData(User user, UserEditionData userEditionData, Role role) {
+		// Checks if the password has been modified
+		if (!userEditionData.getPassword().isEmpty()) {
+			user.setPassword(userEditionData.getPassword());
+		}
+		user.setRole(role);
 	}
 
 	@Override

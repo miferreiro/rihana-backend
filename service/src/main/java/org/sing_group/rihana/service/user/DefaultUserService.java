@@ -26,12 +26,14 @@ import java.util.stream.Stream;
 
 import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
+import javax.ejb.EJBAccessException;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.sing_group.rihana.domain.dao.spi.user.UserDAO;
 import org.sing_group.rihana.domain.entities.user.User;
+import org.sing_group.rihana.service.spi.acl.permission.PermissionService;
 import org.sing_group.rihana.service.spi.user.UserService;
 
 @Stateless
@@ -40,6 +42,9 @@ public class DefaultUserService implements UserService {
 
 	@Inject
 	private UserDAO userDAO;
+
+	@Inject
+	private PermissionService permissionService;
 
 	@Resource
 	private SessionContext context;
@@ -50,27 +55,80 @@ public class DefaultUserService implements UserService {
 	}
 
 	@Override
-	public User get(String id) {
-		return userDAO.get(id);
+	public User get(String login) {
+		String loginLogged = context.getCallerPrincipal().getName();
+
+		if (!(this.permissionService.hasPermission(
+				loginLogged,
+				"USER_MANAGEMENT",
+				"SHOW_CURRENT") &&
+			loginLogged.equals(login)) &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
+		return userDAO.get(login);
 	}
 
 	@Override
 	public User create(User user) {
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"USER_MANAGEMENT",
+				"ADD") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
 		return userDAO.create(user);
 	}
 
 	@Override
 	public User edit(User user) {
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!(this.permissionService.hasPermission(
+				loginLogged,
+				"USER_MANAGEMENT",
+				"EDIT") &&
+			loginLogged.equals(user.getLogin())) &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
 		return userDAO.edit(user);
 	}
 
 	@Override
 	public void delete(User user) {
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"USER_MANAGEMENT",
+				"DELETE") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
 		userDAO.delete(user);
 	}
 
 	@Override
 	public Stream<User> getUsers() {
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"USER_MANAGEMENT",
+				"SHOW_ALL") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
 		return userDAO.getUsers();
 	}
 }

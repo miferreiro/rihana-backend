@@ -31,13 +31,17 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 
+import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
+import javax.ejb.EJBAccessException;
+import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
 
 import org.sing_group.rihana.domain.dao.spi.radiograph.RadiographDAO;
 import org.sing_group.rihana.domain.entities.radiograph.Radiograph;
+import org.sing_group.rihana.service.spi.acl.permission.PermissionService;
 import org.sing_group.rihana.service.spi.exploration.ExplorationStorage;
 import org.sing_group.rihana.service.spi.radiograph.RadiographService;
 
@@ -51,13 +55,40 @@ public class DefaultRadiographService implements RadiographService {
 	@Inject
 	private ExplorationStorage explorationStorage;
 
+	@Inject
+	private PermissionService permissionService;
+
+	@Resource
+	private SessionContext context;
+
 	@Override
 	public Radiograph getRadiograph(String id) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"RADIOGRAPH_MANAGEMENT",
+				"SHOW_CURRENT") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
 		return radiographDAO.get(id);
 	}
 
 	@Override
 	public Radiograph create(Radiograph radiograph) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"RADIOGRAPH_MANAGEMENT",
+				"ADD") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
 
 		InputStream data = sourceToInputStream(radiograph);
 
@@ -69,6 +100,17 @@ public class DefaultRadiographService implements RadiographService {
 
 	@Override
 	public void delete(Radiograph radiograph) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"RADIOGRAPH_MANAGEMENT",
+				"DELETE") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
 		radiographDAO.delete(radiograph);
 	}
 

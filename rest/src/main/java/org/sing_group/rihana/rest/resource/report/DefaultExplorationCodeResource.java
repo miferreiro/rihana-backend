@@ -26,7 +26,6 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.APPLICATION_XML;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
@@ -43,16 +42,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.sing_group.rihana.rest.entity.report.ExplorationCodeData;
 import org.sing_group.rihana.rest.entity.mapper.spi.ExplorationCodeMapper;
+import org.sing_group.rihana.rest.entity.report.ExplorationCodeData;
 import org.sing_group.rihana.rest.filter.CrossDomain;
 import org.sing_group.rihana.rest.resource.spi.report.ExplorationCodeResource;
 import org.sing_group.rihana.service.spi.report.ExplorationCodeService;
 
-
-@RolesAllowed({
-	"ADMIN", "USER", "RADIOLOGIST", "SUPERVISOR"
-})
 @Path("explorationcode")
 @Produces({
 	APPLICATION_JSON, APPLICATION_XML
@@ -80,8 +75,8 @@ public class DefaultExplorationCodeResource implements ExplorationCodeResource {
 		this.explorationCodeMapper.setRequestURI(this.uriInfo);
 	}
 
-	@Path("{code}")
 	@GET
+	@Path("{code}")
 	@ApiOperation(
 		value = "Return the data of an exploration code.", response = ExplorationCodeData.class, code = 200
 	)

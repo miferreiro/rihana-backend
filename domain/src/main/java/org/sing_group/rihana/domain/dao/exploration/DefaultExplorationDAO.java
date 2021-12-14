@@ -37,7 +37,6 @@ import org.sing_group.rihana.domain.dao.DAOHelper;
 import org.sing_group.rihana.domain.dao.spi.exploration.ExplorationDAO;
 import org.sing_group.rihana.domain.entities.exploration.Exploration;
 import org.sing_group.rihana.domain.entities.sign.SignType;
-import org.sing_group.rihana.domain.entities.user.Role;
 import org.sing_group.rihana.domain.entities.user.User;
 
 @Default
@@ -140,7 +139,7 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 				"FROM Exploration ee LEFT JOIN ee.radiographs rr LEFT JOIN rr.signs ss LEFT JOIN ss.type tt " +
 				"WHERE ee.id=e.id";
 
-		 	if (user == null || user.getRole() != Role.ADMIN) querySignType += " AND ee.deleted=0";
+		 	if (user == null || user.getRole().getName() != "ADMIN") querySignType += " AND ee.deleted=0";
 
 			stringBuilder.append("(");
 			for (int count = 0; count < signTypeList.size(); count++) {
@@ -153,7 +152,7 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 		  	}
 			stringBuilder.append(") ");
 
-			if (user != null && user.getRole() != Role.ADMIN) {
+			if (user != null && user.getRole().getName() != "ADMIN") {
 				if (queryInDateRange != "") queryInDateRange= "AND " + queryInDateRange;
 				queryExplorations = "SELECT e " +
 					"FROM Exploration e LEFT JOIN e.radiographs r LEFT JOIN r.signs s LEFT JOIN s.type t " +
@@ -164,7 +163,7 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 				query.setParameter("login", user.getLogin());
 			} else {
 				if (queryInDateRange != "") conditionDeleted = "AND e.deleted=0 ";
-				if (user != null && user.getRole() == Role.ADMIN) conditionDeleted = "";
+				if (user != null && user.getRole().getName() != "ADMIN") conditionDeleted = "";
 				if (queryInDateRange != "" || conditionDeleted != "") stringBuilder.insert(0, "AND ");
 
 				queryExplorations = "SELECT e " +
@@ -185,7 +184,7 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 				query = query.setFirstResult((page - 1) * pageSize)
 					.setMaxResults(pageSize);
 			}
-		} else if (user != null && user.getRole() != Role.ADMIN) {
+		} else if (user != null && user.getRole().getName() != "ADMIN") {
 			if (queryInDateRange != "") queryInDateRange= "AND " + queryInDateRange;
 			queryExplorations = "SELECT e " +
 				"FROM Exploration e " +

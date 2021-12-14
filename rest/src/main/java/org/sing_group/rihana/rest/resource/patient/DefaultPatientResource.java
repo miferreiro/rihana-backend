@@ -26,7 +26,6 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.APPLICATION_XML;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
@@ -55,9 +54,6 @@ import org.sing_group.rihana.rest.filter.CrossDomain;
 import org.sing_group.rihana.rest.resource.spi.patient.PatientResource;
 import org.sing_group.rihana.service.spi.patient.PatientService;
 
-@RolesAllowed({
-	"ADMIN", "USER", "RADIOLOGIST", "SUPERVISOR"
-})
 @Path("patient")
 @Produces({
 	APPLICATION_JSON, APPLICATION_XML
@@ -133,10 +129,11 @@ public class DefaultPatientResource implements PatientResource {
 		return Response.ok(this.patientMapper.toPatientData(this.service.getPatientBy(patientID))).build();
 	}
 
-	@Path("{id}")
+
 	@PUT
+	@Path("{id}")
 	@ApiOperation(
-		value = "Modifies an existing patient", response = PatientData.class, code = 200
+		value = "Modifies an existing patient.", response = PatientData.class, code = 200
 	)
 	@Override
 	public Response edit(@PathParam("id") String id, PatientEditionData patientEditionData) {

@@ -29,7 +29,6 @@ import static javax.ws.rs.core.MediaType.APPLICATION_XML;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
@@ -65,9 +64,6 @@ import org.sing_group.rihana.service.spi.sign.SignService;
 import org.sing_group.rihana.service.spi.sign.SignTypeService;
 import org.sing_group.rihana.service.spi.user.UserService;
 
-@RolesAllowed({
-	"ADMIN", "USER", "RADIOLOGIST", "SUPERVISOR"
-})
 @Path("sign")
 @Produces({
 	APPLICATION_JSON, APPLICATION_XML
@@ -136,7 +132,6 @@ public class DefaultSignResource implements SignResource {
 
 	@POST
 	@Path("type")
-	@RolesAllowed("ADMIN")
 	@ApiOperation(
 		value = "Creates a new sign type.", response = SignTypeData.class, code = 201
 	)
@@ -155,9 +150,6 @@ public class DefaultSignResource implements SignResource {
 
 	@PUT
 	@Path("type/{code}")
-	@RolesAllowed({
-		"ADMIN"
-	})
 	@ApiOperation(
 		value = "Modifies an existing sign type", response = UserData.class, code = 200
 	)
@@ -170,7 +162,6 @@ public class DefaultSignResource implements SignResource {
 
 	@DELETE
 	@Path("type/{code}")
-	@RolesAllowed("ADMIN")
 	@ApiOperation(
 		value = "Deletes an existing sign type.", code = 200
 	)

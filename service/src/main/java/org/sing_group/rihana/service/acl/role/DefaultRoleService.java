@@ -1,0 +1,147 @@
+/*-
+ * #%L
+ * Service
+ * %%
+ * Copyright (C) 2021 David A. Ruano Ordás, José Ramón Méndez Reboredo,
+ * 		Miguel Ferreiro Díaz
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public
+ * License along with this program.  If not, see
+ * <http://www.gnu.org/licenses/gpl-3.0.html>.
+ * #L%
+ */
+package org.sing_group.rihana.service.acl.role;
+
+import java.util.stream.Stream;
+
+import javax.annotation.Resource;
+import javax.annotation.security.PermitAll;
+import javax.ejb.EJBAccessException;
+import javax.ejb.SessionContext;
+import javax.ejb.Stateless;
+import javax.inject.Inject;
+
+import org.sing_group.rihana.domain.dao.spi.acl.role.RoleDAO;
+import org.sing_group.rihana.domain.entities.acl.role.Role;
+import org.sing_group.rihana.service.spi.acl.permission.PermissionService;
+import org.sing_group.rihana.service.spi.acl.role.RoleService;
+
+@Stateless
+@PermitAll
+public class DefaultRoleService implements RoleService {
+
+	@Inject
+	private RoleDAO roleDAO;
+
+	@Inject
+	private PermissionService permissionService;
+
+	@Resource
+	private SessionContext context;
+
+	@Override
+	public Role create(Role role) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"ROLE_MANAGEMENT",
+				"ADD") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
+		return roleDAO.create(role);
+	}
+
+	@Override
+	public Stream<Role> getRoles() {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"ROLE_MANAGEMENT",
+				"SHOW_ALL") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
+		return roleDAO.getRoles();
+	}
+
+	@Override
+	public Role get(int id) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"ROLE_MANAGEMENT",
+				"SHOW_CURRENT") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
+		return roleDAO.get(id);
+	}
+
+	@Override
+	public Role getByName(String name) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+			loginLogged,
+			"ROLE_MANAGEMENT",
+			"SHOW_CURRENT") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
+		return roleDAO.getByName(name);
+	}
+
+	@Override
+	public Role edit(Role role) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"ROLE_MANAGEMENT",
+				"EDIT") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
+		return roleDAO.edit(role);
+	}
+
+	@Override
+	public void delete(Role role) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"ROLE_MANAGEMENT",
+				"DELETE") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
+		roleDAO.delete(role);
+	}
+}

@@ -22,12 +22,16 @@
  */
 package org.sing_group.rihana.service.report;
 
+import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
+import javax.ejb.EJBAccessException;
+import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.sing_group.rihana.domain.dao.spi.report.ReportDAO;
 import org.sing_group.rihana.domain.entities.report.Report;
+import org.sing_group.rihana.service.spi.acl.permission.PermissionService;
 import org.sing_group.rihana.service.spi.report.ReportService;
 
 @Stateless
@@ -37,18 +41,57 @@ public class DefaultReportService implements ReportService {
 	@Inject
 	private ReportDAO reportDAO;
 
+	@Inject
+	private PermissionService permissionService;
+
+	@Resource
+	private SessionContext context;
+
 	@Override
 	public Report getReport(String id) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"REPORT_MANAGEMENT",
+				"SHOW_CURRENT") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
 		return reportDAO.get(id);
 	}
 
 	@Override
 	public Report create(Report report) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"REPORT_MANAGEMENT",
+				"ADD") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
 		return reportDAO.create(report);
 	}
 
 	@Override
 	public void delete(Report report) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+				loginLogged,
+				"REPORT_MANAGEMENT",
+				"DELETE") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
 		reportDAO.delete(report);
 	}
 }

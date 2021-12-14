@@ -36,14 +36,14 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 
+import org.sing_group.rihana.domain.entities.acl.role.Role;
 import org.sing_group.rihana.domain.entities.exploration.Exploration;
 
 @Entity
@@ -58,8 +58,7 @@ public class User implements Serializable {
 	@Column(length = 32, nullable = false)
 	private String password;
 
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
+	@ManyToOne(optional = false)
 	private Role role;
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -73,10 +72,9 @@ public class User implements Serializable {
 
 	User() { }
 
-	public User(String login, String password, Role role) {
+	public User(String login, String password) {
 		this.setLogin(login);
 		this.setPassword(password);
-		this.setRole(role);
 		this.setDeleted(false);
 		this.deleteDate = null;
 	}
@@ -115,8 +113,13 @@ public class User implements Serializable {
 	}
 
 	public void setRole(Role role) {
-		checkArgument(role, r -> requireNonNull(r, "role cannot be null"));
+		if (this.role != null) {
+			this.role.internalRemoveUser(this);
+		}
 		this.role = role;
+		if (role != null) {
+			this.role.internalAddUser(this);
+		}
 	}
 
 	public void internalRemoveExploration(Exploration exploration) {

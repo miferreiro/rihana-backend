@@ -26,7 +26,6 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.APPLICATION_XML;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
@@ -49,9 +48,6 @@ import org.sing_group.rihana.rest.filter.CrossDomain;
 import org.sing_group.rihana.rest.resource.spi.report.ReportResource;
 import org.sing_group.rihana.service.spi.report.ReportService;
 
-@RolesAllowed({
-	"ADMIN", "USER", "RADIOLOGIST", "SUPERVISOR"
-})
 @Path("report")
 @Produces({
 	APPLICATION_JSON, APPLICATION_XML
@@ -79,8 +75,8 @@ public class DefaultReportResource implements ReportResource {
 		this.reportMapper.setRequestURI(this.uriInfo);
 	}
 
-	@Path("{id}")
 	@GET
+	@Path("{id}")
 	@ApiOperation(
 		value = "Return the data of a report.", response = ReportData.class, code = 200
 	)
