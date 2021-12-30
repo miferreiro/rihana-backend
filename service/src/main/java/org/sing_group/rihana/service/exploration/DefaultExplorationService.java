@@ -113,6 +113,10 @@ public class DefaultExplorationService implements ExplorationService {
 				loginLogged,
 				"EXPLORATION_MANAGEMENT",
 				"SHOW_ALL") &&
+			!this.permissionService.hasPermission(
+				loginLogged,
+				"EXPLORATION_MANAGEMENT",
+				"ADD") &&
 			!this.permissionService.isAdmin(loginLogged)
 		) {
 			throw new EJBAccessException("Insufficient privileges");

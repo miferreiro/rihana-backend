@@ -25,7 +25,9 @@ package org.sing_group.rihana.rest.entity.mapper;
 import javax.enterprise.inject.Default;
 import javax.ws.rs.core.UriInfo;
 
+import org.sing_group.rihana.domain.entities.acl.permission.FunctionalityAction;
 import org.sing_group.rihana.domain.entities.acl.permission.Permission;
+import org.sing_group.rihana.rest.entity.acl.permission.FunctionalityActionData;
 import org.sing_group.rihana.rest.entity.acl.permission.PermissionData;
 import org.sing_group.rihana.rest.entity.mapper.spi.PermissionMapper;
 
@@ -43,6 +45,14 @@ public class DefaultPermissionMapper implements PermissionMapper {
 	public PermissionData toPermissionData(Permission permission) {
 		return new PermissionData(
 			permission.getPermissionKey().getRoleId(),
+			permission.getPermissionKey().getFunctionalityActionId().getFunctionalityId(),
+			permission.getPermissionKey().getFunctionalityActionId().getActionId()
+		);
+	}
+
+	@Override
+	public FunctionalityActionData toFunctionalityActionData(Permission permission) {
+		return new FunctionalityActionData(
 			permission.getPermissionKey().getFunctionalityActionId().getFunctionalityId(),
 			permission.getPermissionKey().getFunctionalityActionId().getActionId()
 		);

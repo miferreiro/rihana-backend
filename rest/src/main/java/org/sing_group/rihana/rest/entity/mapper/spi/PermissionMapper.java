@@ -25,6 +25,7 @@ package org.sing_group.rihana.rest.entity.mapper.spi;
 import javax.ws.rs.core.UriInfo;
 
 import org.sing_group.rihana.domain.entities.acl.permission.Permission;
+import org.sing_group.rihana.rest.entity.acl.permission.FunctionalityActionData;
 import org.sing_group.rihana.rest.entity.acl.permission.PermissionData;
 
 public interface PermissionMapper {
@@ -32,4 +33,6 @@ public interface PermissionMapper {
 	void setRequestURI(UriInfo requestURI);
 
 	PermissionData toPermissionData(Permission permission);
+
+	FunctionalityActionData toFunctionalityActionData(Permission permission);
 }

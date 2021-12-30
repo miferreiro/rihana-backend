@@ -48,12 +48,15 @@ import io.swagger.annotations.ApiResponses;
 import org.sing_group.rihana.domain.entities.acl.permission.FunctionalityActionKey;
 import org.sing_group.rihana.domain.entities.acl.permission.Permission;
 import org.sing_group.rihana.domain.entities.acl.permission.PermissionKey;
+import org.sing_group.rihana.rest.entity.acl.functionality.FunctionalityData;
+import org.sing_group.rihana.rest.entity.acl.permission.FunctionalityActionData;
 import org.sing_group.rihana.rest.entity.acl.permission.PermissionData;
 import org.sing_group.rihana.rest.entity.mapper.spi.PermissionMapper;
 import org.sing_group.rihana.rest.filter.CrossDomain;
 import org.sing_group.rihana.rest.resource.acl.action.DefaultActionResource;
 import org.sing_group.rihana.rest.resource.spi.acl.permission.PermissionResource;
 import org.sing_group.rihana.service.spi.acl.permission.PermissionService;
+import org.sing_group.rihana.service.spi.user.UserService;
 
 @Path("permission")
 @Produces({
@@ -73,6 +76,9 @@ public class DefaultPermissionResource implements PermissionResource {
 
 	@Inject
 	private PermissionMapper permissionMapper;
+
+	@Inject
+	private UserService userService;
 
 	@Context
 	private UriInfo uriInfo;
@@ -131,6 +137,19 @@ public class DefaultPermissionResource implements PermissionResource {
 				)
 			)
 		))).build();
+	}
+
+	@GET
+	@Path("{login}")
+	@ApiOperation(
+		value = "Return the permissions of a user.", response = FunctionalityData.class, code = 200
+	)
+	@Override
+	public Response getUserPermissions(@PathParam("login") String login) {
+		return Response.ok(this.userService.get(login).getRole().getPermissions()
+			.stream().map(this.permissionMapper::toFunctionalityActionData)
+			.toArray(FunctionalityActionData[]::new))
+			.build();
 	}
 
 	@GET

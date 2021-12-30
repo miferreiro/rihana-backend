@@ -29,7 +29,9 @@ import org.sing_group.rihana.rest.entity.acl.permission.PermissionData;
 
 @Local
 public interface PermissionResource {
-	Response getPermission(int groupId, int functionalityId, int actionId);
+	Response getPermission(int roleId, int functionalityId, int actionId);
+
+	Response getUserPermissions(String login);
 
 	Response listPermissions();
 
