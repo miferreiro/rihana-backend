@@ -44,7 +44,7 @@ public class ReportEditionData implements Serializable {
 	private String reportN;
 
 	@XmlElement(name = "completionDate", required = true)
-	private Date completion_date;
+	private Date completionDate;
 
 	@XmlElement(name = "applicant", required = true)
 	private String applicant;
@@ -59,7 +59,7 @@ public class ReportEditionData implements Serializable {
 	private String bed;
 
 	@XmlElement(name = "clinicalData", required = true)
-	private String clinical_data;
+	private String clinicalData;
 
 	@XmlElement(name = "findings", required = true)
 	private String findings;
@@ -78,18 +78,18 @@ public class ReportEditionData implements Serializable {
 
 	public ReportEditionData() { }
 
-	public ReportEditionData(String reportN, Date completion_date, String applicant, String priority,
-							  String status, String bed, String clinical_data, String findings, String conclusions,
+	public ReportEditionData(String reportN, Date completionDate, String applicant, String priority,
+							  String status, String bed, String clinicalData, String findings, String conclusions,
 							  UuidAndUri exploration, List<RequestedExplorationEditionData> requestedExplorations,
 							  List<PerformedExplorationEditionData> performedExplorations) {
 
 		this.reportN = reportN;
-		this.completion_date = completion_date;
+		this.completionDate = completionDate;
 		this.applicant = applicant;
 		this.priority = priority;
 		this.status = status;
 		this.bed = bed;
-		this.clinical_data = clinical_data;
+		this.clinicalData = clinicalData;
 		this.findings = findings;
 		this.conclusions = conclusions;
 		this.exploration = exploration;
@@ -105,12 +105,12 @@ public class ReportEditionData implements Serializable {
 		this.reportN = reportN;
 	}
 
-	public Date getCompletion_date() {
-		return completion_date;
+	public Date getCompletionDate() {
+		return completionDate;
 	}
 
-	public void setCompletion_date(Date completion_date) {
-		this.completion_date = completion_date;
+	public void setCompletionDate(Date completionDate) {
+		this.completionDate = completionDate;
 	}
 
 	public String getApplicant() {
@@ -145,12 +145,12 @@ public class ReportEditionData implements Serializable {
 		this.bed = bed;
 	}
 
-	public String getClinical_data() {
-		return clinical_data;
+	public String getClinicalData() {
+		return clinicalData;
 	}
 
-	public void setClinical_data(String clinical_data) {
-		this.clinical_data = clinical_data;
+	public void setClinicalData(String clinicalData) {
+		this.clinicalData = clinicalData;
 	}
 
 	public String getFindings() {

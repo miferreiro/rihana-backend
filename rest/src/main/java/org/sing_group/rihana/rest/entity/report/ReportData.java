@@ -47,7 +47,7 @@ public class ReportData implements Serializable {
 	private String reportN;
 
 	@XmlElement(name = "completionDate", required = true)
-	private Date completion_date;
+	private Date completionDate;
 
 	@XmlElement(name = "applicant", required = true)
 	private String applicant;
@@ -62,7 +62,7 @@ public class ReportData implements Serializable {
 	private String bed;
 
 	@XmlElement(name = "clinicalData", required = true)
-	private String clinical_data;
+	private String clinicalData;
 
 	@XmlElement(name = "findings", required = true)
 	private String findings;
@@ -81,18 +81,18 @@ public class ReportData implements Serializable {
 
 	public ReportData() { }
 
-	public ReportData(String id, String reportN, Date completion_date, String applicant, String priority,
-					  String status, String bed, String clinical_data, String findings, String conclusions,
+	public ReportData(String id, String reportN, Date completionDate, String applicant, String priority,
+					  String status, String bed, String clinicalData, String findings, String conclusions,
 					  UuidAndUri exploration, List<RequestedExplorationData> requestedExplorations,
 					  List<PerformedExplorationData> performedExplorations) {
 		this.id = id;
 		this.reportN = reportN;
-		this.completion_date = completion_date;
+		this.completionDate = completionDate;
 		this.applicant = applicant;
 		this.priority = priority;
 		this.status = status;
 		this.bed = bed;
-		this.clinical_data = clinical_data;
+		this.clinicalData = clinicalData;
 		this.findings = findings;
 		this.conclusions = conclusions;
 		this.exploration = exploration;
@@ -108,8 +108,8 @@ public class ReportData implements Serializable {
 		return reportN;
 	}
 
-	public Date getCompletion_date() {
-		return completion_date;
+	public Date getCompletionDate() {
+		return completionDate;
 	}
 
 	public String getApplicant() {
@@ -128,8 +128,8 @@ public class ReportData implements Serializable {
 		return bed;
 	}
 
-	public String getClinical_data() {
-		return clinical_data;
+	public String getClinicalData() {
+		return clinicalData;
 	}
 
 	public String getFindings() {

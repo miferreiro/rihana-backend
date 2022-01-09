@@ -131,12 +131,12 @@ public class DefaultExplorationMapper implements ExplorationMapper {
 		if (explorationEditionData.getReport() != null) {
 			ReportEditionData reportEditionData = explorationEditionData.getReport();
 			Report report = new Report(reportEditionData.getReportN(),
-				reportEditionData.getCompletion_date(),
+				reportEditionData.getCompletionDate(),
 				reportEditionData.getApplicant(),
 				reportEditionData.getPriority(),
 				reportEditionData.getStatus(),
 				reportEditionData.getBed(),
-				reportEditionData.getClinical_data(),
+				reportEditionData.getClinicalData(),
 				reportEditionData.getFindings(),
 				reportEditionData.getConclusions());
 
