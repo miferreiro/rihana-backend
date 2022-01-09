@@ -23,7 +23,7 @@
 package org.sing_group.rihana.service.spi.exploration;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import javax.ejb.Local;
@@ -42,13 +42,13 @@ public interface ExplorationService {
 	Stream<Exploration> listExplorationsByUserInDateRange(int page, int pageSize,
 														  User user,
 														  Date initialDate, Date finalDate,
-														  List<SignType> signTypeList);
+														  Set<SignType> signTypes);
 
 	int countAllExplorations();
 
 	int countExplorationsByUserAndSignTypesInDateRange(User user,
 													   Date initialDate, Date finalDate,
-													   List<SignType> signTypeList);
+													   Set<SignType> signTypes);
 
 	Exploration create(Exploration exploration);
 

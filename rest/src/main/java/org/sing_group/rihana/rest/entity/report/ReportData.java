@@ -24,7 +24,7 @@ package org.sing_group.rihana.rest.entity.report;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -74,17 +74,17 @@ public class ReportData implements Serializable {
 	private UuidAndUri exploration;
 
 	@XmlElement(name = "requestedExplorations")
-	private List<RequestedExplorationData> requestedExplorations;
+	private Set<RequestedExplorationData> requestedExplorations;
 
 	@XmlElement(name = "performedExplorations")
-	private List<PerformedExplorationData> performedExplorations;
+	private Set<PerformedExplorationData> performedExplorations;
 
 	public ReportData() { }
 
 	public ReportData(String id, String reportN, Date completionDate, String applicant, String priority,
 					  String status, String bed, String clinicalData, String findings, String conclusions,
-					  UuidAndUri exploration, List<RequestedExplorationData> requestedExplorations,
-					  List<PerformedExplorationData> performedExplorations) {
+					  UuidAndUri exploration, Set<RequestedExplorationData> requestedExplorations,
+					  Set<PerformedExplorationData> performedExplorations) {
 		this.id = id;
 		this.reportN = reportN;
 		this.completionDate = completionDate;
@@ -144,11 +144,11 @@ public class ReportData implements Serializable {
 		return exploration;
 	}
 
-	public List<RequestedExplorationData> getRequestedExplorations() {
+	public Set<RequestedExplorationData> getRequestedExplorations() {
 		return requestedExplorations;
 	}
 
-	public List<PerformedExplorationData> getPerformedExplorations() {
+	public Set<PerformedExplorationData> getPerformedExplorations() {
 		return performedExplorations;
 	}
 }

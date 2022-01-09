@@ -24,8 +24,8 @@ package org.sing_group.rihana.domain.entities.acl.role;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -55,10 +55,10 @@ public class Role implements Serializable {
 	private String description;
 
 	@OneToMany(mappedBy = "role", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<User> users = new ArrayList<>();
+	private Set<User> users = new HashSet<>();
 
 	@OneToMany(mappedBy = "id.roleId", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Permission> permissions = new ArrayList<>();
+	private Set<Permission> permissions = new HashSet<>();
 
 	@Column(name = "creation_date", columnDefinition = "DATETIME(3)")
 	private Timestamp creationDate;
@@ -111,7 +111,7 @@ public class Role implements Serializable {
 		users.add(user);
 	}
 
-	public List<User> getUsers() {
+	public Set<User> getUsers() {
 		return users;
 	}
 
@@ -123,7 +123,7 @@ public class Role implements Serializable {
 		permissions.add(permission);
 	}
 
-	public List<Permission> getPermissions() {
+	public Set<Permission> getPermissions() {
 		return permissions;
 	}
 

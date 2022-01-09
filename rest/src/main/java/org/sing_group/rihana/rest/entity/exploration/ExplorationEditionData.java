@@ -24,7 +24,7 @@ package org.sing_group.rihana.rest.entity.exploration;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -58,18 +58,18 @@ public class ExplorationEditionData implements Serializable {
 	private ReportEditionData report;
 
 	@XmlElement(name = "radiographs", required = true)
-	private List<RadiographEditionData> radiographs;
+	private Set<RadiographEditionData> radiographs;
 
 	public ExplorationEditionData() { }
 
-	public ExplorationEditionData(Date explorationDate, String user, PatientEditionData patient, List<RadiographEditionData> radiographs) {
+	public ExplorationEditionData(Date explorationDate, String user, PatientEditionData patient, Set<RadiographEditionData> radiographs) {
 		this.setExplorationDate(explorationDate);
 		this.setUser(user);
 		this.setPatient(patient);
 		this.setRadiographs(radiographs);
 	}
 
-	public ExplorationEditionData(Date explorationDate, String user, PatientEditionData patient, ReportEditionData reportEditionData, List<RadiographEditionData> radiographs) {
+	public ExplorationEditionData(Date explorationDate, String user, PatientEditionData patient, ReportEditionData reportEditionData, Set<RadiographEditionData> radiographs) {
 		this.setExplorationDate(explorationDate);
 		this.setUser(user);
 		this.setPatient(patient);
@@ -77,7 +77,7 @@ public class ExplorationEditionData implements Serializable {
 		this.setRadiographs(radiographs);
 	}
 
-	public ExplorationEditionData(String id, Date explorationDate, String user, PatientEditionData patient, ReportEditionData reportEditionData, List<RadiographEditionData> radiographs) {
+	public ExplorationEditionData(String id, Date explorationDate, String user, PatientEditionData patient, ReportEditionData reportEditionData, Set<RadiographEditionData> radiographs) {
 		this.setId(id);
 		this.setExplorationDate(explorationDate);
 		this.setUser(user);
@@ -126,11 +126,11 @@ public class ExplorationEditionData implements Serializable {
 		this.report = report;
 	}
 
-	public List<RadiographEditionData> getRadiographs() {
+	public Set<RadiographEditionData> getRadiographs() {
 		return radiographs;
 	}
 
-	public void setRadiographs(List<RadiographEditionData> radiographs) {
+	public void setRadiographs(Set<RadiographEditionData> radiographs) {
 		this.radiographs = radiographs;
 	}
 }

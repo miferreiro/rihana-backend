@@ -1,4 +1,3 @@
-
 /*-
  * #%L
  * Domain
@@ -25,8 +24,8 @@ package org.sing_group.rihana.domain.entities.report;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -49,10 +48,10 @@ public class ExplorationCode implements Serializable {
 	private String description;
 
 	@OneToMany(mappedBy = "explorationCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<RequestedExploration> requestedExplorations = new ArrayList<>();
+	private Set<RequestedExploration> requestedExplorations = new HashSet<>();
 
 	@OneToMany(mappedBy = "explorationCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<PerformedExploration> performedExplorations = new ArrayList<>();
+	private Set<PerformedExploration> performedExplorations = new HashSet<>();
 
 	@Column(name = "deleted", columnDefinition="BIT(1) DEFAULT FALSE")
 	private boolean deleted;
@@ -93,7 +92,7 @@ public class ExplorationCode implements Serializable {
 		this.requestedExplorations.add(requestedExploration);
 	}
 
-	public List<RequestedExploration> getRequestedExplorations() {
+	public Set<RequestedExploration> getRequestedExplorations() {
 		return requestedExplorations;
 	}
 
@@ -105,7 +104,7 @@ public class ExplorationCode implements Serializable {
 		this.performedExplorations.add(performedExploration);
 	}
 
-	public List<PerformedExploration> getPerformedExplorations() {
+	public Set<PerformedExploration> getPerformedExplorations() {
 		return performedExplorations;
 	}
 

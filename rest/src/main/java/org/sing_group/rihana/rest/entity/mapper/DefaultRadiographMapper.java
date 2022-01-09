@@ -24,8 +24,8 @@ package org.sing_group.rihana.rest.entity.mapper;
 
 import static org.sing_group.rihana.rest.entity.UuidAndUri.fromEntity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
@@ -61,21 +61,21 @@ public class DefaultRadiographMapper implements RadiographMapper {
 		return new RadiographData(
 			radiograph.getId(), radiograph.getSource(), radiograph.getType(), radiograph.getObservations(),
 			fromEntity(requestURI, radiograph.getExploration(), DefaultExplorationResource.class),
-			toListSignData(radiograph.getSigns())
+			toSetSignData(radiograph.getSigns())
 		);
 	}
 
-	private List<SignData> toListSignData(List<Sign> signs) {
-		List<SignData> signDataList = new ArrayList<>();
+	private Set<SignData> toSetSignData(Set<Sign> signs) {
+		Set<SignData> signDataSet = new HashSet<>();
 
 		for (Sign sign : signs) {
-			signDataList.add(new SignData(signTypeMapper.toSignTypeData(sign.getType()),
+			signDataSet.add(new SignData(signTypeMapper.toSignTypeData(sign.getType()),
 				signLocationMapper.toSignLocationData(sign.getSignLocation()),
 				sign.getBrightness(),
 				sign.getContrast())
 			);
 		}
 
-		return signDataList;
+		return signDataSet;
 	}
 }

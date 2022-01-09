@@ -30,8 +30,8 @@ import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -62,7 +62,7 @@ public class User implements Serializable {
 	private Role role;
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Exploration> explorations = new ArrayList<>();
+	private Set<Exploration> explorations = new HashSet<>();
 
 	@Column(name = "deleted", columnDefinition="BIT(1) DEFAULT FALSE")
 	private boolean deleted;
@@ -130,7 +130,7 @@ public class User implements Serializable {
 		this.explorations.add(exploration);
 	}
 
-	public List<Exploration> getExplorations() {
+	public Set<Exploration> getExplorations() {
 		return explorations;
 	}
 

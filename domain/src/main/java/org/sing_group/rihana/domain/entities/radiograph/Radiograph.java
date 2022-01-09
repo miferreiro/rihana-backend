@@ -23,8 +23,8 @@
 package org.sing_group.rihana.domain.entities.radiograph;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
@@ -65,7 +65,7 @@ public class Radiograph implements Identifiable {
 	private Exploration exploration;
 
 	@OneToMany(mappedBy = "radiograph", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Sign> signs = new ArrayList<>();
+	private Set<Sign> signs = new HashSet<>();
 
 	@Column(name = "creation_date", columnDefinition = "DATETIME(3)")
 	private Timestamp creationDate;
@@ -143,7 +143,7 @@ public class Radiograph implements Identifiable {
 		this.signs.add(sign);
 	}
 
-	public List<Sign> getSigns() {
+	public Set<Sign> getSigns() {
 		return signs;
 	}
 

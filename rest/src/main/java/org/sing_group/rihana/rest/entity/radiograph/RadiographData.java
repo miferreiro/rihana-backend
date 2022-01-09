@@ -23,7 +23,7 @@
 package org.sing_group.rihana.rest.entity.radiograph;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -32,8 +32,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import io.swagger.annotations.ApiModel;
 import org.sing_group.rihana.domain.entities.radiograph.RadiographType;
-import org.sing_group.rihana.rest.entity.sign.SignData;
 import org.sing_group.rihana.rest.entity.UuidAndUri;
+import org.sing_group.rihana.rest.entity.sign.SignData;
 
 @XmlRootElement(name = "radiograph-data", namespace = "http://entity.resource.rest.rihana.sing-group.org")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -57,12 +57,12 @@ public class RadiographData implements Serializable {
 	private UuidAndUri exploration;
 
 	@XmlElement(name = "signs")
-	private List<SignData> signs;
+	private Set<SignData> signs;
 
 	public RadiographData() { }
 
 	public RadiographData(String id, String source, RadiographType type, String observations, UuidAndUri exploration,
-						  List<SignData> signs) {
+						  Set<SignData> signs) {
 		this.id = id;
 		this.source = source;
 		this.type = type;
@@ -91,7 +91,7 @@ public class RadiographData implements Serializable {
 		return exploration;
 	}
 
-	public List<SignData> getSigns() {
+	public Set<SignData> getSigns() {
 		return signs;
 	}
 }

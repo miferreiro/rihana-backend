@@ -24,8 +24,8 @@ package org.sing_group.rihana.rest.entity.mapper;
 
 import static org.sing_group.rihana.rest.entity.UuidAndUri.fromEntity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
@@ -66,28 +66,28 @@ public class DefaultReportMapper implements ReportMapper {
 			report.getPriority(), report.getStatus(), report.getBed(), report.getClinicalData(), report.getFindings(),
 			report.getConclusions(),
 			fromEntity(requestURI, report.getExploration(), DefaultExplorationResource.class),
-			toListRequestedExplorationData(report.getRequestedExplorations()),
-			toListPerformedExplorationData(report.getPerformedExplorations())
+			toSetRequestedExplorationData(report.getRequestedExplorations()),
+			toSetPerformedExplorationData(report.getPerformedExplorations())
 		);
 	}
 
-	private List<RequestedExplorationData> toListRequestedExplorationData(List<RequestedExploration> requestedExplorations) {
-		List<RequestedExplorationData> requestedExplorationDataList = new ArrayList<>();
+	private Set<RequestedExplorationData> toSetRequestedExplorationData(Set<RequestedExploration> requestedExplorations) {
+		Set<RequestedExplorationData> requestedExplorationDataSet = new HashSet<>();
 
 		for (RequestedExploration requestedExploration : requestedExplorations) {
-			requestedExplorationDataList.add(requestedExplorationMapper.toRequestedExplorationData((requestedExploration)));
+			requestedExplorationDataSet.add(requestedExplorationMapper.toRequestedExplorationData(requestedExploration));
 		}
 
-		return requestedExplorationDataList;
+		return requestedExplorationDataSet;
 	}
 
-	private List<PerformedExplorationData> toListPerformedExplorationData(List<PerformedExploration> performedExplorations) {
-		List<PerformedExplorationData> performedExplorationDataList = new ArrayList<>();
+	private Set<PerformedExplorationData> toSetPerformedExplorationData(Set<PerformedExploration> performedExplorations) {
+		Set<PerformedExplorationData> performedExplorationDataSet = new HashSet<>();
 
 		for (PerformedExploration performedExploration : performedExplorations) {
-			performedExplorationDataList.add(performedExplorationMapper.toPerformedExplorationData((performedExploration)));
+			performedExplorationDataSet.add(performedExplorationMapper.toPerformedExplorationData(performedExploration));
 		}
 
-		return performedExplorationDataList;
+		return performedExplorationDataSet;
 	}
 }

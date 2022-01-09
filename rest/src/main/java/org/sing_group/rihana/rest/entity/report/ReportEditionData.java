@@ -24,7 +24,7 @@ package org.sing_group.rihana.rest.entity.report;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -71,17 +71,17 @@ public class ReportEditionData implements Serializable {
 	private UuidAndUri exploration;
 
 	@XmlElement(name = "requestedExplorations")
-	private List<RequestedExplorationEditionData> requestedExplorations;
+	private Set<RequestedExplorationEditionData> requestedExplorations;
 
 	@XmlElement(name = "performedExplorations")
-	private List<PerformedExplorationEditionData> performedExplorations;
+	private Set<PerformedExplorationEditionData> performedExplorations;
 
 	public ReportEditionData() { }
 
 	public ReportEditionData(String reportN, Date completionDate, String applicant, String priority,
-							  String status, String bed, String clinicalData, String findings, String conclusions,
-							  UuidAndUri exploration, List<RequestedExplorationEditionData> requestedExplorations,
-							  List<PerformedExplorationEditionData> performedExplorations) {
+							 String status, String bed, String clinicalData, String findings, String conclusions,
+							 UuidAndUri exploration, Set<RequestedExplorationEditionData> requestedExplorations,
+							 Set<PerformedExplorationEditionData> performedExplorations) {
 
 		this.reportN = reportN;
 		this.completionDate = completionDate;
@@ -177,19 +177,19 @@ public class ReportEditionData implements Serializable {
 		this.exploration = exploration;
 	}
 
-	public List<RequestedExplorationEditionData> getRequestedExplorations() {
+	public Set<RequestedExplorationEditionData> getRequestedExplorations() {
 		return requestedExplorations;
 	}
 
-	public void setRequestedExplorations(List<RequestedExplorationEditionData> requestedExplorations) {
+	public void setRequestedExplorations(Set<RequestedExplorationEditionData> requestedExplorations) {
 		this.requestedExplorations = requestedExplorations;
 	}
 
-	public List<PerformedExplorationEditionData> getPerformedExplorations() {
+	public Set<PerformedExplorationEditionData> getPerformedExplorations() {
 		return performedExplorations;
 	}
 
-	public void setPerformedExplorations(List<PerformedExplorationEditionData> performedExplorations) {
+	public void setPerformedExplorations(Set<PerformedExplorationEditionData> performedExplorations) {
 		this.performedExplorations = performedExplorations;
 	}
 }

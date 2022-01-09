@@ -25,10 +25,10 @@ package org.sing_group.rihana.rest.resource.exploration;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.APPLICATION_XML;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
@@ -172,11 +172,11 @@ public class DefaultExplorationResource implements ExplorationResource {
 		@QueryParam("user") String userId,
 		@QueryParam("page") int page, @QueryParam("pageSize") int pageSize,
 		@QueryParam("initialDate") String initialDateStr, @QueryParam("finalDate") String finalDateStr,
-		@QueryParam("signType") List<String> signTypes
+		@QueryParam("signType") Set<String> signTypes
 	) {
 		User user = null;
 		int countExplorations;
-		List<SignType> signTypeList;
+		Set<SignType> signTypeSet;
 		Date initialDate = null;
 		Date finalDate = null;
 
@@ -189,30 +189,30 @@ public class DefaultExplorationResource implements ExplorationResource {
 		}
 
 		if (signTypes == null || signTypes.size() == 0) {
-			signTypeList = new ArrayList<>();
+			signTypeSet = new HashSet<>();
 		} else {
-			signTypeList = Arrays.asList(signTypes.stream().map(signType -> this.signTypeService.get(signType)).toArray(SignType[]::new));
+			signTypeSet = signTypes.stream().map(signType -> this.signTypeService.get(signType)).collect(Collectors.toSet());
 		}
 
 		if (userId == null || userId.equals("")) {
-			countExplorations = this.service.countExplorationsByUserAndSignTypesInDateRange(null, initialDate, finalDate, signTypeList);
+			countExplorations = this.service.countExplorationsByUserAndSignTypesInDateRange(null, initialDate, finalDate, signTypeSet);
 		} else {
 			user = this.userService.get(userId);
 			if (user.getRole().getName() != "ADMIN") {
-				countExplorations = this.service.countExplorationsByUserAndSignTypesInDateRange(null, initialDate, finalDate, signTypeList);
+				countExplorations = this.service.countExplorationsByUserAndSignTypesInDateRange(null, initialDate, finalDate, signTypeSet);
 			} else {
-				countExplorations = this.service.countExplorationsByUserAndSignTypesInDateRange(user, initialDate, finalDate, signTypeList);
+				countExplorations = this.service.countExplorationsByUserAndSignTypesInDateRange(user, initialDate, finalDate, signTypeSet);
 			}
 		}
 
 		if (userId != null && !userId.equals("") && user.getRole().getName() != "ADMIN") {
 			return Response.ok(
-				this.service.listExplorationsByUserInDateRange(page, pageSize, user, initialDate, finalDate, signTypeList)
+				this.service.listExplorationsByUserInDateRange(page, pageSize, user, initialDate, finalDate, signTypeSet)
 					.map(this.explorationMapper::toExplorationAdminData).toArray(ExplorationAdminData[]::new)
 			).header("X-Pagination-Total-Items", countExplorations).build();
 		} else {
 			return Response.ok(
-				this.service.listExplorationsByUserInDateRange(page, pageSize, user, initialDate, finalDate, signTypeList)
+				this.service.listExplorationsByUserInDateRange(page, pageSize, user, initialDate, finalDate, signTypeSet)
 					.map(this.explorationMapper::toExplorationData).toArray(ExplorationData[]::new)
 			).header("X-Pagination-Total-Items", countExplorations).build();
 		}
@@ -295,7 +295,7 @@ public class DefaultExplorationResource implements ExplorationResource {
 			}
 		}
 
-		List<RadiographEditionData> radiographEditionDataList = explorationEditionData.getRadiographs();
+		Set<RadiographEditionData> radiographEditionDataList = explorationEditionData.getRadiographs();
 
 		for(RadiographEditionData r: radiographEditionDataList) {
 			Radiograph radiograph = new Radiograph(r.getSource(), r.getType(), r.getObservations());
@@ -342,7 +342,7 @@ public class DefaultExplorationResource implements ExplorationResource {
 		exploration.getRadiographs().stream().forEach(radiograph -> {
 			this.radiographService.delete(radiograph);
 		});
-		exploration.setRadiographs(new ArrayList<>());
+		exploration.setRadiographs(new HashSet<>());
 
 		this.explorationMapper.assignExplorationEditData(exploration, explorationEditionData);
 		exploration = this.service.edit(exploration);

@@ -26,9 +26,9 @@ import static java.util.Objects.requireNonNull;
 import static org.sing_group.fluent.checker.Checks.checkArgument;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
@@ -86,10 +86,10 @@ public class Report implements Identifiable {
 	private Exploration exploration;
 
 	@OneToMany(mappedBy = "report", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<RequestedExploration> requestedExplorations = new ArrayList<>();
+	private Set<RequestedExploration> requestedExplorations = new HashSet<>();
 
 	@OneToMany(mappedBy = "report", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<PerformedExploration> performedExplorations = new ArrayList<>();
+	private Set<PerformedExploration> performedExplorations = new HashSet<>();
 
 	@Column(name = "creation_date", columnDefinition = "DATETIME(3)")
 	private Timestamp creationDate;
@@ -224,7 +224,7 @@ public class Report implements Identifiable {
 		this.requestedExplorations.add(requestedExploration);
 	}
 
-	public List<RequestedExploration> getRequestedExplorations() {
+	public Set<RequestedExploration> getRequestedExplorations() {
 		return requestedExplorations;
 	}
 
@@ -236,7 +236,7 @@ public class Report implements Identifiable {
 		this.performedExplorations.add(performedExploration);
 	}
 
-	public List<PerformedExploration> getPerformedExplorations() {
+	public Set<PerformedExploration> getPerformedExplorations() {
 		return performedExplorations;
 	}
 

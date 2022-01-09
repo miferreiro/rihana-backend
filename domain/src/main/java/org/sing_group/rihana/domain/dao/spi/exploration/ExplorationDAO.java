@@ -23,7 +23,7 @@
 package org.sing_group.rihana.domain.dao.spi.exploration;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import org.sing_group.rihana.domain.entities.exploration.Exploration;
@@ -37,12 +37,12 @@ public interface ExplorationDAO {
 	Exploration getExplorationDeleted(String id);
 
 	Stream<Exploration> listExplorationsByUserInDateRange(Integer page, Integer pageSize, User user,
-														  Date initialDate, Date finalDate, List<SignType> signTypeList);
+														  Date initialDate, Date finalDate, Set<SignType> signTypes);
 
 	int countAllExplorations();
 
 	int countExplorationsByUserAndSignTypesInDateRange(User user, Date initialDate, Date finalDate,
-													   List<SignType> signTypeList);
+													   Set<SignType> signTypes);
 
 	Exploration create(Exploration exploration);
 

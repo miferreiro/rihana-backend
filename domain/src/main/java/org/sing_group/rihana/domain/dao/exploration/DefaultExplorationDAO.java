@@ -24,6 +24,7 @@ package org.sing_group.rihana.domain.dao.exploration;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
@@ -77,8 +78,8 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 	@Override
 	public Stream<Exploration> listExplorationsByUserInDateRange(Integer page, Integer pageSize, User user,
 																 Date initialDate, Date finalDate,
-																 List<SignType> signTypeList) {
-		return this.listExplorations(page, pageSize, user, initialDate, finalDate, signTypeList).stream();
+																 Set<SignType> signTypes) {
+		return this.listExplorations(page, pageSize, user, initialDate, finalDate, signTypes).stream();
 	}
 
 	@Override
@@ -88,8 +89,8 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 
 	@Override
 	public int countExplorationsByUserAndSignTypesInDateRange(User user, Date initialDate, Date finalDate,
-															  List<SignType> signTypeList) {
-		return this.listExplorations(null,null, user, initialDate, finalDate, signTypeList).size();
+															  Set<SignType> signTypes) {
+		return this.listExplorations(null,null, user, initialDate, finalDate, signTypes).size();
 	}
 
 	@Override
@@ -115,7 +116,7 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 	}
 
 	private List listExplorations(Integer page, Integer pageSize, User user, Date initialDate, Date finalDate,
-								  List<SignType> signTypeList) {
+								  Set<SignType> signTypes) {
 		String queryInDateRange = "";
 		if (initialDate != null && finalDate != null) {
 			queryInDateRange = "e.date >= :initialDate AND e.date <= :finalDate ";
@@ -133,7 +134,7 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 		String queryExplorations;
 		String conditionDeleted = "e.deleted=0 ";
 
-		if (signTypeList.size() > 0) {
+		if (signTypes.size() > 0) {
 			StringBuilder stringBuilder = new StringBuilder("");
 		 	String querySignType = "SELECT tt.code " +
 				"FROM Exploration ee LEFT JOIN ee.radiographs rr LEFT JOIN rr.signs ss LEFT JOIN ss.type tt " +
@@ -142,13 +143,13 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 		 	if (user == null || user.getRole().getName() != "ADMIN") querySignType += " AND ee.deleted=0";
 
 			stringBuilder.append("(");
-			for (int count = 0; count < signTypeList.size(); count++) {
+			for (int count = 0; count < signTypes.size(); count++) {
 				stringBuilder.append("?")
 					.append(count)
 					.append(" IN (")
 					.append(querySignType)
 					.append(")");
-				if (count + 1 < signTypeList.size()) stringBuilder.append(" AND ");
+				if (count + 1 < signTypes.size()) stringBuilder.append(" AND ");
 		  	}
 			stringBuilder.append(") ");
 
@@ -175,7 +176,7 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 			}
 
 			int count = 0;
-			for (SignType signType : signTypeList) {
+			for (SignType signType : signTypes) {
 				query.setParameter(count, signType.getCode());
 				count++;
 			}

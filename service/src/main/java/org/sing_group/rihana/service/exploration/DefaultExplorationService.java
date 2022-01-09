@@ -23,7 +23,7 @@
 package org.sing_group.rihana.service.exploration;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import javax.annotation.Resource;
@@ -86,7 +86,7 @@ public class DefaultExplorationService implements ExplorationService {
 	}
 
 	@Override
-	public Stream<Exploration> listExplorationsByUserInDateRange(int page, int pageSize, User user, Date initialDate, Date finalDate, List<SignType> signTypeList) {
+	public Stream<Exploration> listExplorationsByUserInDateRange(int page, int pageSize, User user, Date initialDate, Date finalDate, Set<SignType> signTypes) {
 
 		String loginLogged = context.getCallerPrincipal().getName();
 		if (!this.permissionService.hasPermission(
@@ -102,7 +102,7 @@ public class DefaultExplorationService implements ExplorationService {
 			throw new EJBAccessException("Insufficient privileges");
 		}
 
-		return explorationDao.listExplorationsByUserInDateRange(page, pageSize, user, initialDate, finalDate, signTypeList);
+		return explorationDao.listExplorationsByUserInDateRange(page, pageSize, user, initialDate, finalDate, signTypes);
 	}
 
 	@Override
@@ -126,7 +126,7 @@ public class DefaultExplorationService implements ExplorationService {
 	}
 
 	@Override
-	public int countExplorationsByUserAndSignTypesInDateRange(User user, Date initialDate, Date finalDate, List<SignType> signTypeList) {
+	public int countExplorationsByUserAndSignTypesInDateRange(User user, Date initialDate, Date finalDate, Set<SignType> signTypes) {
 
 		String loginLogged = context.getCallerPrincipal().getName();
 		if (!this.permissionService.hasPermission(
@@ -142,7 +142,7 @@ public class DefaultExplorationService implements ExplorationService {
 			throw new EJBAccessException("Insufficient privileges");
 		}
 
-		return explorationDao.countExplorationsByUserAndSignTypesInDateRange(user, initialDate, finalDate, signTypeList);
+		return explorationDao.countExplorationsByUserAndSignTypesInDateRange(user, initialDate, finalDate, signTypes);
 	}
 
 	@Override

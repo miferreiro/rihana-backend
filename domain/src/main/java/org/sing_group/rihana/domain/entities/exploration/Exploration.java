@@ -26,9 +26,9 @@ import static java.util.Objects.requireNonNull;
 import static org.sing_group.fluent.checker.Checks.checkArgument;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
@@ -75,7 +75,7 @@ public class Exploration implements Identifiable {
 	private Report report;
 
 	@OneToMany(mappedBy = "exploration", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Radiograph> radiographs = new ArrayList<>();
+	private Set<Radiograph> radiographs = new HashSet<>();
 
 	@Column(name = "creation_date", columnDefinition = "DATETIME(3)")
 	private Timestamp creationDate;
@@ -103,7 +103,7 @@ public class Exploration implements Identifiable {
 		this.deleteDate = null;
 	}
 
-	public Exploration(String title, Date date, User user, Patient patient, Report report, List<Radiograph> radiographs) {
+	public Exploration(String title, Date date, User user, Patient patient, Report report, Set<Radiograph> radiographs) {
 		id = UUID.randomUUID().toString();
 		this.setTitle(title);
 		this.setDate(date);
@@ -183,11 +183,11 @@ public class Exploration implements Identifiable {
 		this.radiographs.add(radiograph);
 	}
 
-	public List<Radiograph> getRadiographs() {
+	public Set<Radiograph> getRadiographs() {
 		return radiographs;
 	}
 
-	public void setRadiographs(List<Radiograph> radiographs) {
+	public void setRadiographs(Set<Radiograph> radiographs) {
 		this.radiographs = radiographs;
 	}
 

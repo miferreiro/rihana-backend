@@ -24,8 +24,8 @@ package org.sing_group.rihana.domain.entities.acl.action;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -54,7 +54,7 @@ public class Action implements Serializable {
 	private String description;
 
 	@OneToMany(mappedBy = "action", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<FunctionalityAction> functionalityActions = new ArrayList<>();
+	private Set<FunctionalityAction> functionalityActions = new HashSet<>();
 
 	@Column(name = "creation_date", columnDefinition = "DATETIME(3)")
 	private Timestamp creationDate;
@@ -103,7 +103,7 @@ public class Action implements Serializable {
 		functionalityActions.add(functionalityAction);
 	}
 
-	public List<FunctionalityAction> getFunctionalityAction() {
+	public Set<FunctionalityAction> getFunctionalityAction() {
 		return functionalityActions;
 	}
 

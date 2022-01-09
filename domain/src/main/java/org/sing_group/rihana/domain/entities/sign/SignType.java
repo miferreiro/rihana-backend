@@ -24,8 +24,8 @@ package org.sing_group.rihana.domain.entities.sign;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -61,7 +61,7 @@ public class SignType implements Serializable {
 	private String secondaryColor;
 
 	@OneToMany(mappedBy = "type", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Sign> signs = new ArrayList<>();
+	private Set<Sign> signs = new HashSet<>();
 
 	@Column(name = "deleted", columnDefinition="BIT(1) DEFAULT FALSE")
 	private boolean deleted;
@@ -138,7 +138,7 @@ public class SignType implements Serializable {
 		this.signs.add(sign);
 	}
 
-	public List<Sign> getSigns() {
+	public Set<Sign> getSigns() {
 		return signs;
 	}
 

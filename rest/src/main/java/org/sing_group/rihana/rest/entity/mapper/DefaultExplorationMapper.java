@@ -25,7 +25,8 @@ package org.sing_group.rihana.rest.entity.mapper;
 import static org.sing_group.rihana.rest.entity.UuidAndUri.fromEntities;
 import static org.sing_group.rihana.rest.entity.UuidAndUri.fromEntity;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Set;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
@@ -95,7 +96,7 @@ public class DefaultExplorationMapper implements ExplorationMapper {
 			exploration.getId(), exploration.getTitle(), exploration.getDate(), exploration.getUser(),
 			fromEntity(requestURI, exploration.getPatient(), DefaultPatientResource.class),
 			fromEntity(requestURI, exploration.getReport(), DefaultReportResource.class),
-			fromEntities(requestURI, exploration.getRadiographs(), DefaultRadiographResource.class)
+			fromEntities(requestURI, new ArrayList<>(exploration.getRadiographs()), DefaultRadiographResource.class)
 		);
 	}
 	@Override
@@ -104,7 +105,7 @@ public class DefaultExplorationMapper implements ExplorationMapper {
 			exploration.getId(), exploration.getTitle(), exploration.getDate(), exploration.getUser(),
 			fromEntity(requestURI, exploration.getPatient(), DefaultPatientResource.class),
 			fromEntity(requestURI, exploration.getReport(), DefaultReportResource.class),
-			fromEntities(requestURI, exploration.getRadiographs(), DefaultRadiographResource.class),
+			fromEntities(requestURI, new ArrayList<>(exploration.getRadiographs()), DefaultRadiographResource.class),
 			exploration.isDeleted()
 		);
 	}
@@ -171,7 +172,7 @@ public class DefaultExplorationMapper implements ExplorationMapper {
 			}
 		}
 
-		List<RadiographEditionData> radiographEditionDataList = explorationEditionData.getRadiographs();
+		Set<RadiographEditionData> radiographEditionDataList = explorationEditionData.getRadiographs();
 
 		for(RadiographEditionData r: radiographEditionDataList) {
 			Radiograph radiograph = new Radiograph(r.getSource(), r.getType(), r.getObservations());
