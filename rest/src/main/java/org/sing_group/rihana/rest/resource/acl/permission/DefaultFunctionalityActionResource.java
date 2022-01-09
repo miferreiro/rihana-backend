@@ -50,7 +50,6 @@ import org.sing_group.rihana.domain.entities.acl.permission.FunctionalityActionK
 import org.sing_group.rihana.rest.entity.acl.permission.FunctionalityActionData;
 import org.sing_group.rihana.rest.entity.mapper.spi.FunctionalityActionMapper;
 import org.sing_group.rihana.rest.filter.CrossDomain;
-import org.sing_group.rihana.rest.resource.acl.action.DefaultActionResource;
 import org.sing_group.rihana.rest.resource.spi.acl.permission.FunctionalityActionResource;
 import org.sing_group.rihana.service.spi.acl.permission.FunctionalityActionService;
 

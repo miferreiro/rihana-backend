@@ -25,7 +25,6 @@ package org.sing_group.rihana.rest.entity.mapper;
 import javax.enterprise.inject.Default;
 import javax.ws.rs.core.UriInfo;
 
-import org.sing_group.rihana.domain.entities.acl.permission.FunctionalityAction;
 import org.sing_group.rihana.domain.entities.acl.permission.Permission;
 import org.sing_group.rihana.rest.entity.acl.permission.FunctionalityActionData;
 import org.sing_group.rihana.rest.entity.acl.permission.PermissionData;
