@@ -30,5 +30,7 @@ public interface ReportDAO {
 
 	Report create(Report report);
 
+	Report edit(Report report);
+
 	void delete(Report report);
 }

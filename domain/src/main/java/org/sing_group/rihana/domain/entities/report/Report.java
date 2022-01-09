@@ -36,26 +36,24 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
 
 import org.sing_group.rihana.domain.entities.Identifiable;
 import org.sing_group.rihana.domain.entities.exploration.Exploration;
 
 @Entity
-@Table(name = "report", uniqueConstraints = @UniqueConstraint(columnNames = {
-	"reportN"
-}))
+@Table(name = "report")
 public class Report implements Identifiable {
 
 	@Id
 	@Column(name = "id")
 	private String id;
 
-	@Column(name = "reportN", nullable = false, unique = true)
+	@Column(name = "reportN")
 	private String reportN;
 
 	@Column(name = "completion_date")
@@ -82,7 +80,8 @@ public class Report implements Identifiable {
 	@Column(name = "conclusions")
 	private String conclusions;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "exploration_id", referencedColumnName = "id")
 	private Exploration exploration;
 
 	@OneToMany(mappedBy = "report", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -206,14 +205,13 @@ public class Report implements Identifiable {
 	}
 
 	public void setExploration(Exploration exploration) {
-		if (exploration == null) {
-			if (this.exploration != null) {
-				this.exploration.setReport(null);
-			}
-		} else {
-			exploration.setReport(this);
+		if (this.exploration != null) {
+			this.exploration.internalRemoveReport(this);
 		}
 		this.exploration = exploration;
+		if (exploration != null) {
+			this.exploration.internalAddReport(this);
+		}
 	}
 
 	public void internalRemoveRequestedExploration(RequestedExploration requestedExploration) {

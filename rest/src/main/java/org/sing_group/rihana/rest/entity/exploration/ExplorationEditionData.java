@@ -62,21 +62,6 @@ public class ExplorationEditionData implements Serializable {
 
 	public ExplorationEditionData() { }
 
-	public ExplorationEditionData(Date explorationDate, String user, PatientEditionData patient, Set<RadiographEditionData> radiographs) {
-		this.setExplorationDate(explorationDate);
-		this.setUser(user);
-		this.setPatient(patient);
-		this.setRadiographs(radiographs);
-	}
-
-	public ExplorationEditionData(Date explorationDate, String user, PatientEditionData patient, ReportEditionData reportEditionData, Set<RadiographEditionData> radiographs) {
-		this.setExplorationDate(explorationDate);
-		this.setUser(user);
-		this.setPatient(patient);
-		this.setReport(reportEditionData);
-		this.setRadiographs(radiographs);
-	}
-
 	public ExplorationEditionData(String id, Date explorationDate, String user, PatientEditionData patient, ReportEditionData reportEditionData, Set<RadiographEditionData> radiographs) {
 		this.setId(id);
 		this.setExplorationDate(explorationDate);

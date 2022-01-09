@@ -142,7 +142,6 @@ CREATE TABLE `report` (
     `deleted`           bit(1)          DEFAULT b'0',
     `delete_date`       datetime(3)     DEFAULT NULL,
     PRIMARY KEY (`id`),
-    UNIQUE KEY (`reportN`),
     CONSTRAINT FOREIGN KEY (`exploration_id`) REFERENCES `exploration` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

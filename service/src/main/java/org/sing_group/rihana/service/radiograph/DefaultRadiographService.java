@@ -78,7 +78,7 @@ public class DefaultRadiographService implements RadiographService {
 	}
 
 	@Override
-	public Radiograph create(Radiograph radiograph) {
+	public Radiograph create(Radiograph radiograph, String source) {
 
 		String loginLogged = context.getCallerPrincipal().getName();
 		if (!this.permissionService.hasPermission(
@@ -90,7 +90,7 @@ public class DefaultRadiographService implements RadiographService {
 			throw new EJBAccessException("Insufficient privileges");
 		}
 
-		InputStream data = sourceToInputStream(radiograph);
+		InputStream data = sourceToInputStream(radiograph, source);
 
 		String filePath = explorationStorage.storeRadiograph(radiograph, data);
 		radiograph.setSource(filePath);
@@ -114,9 +114,9 @@ public class DefaultRadiographService implements RadiographService {
 		radiographDAO.delete(radiograph);
 	}
 
-	private InputStream sourceToInputStream(Radiograph radiograph) {
+	private InputStream sourceToInputStream(Radiograph radiograph, String source) {
 
-		String b64Data = radiograph.getSource().split(",")[1];
+		String b64Data = source.split(",")[1];
 
 		byte[] decodedString = new byte[0];
 		try {

@@ -67,7 +67,13 @@ public class DefaultReportDAO implements ReportDAO {
 	}
 
 	@Override
+	public Report edit(Report report) {
+		return this.dh.update(report);
+	}
+
+	@Override
 	public void delete(Report report) {
-		this.dh.remove(report);
+		report.setDeleted(true);
+		this.dh.update(report);
 	}
 }

@@ -45,10 +45,12 @@ import java.util.stream.Stream;
 
 import javax.annotation.Resource;
 import javax.enterprise.inject.Default;
+import javax.inject.Inject;
 
 import org.sing_group.rihana.domain.entities.exploration.Exploration;
 import org.sing_group.rihana.domain.entities.radiograph.Radiograph;
 import org.sing_group.rihana.service.spi.exploration.ExplorationStorage;
+import org.sing_group.rihana.service.spi.radiograph.RadiographService;
 
 @Default
 public class DefaultExplorationStorage implements ExplorationStorage {
@@ -57,6 +59,9 @@ public class DefaultExplorationStorage implements ExplorationStorage {
 
 	@Resource(name = PATH_CONFIG_NAME)
 	private String path;
+
+	@Inject
+	private RadiographService radiographService;
 
 	public DefaultExplorationStorage() {}
 
@@ -125,33 +130,42 @@ public class DefaultExplorationStorage implements ExplorationStorage {
 	}
 
 	@Override
-	public void deleteRadiographsExploration(Exploration exploration) {
+	public Exploration deleteRadiographsExploration(Exploration exploration) {
 
-		for (Radiograph radiograph: exploration.getRadiographs()) {
-			Path filePath = getExplorationFolderForId(radiograph.getExploration().getId());
-			filePath = filePath.resolve(radiograph.getType().name() + ".png");
+		Set<Radiograph> radiographSet = exploration.getCurrentRadiographs();
 
-			if (!exists(filePath)) {
-				throw new IllegalArgumentException("Cannot find file for id: " + filePath);
-			}
+		for (Radiograph radiograph: radiographSet) {
+			if (!radiograph.isDeleted()) {
 
-			Path backupPath = getBasePath()
-				.resolve("backup")
-				.resolve(exploration.getId());
+				Path filePath = getExplorationFolderForId(radiograph.getExploration().getId());
+				filePath = filePath.resolve(radiograph.getType().name() + ".png");
 
-			if (!exists(backupPath) || !isDirectory(backupPath)) {
-				new File(backupPath.toString()).mkdirs();
-			}
+				if (!exists(filePath)) {
+					throw new IllegalArgumentException("Cannot find file for id: " + filePath);
+				}
 
-			backupPath = backupPath.resolve(new SimpleDateFormat("'" + radiograph.getType().name() + "'-yyyyMMddHHmm'.png'")
-				.format(new Date()));
+				Path backupPath = getBasePath()
+					.resolve("backup")
+					.resolve(exploration.getId());
 
-			try {
-				Files.move(filePath, backupPath, StandardCopyOption.REPLACE_EXISTING);
-			} catch (IOException e) {
-				throw new RuntimeException(e);
+				if (!exists(backupPath) || !isDirectory(backupPath)) {
+					new File(backupPath.toString()).mkdirs();
+				}
+
+				backupPath = backupPath.resolve(new SimpleDateFormat("'" + radiograph.getType().name() + "'-yyyyMMddHHmm'.png'")
+					.format(new Date()));
+
+				try {
+					Files.move(filePath, backupPath, StandardCopyOption.REPLACE_EXISTING);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+
+				radiograph.setSource(backupPath.toString());
 			}
 		}
+
+		return exploration;
 	}
 
 	@Override

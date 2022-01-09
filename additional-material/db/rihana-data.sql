@@ -104,6 +104,7 @@ VALUES
     (9, 10, '2019-01-22 12:20:09.000', '2020-02-24 17:22:06.000', 0, null),
     (10, 1, '2019-01-22 12:20:09.000', '2020-02-24 17:22:06.000', 0, null),
     (10, 2, '2019-01-22 12:20:09.000', '2020-02-24 17:22:06.000', 0, null),
+    (10, 3, '2019-01-22 12:20:09.000', '2020-02-24 17:22:06.000', 0, null),
     (10, 5, '2019-01-22 12:20:09.000', '2020-02-24 17:22:06.000', 0, null),
     (11, 1, '2019-01-22 12:20:09.000', '2020-02-24 17:22:06.000', 0, null),
     (11, 2, '2019-01-22 12:20:09.000', '2020-02-24 17:22:06.000', 0, null),
@@ -133,7 +134,9 @@ VALUES
     (2, 9, 2, '2019-01-22 12:20:09.000', '2020-02-24 17:22:06.000', 0, null),
     (2, 9, 5, '2019-01-22 12:20:09.000', '2020-02-24 17:22:06.000', 0, null),
     (2, 9, 9, '2019-01-22 12:20:09.000', '2020-02-24 17:22:06.000', 0, null),
+    (2, 9, 10, '2019-01-22 12:20:09.000', '2020-02-24 17:22:06.000', 0, null),
     (2, 10, 1, '2019-01-22 12:20:09.000', '2020-02-24 17:22:06.000', 0, null),
+    (2, 10, 3, '2019-01-22 12:20:09.000', '2020-02-24 17:22:06.000', 0, null),
     (2, 10, 2, '2019-01-22 12:20:09.000', '2020-02-24 17:22:06.000', 0, null),
     (2, 10, 5, '2019-01-22 12:20:09.000', '2020-02-24 17:22:06.000', 0, null),
     (2, 11, 5, '2019-01-22 12:20:09.000', '2020-02-24 17:22:06.000', 0, null),
@@ -151,8 +154,10 @@ VALUES
     (3, 9, 2, '2019-01-22 12:20:09.000', '2020-02-24 17:22:06.000', 0, null),
     (3, 9, 5, '2019-01-22 12:20:09.000', '2020-02-24 17:22:06.000', 0, null),
     (3, 9, 9, '2019-01-22 12:20:09.000', '2020-02-24 17:22:06.000', 0, null),
+    (3, 9, 10, '2019-01-22 12:20:09.000', '2020-02-24 17:22:06.000', 0, null),
     (3, 10, 1, '2019-01-22 12:20:09.000', '2020-02-24 17:22:06.000', 0, null),
     (3, 10, 2, '2019-01-22 12:20:09.000', '2020-02-24 17:22:06.000', 0, null),
+    (3, 10, 3, '2019-01-22 12:20:09.000', '2020-02-24 17:22:06.000', 0, null),
     (3, 10, 5, '2019-01-22 12:20:09.000', '2020-02-24 17:22:06.000', 0, null),
     (3, 11, 5, '2019-01-22 12:20:09.000', '2020-02-24 17:22:06.000', 0, null),
     (3, 11, 6, '2019-01-22 12:20:09.000', '2020-02-24 17:22:06.000', 0, null),
@@ -193,18 +198,18 @@ VALUES
 --
 INSERT INTO `report` (`id`, `reportN`, `completion_date`, `applicant`, `priority`, `status`, `bed`, `clinical_data`, `findings`, `conclusions`, `exploration_id`, `creation_date`, `update_date`, `deleted`, `delete_date`)
 VALUES
-    ('1', '1', '2018-12-12', '- / ONCN - ONCOLOXIA MEDICA HOSP.', 'Ordinaria', 'Ingresado', 'H107B', 'Control radiológico de infección respiratoria en paciente con Ca pulmón IV / Rx tórax', 'Ejemplo 1', 'Aparente discreta mejoría radiológica.', '1', '2018-12-12 23:00:00', '2020-02-24 17:21:58', 0, null),
-    ('2', '2', '2018-12-12', '- / ONCN - ONCOLOXIA MEDICA HOSP.', 'Ordinaria', 'Ingresado', 'H107B', 'Control radiológico de infección respiratoria en paciente con Ca pulmón IV / Rx tórax', 'Ejemplo 2', 'Aparente discreta mejoría radiológica.', '2', '2019-09-24 22:00:00', '2020-02-24 17:21:58', 0, null),
-    ('3', '3', '2018-12-12', '- / ONCN - ONCOLOXIA MEDICA HOSP.', 'Ordinaria', 'Ingresado', 'H107B', 'Control radiológico de infección respiratoria en paciente con Ca pulmón IV / Rx tórax', 'Ejemplo 3', 'Aparente discreta mejoría radiológica.', '3', '2019-02-19 23:00:00', '2020-02-24 17:22:00', 0, null),
-    ('4', '4', '2018-12-12', '- / ONCN - ONCOLOXIA MEDICA HOSP.', 'Ordinaria', 'Ingresado', 'H107B', 'Control radiológico de infección respiratoria en paciente con Ca pulmón IV / Rx tórax', 'Ejemplo 4', 'Aparente discreta mejoría radiológica.', '4', '2019-09-09 22:00:00', '2020-02-24 17:22:01', 0, null),
-    ('5', '5', '2018-12-12', '- / ONCN - ONCOLOXIA MEDICA HOSP.', 'Ordinaria', 'Ingresado', 'H107B', 'Control radiológico de infección respiratoria en paciente con Ca pulmón IV / Rx tórax', 'Ejemplo 5', 'Aparente discreta mejoría radiológica.', '5', '2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
-    ('6', '56', '2018-12-12', '- / ONCN - ONCOLOXIA MEDICA HOSP.', 'Ordinaria', 'Ingresado', 'H107B', 'Control radiológico de infección respiratoria en paciente con Ca pulmón IV / Rx tórax', 'Ejemplo 6', 'Aparente discreta mejoría radiológica.', '6','2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
-    ('7', '7', '2018-12-12', '- / ONCN - ONCOLOXIA MEDICA HOSP.', 'Ordinaria', 'Ingresado', 'H107B', 'Control radiológico de infección respiratoria en paciente con Ca pulmón IV / Rx tórax', 'Ejemplo 7', 'Aparente discreta mejoría radiológica.', '7', '2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
-    ('8', '8', '2018-12-12', '- / ONCN - ONCOLOXIA MEDICA HOSP.', 'Ordinaria', 'Ingresado', 'H107B', 'Control radiológico de infección respiratoria en paciente con Ca pulmón IV / Rx tórax', 'Ejemplo 8', 'Aparente discreta mejoría radiológica.', '8', '2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
-    ('9', '9', '2018-12-12', '- / ONCN - ONCOLOXIA MEDICA HOSP.', 'Ordinaria', 'Ingresado', 'H107B', 'Control radiológico de infección respiratoria en paciente con Ca pulmón IV / Rx tórax', 'Ejemplo 9', 'Aparente discreta mejoría radiológica.', '9', '2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
-    ('10', '10', '2018-12-12', '- / ONCN - ONCOLOXIA MEDICA HOSP.', 'Ordinaria', 'Ingresado', 'H107B', 'Control radiológico de infección respiratoria en paciente con Ca pulmón IV / Rx tórax', 'Ejemplo 10', 'Aparente discreta mejoría radiológica.', '10', '2019-02-27 10:00:00', '2019-02-27 10:00:00', 0, null),
-    ('11', '11', '2018-12-12', '- / ONCN - ONCOLOXIA MEDICA HOSP.', 'Ordinaria', 'Ingresado', 'H107B', 'Control radiológico de infección respiratoria en paciente con Ca pulmón IV / Rx tórax', 'Ejemplo 11', 'Aparente discreta mejoría radiológica.', '11', '2020-01-27 23:00:00', '2020-01-27 23:00:00', 0, null),
-    ('12', '12', '2018-12-12', '- / ONCN - ONCOLOXIA MEDICA HOSP.', 'Ordinaria', 'Ingresado', 'H107B', 'Control radiológico de infección respiratoria en paciente con Ca pulmón IV / Rx tórax', 'Ejemplo 12', 'Aparente discreta mejoría radiológica.', '12', '2021-01-27 00:00:00', '2021-01-27 00:00:00', 0, null);
+    ('1', '1', '2018-12-12', '- / ONCN - ONCOLOXIA MEDICA HOSP.', 'Ordinaria', 'Ingresado', 'H107B', 'Control radiolï¿½gico de infecciï¿½n respiratoria en paciente con Ca pulmï¿½n IV / Rx tï¿½rax', 'Ejemplo 1', 'Aparente discreta mejorï¿½a radiolï¿½gica.', '1', '2018-12-12 23:00:00', '2020-02-24 17:21:58', 0, null),
+    ('2', '2', '2018-12-12', '- / ONCN - ONCOLOXIA MEDICA HOSP.', 'Ordinaria', 'Ingresado', 'H107B', 'Control radiolï¿½gico de infecciï¿½n respiratoria en paciente con Ca pulmï¿½n IV / Rx tï¿½rax', 'Ejemplo 2', 'Aparente discreta mejorï¿½a radiolï¿½gica.', '2', '2019-09-24 22:00:00', '2020-02-24 17:21:58', 0, null),
+    ('3', '3', '2018-12-12', '- / ONCN - ONCOLOXIA MEDICA HOSP.', 'Ordinaria', 'Ingresado', 'H107B', 'Control radiolï¿½gico de infecciï¿½n respiratoria en paciente con Ca pulmï¿½n IV / Rx tï¿½rax', 'Ejemplo 3', 'Aparente discreta mejorï¿½a radiolï¿½gica.', '3', '2019-02-19 23:00:00', '2020-02-24 17:22:00', 0, null),
+    ('4', '4', '2018-12-12', '- / ONCN - ONCOLOXIA MEDICA HOSP.', 'Ordinaria', 'Ingresado', 'H107B', 'Control radiolï¿½gico de infecciï¿½n respiratoria en paciente con Ca pulmï¿½n IV / Rx tï¿½rax', 'Ejemplo 4', 'Aparente discreta mejorï¿½a radiolï¿½gica.', '4', '2019-09-09 22:00:00', '2020-02-24 17:22:01', 0, null),
+    ('5', '5', '2018-12-12', '- / ONCN - ONCOLOXIA MEDICA HOSP.', 'Ordinaria', 'Ingresado', 'H107B', 'Control radiolï¿½gico de infecciï¿½n respiratoria en paciente con Ca pulmï¿½n IV / Rx tï¿½rax', 'Ejemplo 5', 'Aparente discreta mejorï¿½a radiolï¿½gica.', '5', '2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
+    ('6', '56', '2018-12-12', '- / ONCN - ONCOLOXIA MEDICA HOSP.', 'Ordinaria', 'Ingresado', 'H107B', 'Control radiolï¿½gico de infecciï¿½n respiratoria en paciente con Ca pulmï¿½n IV / Rx tï¿½rax', 'Ejemplo 6', 'Aparente discreta mejorï¿½a radiolï¿½gica.', '6','2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
+    ('7', '7', '2018-12-12', '- / ONCN - ONCOLOXIA MEDICA HOSP.', 'Ordinaria', 'Ingresado', 'H107B', 'Control radiolï¿½gico de infecciï¿½n respiratoria en paciente con Ca pulmï¿½n IV / Rx tï¿½rax', 'Ejemplo 7', 'Aparente discreta mejorï¿½a radiolï¿½gica.', '7', '2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
+    ('8', '8', '2018-12-12', '- / ONCN - ONCOLOXIA MEDICA HOSP.', 'Ordinaria', 'Ingresado', 'H107B', 'Control radiolï¿½gico de infecciï¿½n respiratoria en paciente con Ca pulmï¿½n IV / Rx tï¿½rax', 'Ejemplo 8', 'Aparente discreta mejorï¿½a radiolï¿½gica.', '8', '2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
+    ('9', '9', '2018-12-12', '- / ONCN - ONCOLOXIA MEDICA HOSP.', 'Ordinaria', 'Ingresado', 'H107B', 'Control radiolï¿½gico de infecciï¿½n respiratoria en paciente con Ca pulmï¿½n IV / Rx tï¿½rax', 'Ejemplo 9', 'Aparente discreta mejorï¿½a radiolï¿½gica.', '9', '2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
+    ('10', '10', '2018-12-12', '- / ONCN - ONCOLOXIA MEDICA HOSP.', 'Ordinaria', 'Ingresado', 'H107B', 'Control radiolï¿½gico de infecciï¿½n respiratoria en paciente con Ca pulmï¿½n IV / Rx tï¿½rax', 'Ejemplo 10', 'Aparente discreta mejorï¿½a radiolï¿½gica.', '10', '2019-02-27 10:00:00', '2019-02-27 10:00:00', 0, null),
+    ('11', '11', '2018-12-12', '- / ONCN - ONCOLOXIA MEDICA HOSP.', 'Ordinaria', 'Ingresado', 'H107B', 'Control radiolï¿½gico de infecciï¿½n respiratoria en paciente con Ca pulmï¿½n IV / Rx tï¿½rax', 'Ejemplo 11', 'Aparente discreta mejorï¿½a radiolï¿½gica.', '11', '2020-01-27 23:00:00', '2020-01-27 23:00:00', 0, null),
+    ('12', '12', '2018-12-12', '- / ONCN - ONCOLOXIA MEDICA HOSP.', 'Ordinaria', 'Ingresado', 'H107B', 'Control radiolï¿½gico de infecciï¿½n respiratoria en paciente con Ca pulmï¿½n IV / Rx tï¿½rax', 'Ejemplo 12', 'Aparente discreta mejorï¿½a radiolï¿½gica.', '12', '2021-01-27 00:00:00', '2021-01-27 00:00:00', 0, null);
 
 --
 -- Data for table `Exploration code`

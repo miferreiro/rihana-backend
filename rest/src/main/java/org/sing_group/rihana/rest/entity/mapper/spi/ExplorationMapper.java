@@ -27,7 +27,6 @@ import javax.ws.rs.core.UriInfo;
 import org.sing_group.rihana.domain.entities.exploration.Exploration;
 import org.sing_group.rihana.rest.entity.exploration.ExplorationAdminData;
 import org.sing_group.rihana.rest.entity.exploration.ExplorationData;
-import org.sing_group.rihana.rest.entity.exploration.ExplorationEditionData;
 
 public interface ExplorationMapper {
 
@@ -36,6 +35,4 @@ public interface ExplorationMapper {
 	ExplorationData toExplorationData(Exploration exploration);
 
 	ExplorationAdminData toExplorationAdminData(Exploration exploration);
-
-	void assignExplorationEditData(Exploration exploration, ExplorationEditionData explorationEditionData);
 }

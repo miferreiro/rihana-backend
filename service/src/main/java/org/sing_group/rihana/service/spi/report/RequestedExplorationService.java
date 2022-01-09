@@ -20,22 +20,14 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.rihana.service.spi.exploration;
+package org.sing_group.rihana.service.spi.report;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.Set;
+import javax.ejb.Local;
 
-import org.sing_group.rihana.domain.entities.exploration.Exploration;
-import org.sing_group.rihana.domain.entities.radiograph.Radiograph;
+import org.sing_group.rihana.domain.entities.report.RequestedExploration;
 
-public interface ExplorationStorage {
+@Local
+public interface RequestedExplorationService {
 
-	String storeRadiograph(Radiograph radiograph, InputStream data);
-
-	FileInputStream retrieveRadiograph(Radiograph radiograph);
-
-	Exploration deleteRadiographsExploration(Exploration exploration);
-
-	Set<String> getFormatsForRadiographType(Radiograph radiograph);
+	RequestedExploration create(RequestedExploration requestedExploration);
 }

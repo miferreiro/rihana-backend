@@ -36,7 +36,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -89,7 +88,7 @@ public class Patient implements Identifiable {
 	@Column(name = "birthdate")
 	private Timestamp birthdate;
 
-	@OneToMany(mappedBy = "patient", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
 	private Set<Exploration> explorations = new HashSet<>();
 
 	@Column(name = "creation_date", columnDefinition = "DATETIME(3)")

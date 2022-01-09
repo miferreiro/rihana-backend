@@ -30,15 +30,16 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
@@ -66,13 +67,15 @@ public class Exploration implements Identifiable {
 	private Timestamp date;
 
 	@ManyToOne(optional = false)
+	@JoinColumn(name = "user_login", columnDefinition = "login")
 	private User user;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "patient_id", referencedColumnName = "id", nullable = false)
 	private Patient patient;
 
-	@OneToOne(mappedBy = "exploration", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL, optional = false)
-	private Report report;
+	@OneToMany(mappedBy = "exploration", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Report> reports = new HashSet<>();
 
 	@OneToMany(mappedBy = "exploration", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Radiograph> radiographs = new HashSet<>();
@@ -109,7 +112,7 @@ public class Exploration implements Identifiable {
 		this.setDate(date);
 		this.setUser(user);
 		this.setPatient(patient);
-		this.setReport(report);
+		this.reports.add(report);
 		this.radiographs = radiographs;
 		this.creationDate = this.updateDate = new Timestamp(System.currentTimeMillis());
 		this.setDeleted(false);
@@ -167,24 +170,36 @@ public class Exploration implements Identifiable {
 		}
 	}
 
-	public Report getReport() {
-		return report;
+	public void internalRemoveReport(Report report) {
+		reports.remove(report);
 	}
 
-	public void setReport(Report report) {
-		this.report = report;
+	public void internalAddReport(Report report) {
+		reports.add(report);
+	}
+
+	public Set<Report> getReports() {
+		return reports;
+	}
+
+	public Report getCurrentReport() {
+		return reports.stream().filter(report -> !report.isDeleted()).findFirst().get();
 	}
 
 	public void internalRemoveRadiograph(Radiograph radiograph) {
-		this.radiographs.remove(radiograph);
+		radiographs.remove(radiograph);
 	}
 
 	public void internalAddRadiograph(Radiograph radiograph) {
-		this.radiographs.add(radiograph);
+		radiographs.add(radiograph);
 	}
 
 	public Set<Radiograph> getRadiographs() {
 		return radiographs;
+	}
+
+	public Set<Radiograph> getCurrentRadiographs() {
+		return radiographs.stream().filter(radiograph -> !radiograph.isDeleted()).collect(Collectors.toSet());
 	}
 
 	public void setRadiographs(Set<Radiograph> radiographs) {

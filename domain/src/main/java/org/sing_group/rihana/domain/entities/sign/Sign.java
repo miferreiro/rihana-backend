@@ -47,12 +47,12 @@ public class Sign implements Identifiable {
 	@Column(name = "id")
 	private String id;
 
-	@ManyToOne
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "signtype_code")
 	private SignType type;
 
-	@ManyToOne
-	@JoinColumn(name = "radiograph_id")
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "radiograph_id", referencedColumnName = "id")
 	private Radiograph radiograph;
 
 	@OneToOne(mappedBy = "sign", fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL, optional = true)

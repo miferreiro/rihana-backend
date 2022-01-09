@@ -27,7 +27,6 @@ import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -47,10 +46,10 @@ public class ExplorationCode implements Serializable {
 	@Column(name = "description")
 	private String description;
 
-	@OneToMany(mappedBy = "explorationCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "explorationCode", fetch = FetchType.LAZY, orphanRemoval = true)
 	private Set<RequestedExploration> requestedExplorations = new HashSet<>();
 
-	@OneToMany(mappedBy = "explorationCode", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "explorationCode", fetch = FetchType.LAZY, orphanRemoval = true)
 	private Set<PerformedExploration> performedExplorations = new HashSet<>();
 
 	@Column(name = "deleted", columnDefinition="BIT(1) DEFAULT FALSE")

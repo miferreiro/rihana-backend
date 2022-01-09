@@ -110,6 +110,7 @@ public class Action implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
 	public boolean isDeleted() {
 		return deleted;
 	}

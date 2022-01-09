@@ -31,7 +31,7 @@ public interface RadiographService {
 
 	Radiograph getRadiograph(String id);
 
-	Radiograph create(Radiograph radiograph);
+	Radiograph create(Radiograph radiograph, String source);
 
 	void delete(Radiograph radiograph);
 }

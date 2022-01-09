@@ -28,6 +28,7 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -46,8 +47,8 @@ public class RequestedExploration implements Identifiable {
 	@Column(name = "date")
 	private Timestamp date;
 
-	@ManyToOne
-	@JoinColumn(name = "report_id")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "report_id", referencedColumnName = "id")
 	private Report report;
 
 	@ManyToOne

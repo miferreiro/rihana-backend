@@ -34,6 +34,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -61,7 +62,8 @@ public class Radiograph implements Identifiable {
 	@Column(name = "observations")
 	private String observations;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "exploration_id", referencedColumnName = "id")
 	private Exploration exploration;
 
 	@OneToMany(mappedBy = "radiograph", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -74,7 +76,7 @@ public class Radiograph implements Identifiable {
 	@Column(name = "update_date", columnDefinition = "DATETIME(3)")
 	private Timestamp updateDate;
 
-	@Column(name = "deleted", columnDefinition="BIT(1) DEFAULT FALSE")
+	@Column(name = "deleted", columnDefinition = "BIT(1) DEFAULT FALSE")
 	private boolean deleted;
 
 	@Column(name = "delete_date", columnDefinition = "DATETIME(3)")
@@ -82,11 +84,32 @@ public class Radiograph implements Identifiable {
 
 	Radiograph() { }
 
+	public Radiograph(RadiographType type, String observations) {
+		this.id = UUID.randomUUID().toString();
+		this.setSource("");
+		this.setType(type);
+		this.setObservations(observations);
+		this.creationDate = this.updateDate = new Timestamp(System.currentTimeMillis());
+		this.setDeleted(false);
+		this.deleteDate = null;
+	}
+
+	public Radiograph(RadiographType type, String observations, Exploration exploration) {
+		this.id = UUID.randomUUID().toString();
+		this.setSource("");
+		this.setType(type);
+		this.setObservations(observations);
+		this.setExploration(exploration);
+		this.creationDate = this.updateDate = new Timestamp(System.currentTimeMillis());
+		this.setDeleted(false);
+		this.deleteDate = null;
+	}
+
 	public Radiograph(String source, RadiographType type, String observations) {
 		this.id = UUID.randomUUID().toString();
-		this.source = source;
-		this.type = type;
-		this.observations = observations;
+		this.setSource(source);
+		this.setType(type);
+		this.setObservations(observations);
 		this.creationDate = this.updateDate = new Timestamp(System.currentTimeMillis());
 		this.setDeleted(false);
 		this.deleteDate = null;

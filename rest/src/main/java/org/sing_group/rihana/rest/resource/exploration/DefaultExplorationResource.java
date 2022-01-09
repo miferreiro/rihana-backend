@@ -27,6 +27,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_XML;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -81,7 +82,9 @@ import org.sing_group.rihana.service.spi.exploration.ExplorationStorage;
 import org.sing_group.rihana.service.spi.patient.PatientService;
 import org.sing_group.rihana.service.spi.radiograph.RadiographService;
 import org.sing_group.rihana.service.spi.report.ExplorationCodeService;
+import org.sing_group.rihana.service.spi.report.PerformedExplorationService;
 import org.sing_group.rihana.service.spi.report.ReportService;
+import org.sing_group.rihana.service.spi.report.RequestedExplorationService;
 import org.sing_group.rihana.service.spi.sign.SignService;
 import org.sing_group.rihana.service.spi.sign.SignTypeService;
 import org.sing_group.rihana.service.spi.user.UserService;
@@ -113,6 +116,12 @@ public class DefaultExplorationResource implements ExplorationResource {
 
 	@Inject
 	private ReportService reportService;
+
+	@Inject
+	private RequestedExplorationService requestedExplorationService;
+
+	@Inject
+	private PerformedExplorationService performedExplorationService;
 
 	@Inject
 	private ExplorationCodeService explorationCodeService;
@@ -230,20 +239,7 @@ public class DefaultExplorationResource implements ExplorationResource {
 
 		User user = this.userService.get(explorationEditionData.getUser());
 
-		Patient patient = null;
-
-		if  (explorationEditionData.getPatient() != null) {
-			PatientEditionData patientEditionData = explorationEditionData.getPatient();
-
-			if (!this.patientService.existsPatientBy(patientEditionData.getPatientID())) {
-				patient = this.patientService.create(
-					new Patient(patientEditionData.getPatientID(),
-						patientEditionData.getSex(),
-						patientEditionData.getBirthdate()));
-			} else {
-				patient = this.patientService.getPatientBy(patientEditionData.getPatientID());
-			}
-		}
+		Patient patient = createPatient(explorationEditionData);
 
 		String title = "Exploration " + (this.service.countAllExplorations() + 1);
 		Exploration exploration = new Exploration(
@@ -253,74 +249,14 @@ public class DefaultExplorationResource implements ExplorationResource {
 			patient
 		);
 
-		if (explorationEditionData.getReport() != null) {
-			ReportEditionData reportEditionData = explorationEditionData.getReport();
-			Report report = new Report(reportEditionData.getReportN(),
-				reportEditionData.getCompletionDate(),
-				reportEditionData.getApplicant(),
-				reportEditionData.getPriority(),
-				reportEditionData.getStatus(),
-				reportEditionData.getBed(),
-				reportEditionData.getClinicalData(),
-				reportEditionData.getFindings(),
-				reportEditionData.getConclusions());
-
-			report.setExploration(exploration);
-			this.reportService.create(report);
-
-			for (RequestedExplorationEditionData r : reportEditionData.getRequestedExplorations()) {
-
-				ExplorationCode explorationCode;
-				if (!this.explorationCodeService.existsExplorationCodeBy(r.getCode())) {
-					explorationCode = new ExplorationCode(r.getCode(), r.getDescription());
-				} else {
-					explorationCode = this.explorationCodeService.getExplorationCode(r.getCode());
-				}
-
-				RequestedExploration requestedExploration = new RequestedExploration(r.getDate(), report, explorationCode);
-				report.internalAddRequestedExploration(requestedExploration);
-			}
-
-			for (PerformedExplorationEditionData p : reportEditionData.getPerformedExplorations()) {
-
-				ExplorationCode explorationCode;
-				if (!this.explorationCodeService.existsExplorationCodeBy(p.getCode())) {
-					explorationCode = new ExplorationCode(p.getCode(), p.getDescription());
-				} else {
-					explorationCode = this.explorationCodeService.getExplorationCode(p.getCode());
-				}
-
-				PerformedExploration performedExploration = new PerformedExploration(p.getDate(), p.getPortable(), p.getSurgery(), report, explorationCode);
-				report.internalAddPerformedExploration(performedExploration);
-			}
-		}
-
-		Set<RadiographEditionData> radiographEditionDataList = explorationEditionData.getRadiographs();
-
-		for(RadiographEditionData r: radiographEditionDataList) {
-			Radiograph radiograph = new Radiograph(r.getSource(), r.getType(), r.getObservations());
-			radiograph.setExploration(exploration);
-
-			this.radiographService.create(radiograph);
-
-			for(SignData s: r.getSigns()) {
-				SignType signType = this.signTypeService.get(s.getType().getCode());
-
-				Sign sign = new Sign(signType, s.getBrightness(), s.getContrast(), radiograph);
-				this.signService.create(sign);
-				if (s.getLocation() != null) {
-					new SignLocation(s.getLocation().getX(), s.getLocation().getY(), s.getLocation().getWidth(),
-						s.getLocation().getHeight(), sign);
-				}
-			}
-		}
-
 		exploration = this.service.create(exploration);
+
+		createReport(explorationEditionData, exploration);
+		createRadiographs(explorationEditionData, exploration);
 
 		return Response.created(UriBuilder.fromResource(DefaultExplorationResource.class).path(exploration.getId()).build())
 			.entity(explorationMapper.toExplorationData(exploration)).build();
 	}
-
 
 	@PUT
 	@Path("{id}")
@@ -335,17 +271,34 @@ public class DefaultExplorationResource implements ExplorationResource {
 	public Response edit(@PathParam("id") String id, ExplorationEditionData explorationEditionData) {
 		Exploration exploration = this.service.getExploration(id);
 
-		this.reportService.delete(exploration.getReport());
+		Patient patient = createPatient(explorationEditionData);
+
+		exploration = this.service.getExploration(id);
+		exploration.setPatient(patient);
+
+		this.service.edit(exploration);
+
+		exploration = this.service.getExploration(id);
+
+		Iterator<Report> iterator = new HashSet<>(exploration.getReports()).iterator();
+		while (iterator.hasNext()) {
+			Report report = iterator.next();
+			if (!report.isDeleted()) {
+				this.reportService.delete(report);
+			}
+		}
+
+		createReport(explorationEditionData, exploration);
 
 		this.explorationStorage.deleteRadiographsExploration(exploration);
 
-		exploration.getRadiographs().stream().forEach(radiograph -> {
-			this.radiographService.delete(radiograph);
-		});
-		exploration.setRadiographs(new HashSet<>());
+		for (Radiograph radiograph: exploration.getCurrentRadiographs()) {
+			if (!radiograph.isDeleted()) {
+				this.radiographService.delete(radiograph);
+			}
+		}
 
-		this.explorationMapper.assignExplorationEditData(exploration, explorationEditionData);
-		exploration = this.service.edit(exploration);
+		createRadiographs(explorationEditionData, exploration);
 
 		return Response.ok(this.explorationMapper.toExplorationData(exploration)).build();
 	}
@@ -380,5 +333,95 @@ public class DefaultExplorationResource implements ExplorationResource {
 		Exploration exploration = this.service.getExplorationDeleted(id);
 		this.service.recover(exploration);
 		return Response.ok().build();
+	}
+
+
+	private Patient createPatient(ExplorationEditionData explorationEditionData) {
+		Patient patient = null;
+
+		if  (explorationEditionData.getPatient() != null) {
+			PatientEditionData patientEditionData = explorationEditionData.getPatient();
+
+			if (!this.patientService.existsPatientBy(patientEditionData.getPatientID())) {
+				patient = new Patient(patientEditionData.getPatientID(),
+					patientEditionData.getSex(),
+					patientEditionData.getBirthdate());
+				patient = this.patientService.create(patient);
+			} else {
+				patient = this.patientService.getPatientBy(patientEditionData.getPatientID());
+			}
+		}
+
+		return patient;
+	}
+
+	private void createReport(ExplorationEditionData explorationEditionData, Exploration exploration) {
+		if (explorationEditionData.getReport() != null) {
+			ReportEditionData reportEditionData = explorationEditionData.getReport();
+			Report report = new Report(reportEditionData.getReportN(),
+				reportEditionData.getCompletionDate(),
+				reportEditionData.getApplicant(),
+				reportEditionData.getPriority(),
+				reportEditionData.getStatus(),
+				reportEditionData.getBed(),
+				reportEditionData.getClinicalData(),
+				reportEditionData.getFindings(),
+				reportEditionData.getConclusions());
+
+			report.setExploration(exploration);
+			this.reportService.create(report);
+
+			for (RequestedExplorationEditionData r : reportEditionData.getRequestedExplorations()) {
+
+				ExplorationCode explorationCode;
+				if (!this.explorationCodeService.existsExplorationCodeBy(r.getCode())) {
+					explorationCode = new ExplorationCode(r.getCode(), r.getDescription());
+				} else {
+					explorationCode = this.explorationCodeService.getExplorationCode(r.getCode());
+				}
+
+				RequestedExploration requestedExploration = new RequestedExploration(r.getDate(), report, explorationCode);
+				this.requestedExplorationService.create(requestedExploration);
+				report.internalAddRequestedExploration(requestedExploration);
+			}
+
+			for (PerformedExplorationEditionData p : reportEditionData.getPerformedExplorations()) {
+
+				ExplorationCode explorationCode;
+				if (!this.explorationCodeService.existsExplorationCodeBy(p.getCode())) {
+					explorationCode = new ExplorationCode(p.getCode(), p.getDescription());
+				} else {
+					explorationCode = this.explorationCodeService.getExplorationCode(p.getCode());
+				}
+
+				PerformedExploration performedExploration = new PerformedExploration(p.getDate(), p.getPortable(), p.getSurgery(), report, explorationCode);
+				this.performedExplorationService.create(performedExploration);
+				report.internalAddPerformedExploration(performedExploration);
+			}
+			this.reportService.edit(report);
+		}
+	}
+
+	private void createRadiographs(ExplorationEditionData explorationEditionData, Exploration exploration) {
+		Set<RadiographEditionData> radiographEditionDataList = explorationEditionData.getRadiographs();
+
+		for(RadiographEditionData r: radiographEditionDataList) {
+			Radiograph radiograph = new Radiograph(r.getType(), r.getObservations());
+			radiograph.setExploration(exploration);
+
+			this.radiographService.create(radiograph, r.getSource());
+
+			for(SignData s: r.getSigns()) {
+				SignType signType = this.signTypeService.get(s.getType().getCode());
+
+				Sign sign = new Sign(signType, s.getBrightness(), s.getContrast(), radiograph);
+				this.signService.create(sign);
+
+				if (s.getLocation() != null) {
+					new SignLocation(s.getLocation().getX(), s.getLocation().getY(), s.getLocation().getWidth(),
+						s.getLocation().getHeight(), sign);
+				}
+			}
+		}
 	}
 }
