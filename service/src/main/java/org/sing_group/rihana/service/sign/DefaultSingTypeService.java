@@ -25,8 +25,10 @@ package org.sing_group.rihana.service.sign;
 import java.util.stream.Stream;
 
 import javax.annotation.Resource;
+import javax.annotation.security.PermitAll;
 import javax.ejb.EJBAccessException;
 import javax.ejb.SessionContext;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.sing_group.rihana.domain.dao.spi.sign.SignTypeDAO;
@@ -34,6 +36,8 @@ import org.sing_group.rihana.domain.entities.sign.SignType;
 import org.sing_group.rihana.service.spi.acl.permission.PermissionService;
 import org.sing_group.rihana.service.spi.sign.SignTypeService;
 
+@Stateless
+@PermitAll
 public class DefaultSingTypeService implements SignTypeService {
 
 	@Inject
