@@ -100,7 +100,8 @@ public class DefaultExplorationService implements ExplorationService {
 	}
 
 	@Override
-	public Stream<Exploration> listExplorationsByUserInDateRange(int page, int pageSize, User user, Date initialDate, Date finalDate, Set<SignType> signTypes) {
+	public Stream<Exploration> listExplorationsByUserInDateRange(int page, int pageSize, User user, Date initialDate,
+																 Date finalDate, Set<SignType> signTypes) {
 
 		String loginLogged = context.getCallerPrincipal().getName();
 		if (!this.permissionService.hasPermission(
@@ -140,7 +141,8 @@ public class DefaultExplorationService implements ExplorationService {
 	}
 
 	@Override
-	public int countExplorationsByUserAndSignTypesInDateRange(User user, Date initialDate, Date finalDate, Set<SignType> signTypes) {
+	public int countExplorationsByUserAndSignTypesInDateRange(User user, Date initialDate, Date finalDate,
+															  Set<SignType> signTypes) {
 
 		String loginLogged = context.getCallerPrincipal().getName();
 		if (!this.permissionService.hasPermission(

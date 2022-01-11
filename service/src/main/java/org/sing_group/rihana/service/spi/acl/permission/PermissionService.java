@@ -43,4 +43,6 @@ public interface PermissionService {
 	boolean hasPermission(String login, String functionalityName, String actionName);
 
 	boolean isAdmin(String login);
+
+	boolean isSupervisor(String login);
 }

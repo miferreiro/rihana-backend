@@ -40,4 +40,6 @@ public interface PermissionDAO {
 	boolean hasPermission(PermissionKey permissionKey);
 
 	boolean isAdmin(String login);
+
+	boolean isSupervisor(String login);
 }

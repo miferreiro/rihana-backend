@@ -145,4 +145,9 @@ public class DefaultPermissionService implements PermissionService {
 	public boolean isAdmin(String login) {
 		return permissionDAO.isAdmin(login);
 	}
+
+	@Override
+	public boolean isSupervisor(String login) {
+		return permissionDAO.isSupervisor(login);
+	}
 }

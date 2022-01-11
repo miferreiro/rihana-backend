@@ -32,6 +32,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
@@ -77,6 +79,7 @@ import org.sing_group.rihana.rest.entity.sign.SignData;
 import org.sing_group.rihana.rest.filter.CrossDomain;
 import org.sing_group.rihana.rest.mapper.SecurityExceptionMapper;
 import org.sing_group.rihana.rest.resource.spi.exploration.ExplorationResource;
+import org.sing_group.rihana.service.spi.acl.permission.PermissionService;
 import org.sing_group.rihana.service.spi.exploration.ExplorationService;
 import org.sing_group.rihana.service.spi.exploration.ExplorationStorage;
 import org.sing_group.rihana.service.spi.patient.PatientService;
@@ -101,6 +104,12 @@ import org.sing_group.rihana.service.spi.user.UserService;
 @Default
 @CrossDomain(allowedHeaders = "X-Pagination-Total-Items")
 public class DefaultExplorationResource implements ExplorationResource {
+
+	@Resource
+	private SessionContext context;
+
+	@Inject
+	private PermissionService permissionService;
 
 	@Inject
 	private ExplorationService service;
@@ -203,20 +212,19 @@ public class DefaultExplorationResource implements ExplorationResource {
 			signTypeSet = signTypes.stream().map(signType -> this.signTypeService.get(signType)).collect(Collectors.toSet());
 		}
 
+		String loginLogged = context.getCallerPrincipal().getName();
 		if (userId == null || userId.equals("")) {
 			countExplorations = this.service.countExplorationsByUserAndSignTypesInDateRange(null, initialDate, finalDate, signTypeSet);
 		} else {
 			user = this.userService.get(userId);
-			if (user.getRole().getName() != "ADMIN") {
-				countExplorations = this.service.countExplorationsByUserAndSignTypesInDateRange(null, initialDate, finalDate, signTypeSet);
-			} else {
-				countExplorations = this.service.countExplorationsByUserAndSignTypesInDateRange(user, initialDate, finalDate, signTypeSet);
-			}
+			countExplorations = this.service.countExplorationsByUserAndSignTypesInDateRange(user, initialDate, finalDate, signTypeSet);
 		}
 
-		if (userId != null && !userId.equals("") && user.getRole().getName() != "ADMIN") {
+
+		if (this.permissionService.hasPermission(loginLogged, "EXPLORATION_MANAGEMENT", "RETRIEVE") ||
+			this.permissionService.isAdmin(loginLogged)) {
 			return Response.ok(
-				this.service.listExplorationsByUserInDateRange(page, pageSize, user, initialDate, finalDate, signTypeSet)
+				this.service.listExplorationsByUserInDateRange(page, pageSize, null, initialDate, finalDate, signTypeSet)
 					.map(this.explorationMapper::toExplorationAdminData).toArray(ExplorationAdminData[]::new)
 			).header("X-Pagination-Total-Items", countExplorations).build();
 		} else {

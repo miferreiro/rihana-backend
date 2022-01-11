@@ -63,6 +63,7 @@ public class DefaultUserService implements UserService {
 				"USER_MANAGEMENT",
 				"SHOW_CURRENT") &&
 			loginLogged.equals(login)) &&
+			!this.permissionService.isSupervisor(loginLogged) &&
 			!this.permissionService.isAdmin(loginLogged)
 		) {
 			throw new EJBAccessException("Insufficient privileges");

@@ -28,14 +28,19 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import javax.ejb.SessionContext;
 import javax.enterprise.inject.Default;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 
 import org.sing_group.rihana.domain.dao.DAOHelper;
+import org.sing_group.rihana.domain.dao.spi.acl.permission.PermissionDAO;
 import org.sing_group.rihana.domain.dao.spi.exploration.ExplorationDAO;
+import org.sing_group.rihana.domain.dao.spi.user.UserDAO;
 import org.sing_group.rihana.domain.entities.exploration.Exploration;
 import org.sing_group.rihana.domain.entities.sign.SignType;
 import org.sing_group.rihana.domain.entities.user.User;
@@ -43,6 +48,15 @@ import org.sing_group.rihana.domain.entities.user.User;
 @Default
 @Transactional(value = Transactional.TxType.MANDATORY)
 public class DefaultExplorationDAO implements ExplorationDAO {
+
+	@Resource
+	private SessionContext context;
+
+	@Inject
+	private UserDAO userDao;
+
+	@Inject
+	private PermissionDAO permissionDao;
 
 	@PersistenceContext
 	protected EntityManager em;
@@ -117,6 +131,9 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 
 	private List listExplorations(Integer page, Integer pageSize, User user, Date initialDate, Date finalDate,
 								  Set<SignType> signTypes) {
+
+		String roleLogged = userDao.get(context.getCallerPrincipal().getName()).getRole().getName();
+
 		String queryInDateRange = "";
 		if (initialDate != null && finalDate != null) {
 			queryInDateRange = "e.date >= :initialDate AND e.date <= :finalDate ";
@@ -131,8 +148,7 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 		}
 
 		Query query;
-		String queryExplorations;
-		String conditionDeleted = "e.deleted=0 ";
+		String queryExplorations, conditionDeleted;
 
 		if (signTypes.size() > 0) {
 			StringBuilder stringBuilder = new StringBuilder("");
@@ -140,7 +156,9 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 				"FROM Exploration ee LEFT JOIN ee.radiographs rr LEFT JOIN rr.signs ss LEFT JOIN ss.type tt " +
 				"WHERE ee.id=e.id";
 
-		 	if (user == null || user.getRole().getName() != "ADMIN") querySignType += " AND ee.deleted=0";
+		 	if (user == null && (roleLogged != "ADMIN" || roleLogged != "SUPERVISOR")) {
+		 		querySignType += " AND ee.deleted=0";
+			}
 
 			stringBuilder.append("(");
 			for (int count = 0; count < signTypes.size(); count++) {
@@ -149,27 +167,37 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 					.append(" IN (")
 					.append(querySignType)
 					.append(")");
-				if (count + 1 < signTypes.size()) stringBuilder.append(" AND ");
+				if (count + 1 < signTypes.size()){
+					stringBuilder.append(" AND ");
+				}
 		  	}
 			stringBuilder.append(") ");
 
-			if (user != null && user.getRole().getName() != "ADMIN") {
-				if (queryInDateRange != "") queryInDateRange= "AND " + queryInDateRange;
+			if (user != null && (roleLogged != "ADMIN" || roleLogged != "SUPERVISOR")) {
+				if (queryInDateRange != "") {
+					queryInDateRange += "AND ";
+				}
+
 				queryExplorations = "SELECT e " +
 					"FROM Exploration e LEFT JOIN e.radiographs r LEFT JOIN r.signs s LEFT JOIN s.type t " +
-					"WHERE e.user.login=:login AND e.deleted=0 " + queryInDateRange + " AND " + stringBuilder +
+					"WHERE e.user.login=:login AND e.deleted=0 AND " + queryInDateRange + stringBuilder +
 					"GROUP BY e.id ORDER BY e.date DESC";
 
 				query = this.em.createQuery(queryExplorations, Exploration.class);
 				query.setParameter("login", user.getLogin());
 			} else {
-				if (queryInDateRange != "") conditionDeleted = "AND e.deleted=0 ";
-				if (user != null && user.getRole().getName() != "ADMIN") conditionDeleted = "";
-				if (queryInDateRange != "" || conditionDeleted != "") stringBuilder.insert(0, "AND ");
+				if (user != null && (roleLogged != "ADMIN" || roleLogged != "SUPERVISOR")) {
+					conditionDeleted = "";
+				} else {
+					conditionDeleted = "AND e.deleted=0 ";
+				}
+				if (queryInDateRange != "") {
+					stringBuilder.insert(0, "AND ");
+				}
 
 				queryExplorations = "SELECT e " +
 					"FROM Exploration e LEFT JOIN e.radiographs r LEFT JOIN r.signs s LEFT JOIN s.type t " +
-					"WHERE " + queryInDateRange + conditionDeleted + stringBuilder +
+					"WHERE " + queryInDateRange  + stringBuilder + conditionDeleted +
 					"GROUP BY e.id ORDER BY e.date DESC";
 
 				query = this.em.createQuery(queryExplorations, Exploration.class);
@@ -182,45 +210,74 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 			}
 
 			if (page != null && pageSize != null) {
-				query = query.setFirstResult((page - 1) * pageSize)
-					.setMaxResults(pageSize);
+				query = query.setFirstResult((page - 1) * pageSize).setMaxResults(pageSize);
 			}
-		} else if (user != null && user.getRole().getName() != "ADMIN") {
-			if (queryInDateRange != "") queryInDateRange= "AND " + queryInDateRange;
+		} else if (user != null) {
+			if (queryInDateRange != "") {
+				queryInDateRange= "AND " + queryInDateRange;
+			}
+
+			if (!roleLogged.equals("ADMIN") && !roleLogged.equals("SUPERVISOR")) {
+				conditionDeleted = " AND e.deleted=0 ";
+			} else {
+				conditionDeleted = "";
+			}
+
 			queryExplorations = "SELECT e " +
 				"FROM Exploration e " +
-				"WHERE e.deleted=0 AND e.user.login=:login " + queryInDateRange +
+				"WHERE e.user.login=:login " + queryInDateRange + conditionDeleted +
 				"ORDER BY e.date DESC";
 
 		 	query = this.em.createQuery(queryExplorations, Exploration.class);
 		 	query.setParameter("login", user.getLogin());
 
-			if (initialDate != null) query.setParameter("initialDate", initialDate);
-			if (finalDate != null) query.setParameter("finalDate", finalDate);
+			if (initialDate != null){
+				query.setParameter("initialDate", initialDate);
+			}
+			if (finalDate != null){
+				query.setParameter("finalDate", finalDate);
+			}
 
 			if (page != null && pageSize != null) {
-				query = query.setFirstResult((page - 1) * pageSize)
-					.setMaxResults(pageSize);
+				query = query.setFirstResult((page - 1) * pageSize).setMaxResults(pageSize);
 			}
 		} else {
 		 	if (queryInDateRange != "") {
-		 		conditionDeleted = " AND e.deleted=0 ";
-		 	}
-		 	queryExplorations = "SELECT e " +
-				"FROM Exploration e " +
-				"WHERE " + queryInDateRange + conditionDeleted +
-				"ORDER BY e.date DESC";
+				if (!roleLogged.equals("ADMIN") && !roleLogged.equals("SUPERVISOR")) {
+					conditionDeleted = " AND e.deleted=0 ";
+				} else {
+					conditionDeleted = "";
+				}
+				queryExplorations = "SELECT e " +
+					"FROM Exploration e " +
+					"WHERE " + queryInDateRange + conditionDeleted +
+					"ORDER BY e.date DESC";
+			} else {
+		 		if(!roleLogged.equals("ADMIN") && !roleLogged.equals("SUPERVISOR")) {
+					queryExplorations = "SELECT e " +
+						"FROM Exploration e " +
+						"WHERE e.deleted=0 " +
+						"ORDER BY e.date DESC";
+				} else {
+					queryExplorations = "SELECT e " +
+						"FROM Exploration e " +
+						"ORDER BY e.date DESC";
+				}
+			}
 
 		 	query = this.em.createQuery(queryExplorations, Exploration.class);
 
 			if (page != null && pageSize != null) {
-				query = query.setFirstResult((page - 1) * pageSize)
-					.setMaxResults(pageSize);
+				query = query.setFirstResult((page - 1) * pageSize).setMaxResults(pageSize);
 			}
 		}
 
-		if (initialDate != null) query.setParameter("initialDate", initialDate);
-		if (finalDate != null) query.setParameter("finalDate", finalDate);
+		if (initialDate != null){
+			query.setParameter("initialDate", initialDate);
+		}
+		if (finalDate != null){
+			query.setParameter("finalDate", finalDate);
+		}
 
 		return query.getResultList();
 	}

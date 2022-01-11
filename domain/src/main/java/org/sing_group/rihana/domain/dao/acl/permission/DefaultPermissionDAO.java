@@ -111,4 +111,18 @@ public class DefaultPermissionDAO implements PermissionDAO {
 
 		return query.getResultList().size() > 0;
 	}
+
+	@Override
+	public boolean isSupervisor(String login) {
+
+		String queryAdmin = "SELECT u " +
+			"FROM User u " +
+			"WHERE u.role.id = 2 AND " +
+			"u.login=:login";
+
+		Query query = this.em.createQuery(queryAdmin, User.class);
+		query.setParameter("login", login);
+
+		return query.getResultList().size() > 0;
+	}
 }
