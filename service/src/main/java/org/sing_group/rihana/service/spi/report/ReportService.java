@@ -29,7 +29,7 @@ import org.sing_group.rihana.domain.entities.report.Report;
 @Local
 public interface ReportService {
 
-	Report getReport(String id);
+	Report get(String id);
 
 	Report create(Report report);
 

@@ -88,7 +88,7 @@ public class DefaultReportResource implements ReportResource {
 		@PathParam("id") String id
 	) {
 		return Response
-			.ok(this.reportMapper.toReportData(this.service.getReport(id)))
+			.ok(this.reportMapper.toReportData(this.service.get(id)))
 			.build();
 	}
 }

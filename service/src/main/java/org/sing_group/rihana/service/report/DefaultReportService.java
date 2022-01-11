@@ -48,7 +48,7 @@ public class DefaultReportService implements ReportService {
 	private SessionContext context;
 
 	@Override
-	public Report getReport(String id) {
+	public Report get(String id) {
 
 		String loginLogged = context.getCallerPrincipal().getName();
 		if (!this.permissionService.hasPermission(
