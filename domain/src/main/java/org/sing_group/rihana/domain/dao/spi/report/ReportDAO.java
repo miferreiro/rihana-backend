@@ -28,6 +28,8 @@ public interface ReportDAO {
 
 	Report get(String id);
 
+	boolean existsReportNBy(String reportN);
+
 	Report create(Report report);
 
 	Report edit(Report report);

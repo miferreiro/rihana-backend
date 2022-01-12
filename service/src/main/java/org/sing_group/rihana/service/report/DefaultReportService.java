@@ -64,6 +64,22 @@ public class DefaultReportService implements ReportService {
 	}
 
 	@Override
+	public boolean existsReportNBy(String reportN) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+			loginLogged,
+			"REPORT_MANAGEMENT",
+			"SHOW_CURRENT") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
+		return reportDAO.existsReportNBy(reportN);
+	}
+
+	@Override
 	public Report create(Report report) {
 
 		String loginLogged = context.getCallerPrincipal().getName();

@@ -239,31 +239,35 @@ public class DefaultExplorationResource implements ExplorationResource {
 	@ApiOperation(
 		value = "Creates a new exploration.", response = ExplorationData.class, code = 201
 	)
-	@ApiResponses(
-		@ApiResponse(code = 400, message = "Unknown exploration: {id}")
-	)
+	@ApiResponses({
+		@ApiResponse(code = 400, message = "Unknown exploration: {id}"),
+		@ApiResponse(code = 409, message = "The report already exists")
+	})
 	@Override
 	public Response create(ExplorationEditionData explorationEditionData) {
 
-		User user = this.userService.get(explorationEditionData.getUser());
+		if (!reportService.existsReportNBy(explorationEditionData.getReport().getReportN())) {
+			User user = this.userService.get(explorationEditionData.getUser());
 
-		Patient patient = createPatient(explorationEditionData);
+			Patient patient = createPatient(explorationEditionData);
 
-		String title = "Exploration " + (this.service.countAllExplorations() + 1);
-		Exploration exploration = new Exploration(
-			title,
-			explorationEditionData.getExplorationDate(),
-			user,
-			patient
-		);
+			String title = "Exploration " + (this.service.countAllExplorations() + 1);
+			Exploration exploration = new Exploration(
+				title,
+				explorationEditionData.getExplorationDate(),
+				user,
+				patient
+			);
 
-		exploration = this.service.create(exploration);
+			exploration = this.service.create(exploration);
+			createReport(explorationEditionData, exploration);
+			createRadiographs(explorationEditionData, exploration);
 
-		createReport(explorationEditionData, exploration);
-		createRadiographs(explorationEditionData, exploration);
-
-		return Response.created(UriBuilder.fromResource(DefaultExplorationResource.class).path(exploration.getId()).build())
-			.entity(explorationMapper.toExplorationData(exploration)).build();
+			return Response.created(UriBuilder.fromResource(DefaultExplorationResource.class).path(exploration.getId()).build())
+				.entity(explorationMapper.toExplorationData(exploration)).build();
+		} else {
+			return Response.status(Response.Status.CONFLICT).entity("The report already exists").build();
+		}
 	}
 
 	@PUT
@@ -273,15 +277,20 @@ public class DefaultExplorationResource implements ExplorationResource {
 	)
 	@ApiResponses({
 		@ApiResponse(code = 400, message = "Unknown exploration: {id}"),
-		@ApiResponse(code = 430, message = SecurityExceptionMapper.FORBIDDEN_MESSAGE)
+		@ApiResponse(code = 409, message = "The report already exists")
 	})
 	@Override
 	public Response edit(@PathParam("id") String id, ExplorationEditionData explorationEditionData) {
+
 		Exploration exploration = this.service.getExploration(id);
 
-		Patient patient = createPatient(explorationEditionData);
+		if (!explorationEditionData.getReport().getReportN().equals(exploration.getCurrentReport().getReportN())) {
+			if (reportService.existsReportNBy(explorationEditionData.getReport().getReportN())) {
+				return Response.status(Response.Status.CONFLICT).entity("The report already exists").build();
+			}
+		}
 
-		exploration = this.service.getExploration(id);
+		Patient patient = createPatient(explorationEditionData);
 		exploration.setPatient(patient);
 
 		this.service.edit(exploration);
@@ -334,15 +343,20 @@ public class DefaultExplorationResource implements ExplorationResource {
 	)
 	@ApiResponses({
 		@ApiResponse(code = 400, message = "Unknown exploration: {id}"),
+		@ApiResponse(code = 409, message = "The report already exists"),
 		@ApiResponse(code = 430, message = SecurityExceptionMapper.FORBIDDEN_MESSAGE)
 	})
 	@Override
 	public Response recover(@PathParam("id") String id) {
 		Exploration exploration = this.service.getExplorationDeleted(id);
+
+		if (reportService.existsReportNBy(exploration.getCurrentReport().getReportN())) {
+			return Response.status(Response.Status.CONFLICT).entity("The report already exists").build();
+		}
+
 		this.service.recover(exploration);
 		return Response.ok().build();
 	}
-
 
 	private Patient createPatient(ExplorationEditionData explorationEditionData) {
 		Patient patient = null;
