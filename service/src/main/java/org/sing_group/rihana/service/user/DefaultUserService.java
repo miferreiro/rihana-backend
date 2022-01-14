@@ -93,8 +93,12 @@ public class DefaultUserService implements UserService {
 		if (!(this.permissionService.hasPermission(
 				loginLogged,
 				"USER_MANAGEMENT",
-				"EDIT") &&
+				"EDIT_OWN") &&
 			loginLogged.equals(user.getLogin())) &&
+			!this.permissionService.hasPermission(
+				loginLogged,
+				"USER_MANAGEMENT",
+				"EDIT") &&
 			!this.permissionService.isAdmin(loginLogged)
 		) {
 			throw new EJBAccessException("Insufficient privileges");
