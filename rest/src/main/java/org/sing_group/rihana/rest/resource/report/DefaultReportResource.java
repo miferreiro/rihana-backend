@@ -43,6 +43,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.sing_group.rihana.rest.entity.mapper.spi.ReportMapper;
+import org.sing_group.rihana.rest.entity.patient.PatientData;
 import org.sing_group.rihana.rest.entity.report.ReportData;
 import org.sing_group.rihana.rest.filter.CrossDomain;
 import org.sing_group.rihana.rest.resource.spi.report.ReportResource;
@@ -89,6 +90,18 @@ public class DefaultReportResource implements ReportResource {
 	) {
 		return Response
 			.ok(this.reportMapper.toReportData(this.service.get(id)))
+			.build();
+	}
+
+	@GET
+	@Path("reportN/{reportN}")
+	@ApiOperation(
+		value = "Return the data of a report with the identifier of report.", response = PatientData.class, code = 200
+	)
+	@Override
+	public Response getReportBy(@PathParam("reportN") String reportN) {
+		return Response
+			.ok(this.reportMapper.toReportData(this.service.getReportBy(reportN)))
 			.build();
 	}
 }

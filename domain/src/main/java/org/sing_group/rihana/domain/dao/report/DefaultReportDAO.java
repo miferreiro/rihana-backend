@@ -62,6 +62,13 @@ public class DefaultReportDAO implements ReportDAO {
 	}
 
 	@Override
+	public Report getReportBy(String reportN) {
+		return this.em
+			.createQuery("SELECT r FROM Report r WHERE r.reportN=:reportN AND r.deleted=0 AND r.exploration.deleted=0", Report.class)
+			.setParameter("reportN", reportN).getSingleResult();
+	}
+
+	@Override
 	public boolean existsReportNBy(String reportN) {
 		return this.em
 			.createQuery("SELECT r FROM Report r WHERE r.reportN=:reportN AND r.deleted=0 AND r.exploration.deleted=0", Report.class)

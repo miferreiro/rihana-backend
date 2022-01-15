@@ -31,6 +31,8 @@ public interface ReportService {
 
 	Report get(String id);
 
+	Report getReportBy(String reportN);
+
 	boolean existsReportNBy(String reportN);
 
 	Report create(Report report);

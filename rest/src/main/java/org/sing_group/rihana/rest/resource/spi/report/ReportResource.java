@@ -29,4 +29,6 @@ import javax.ws.rs.core.Response;
 public interface ReportResource {
 
 	Response getReport(String id);
+
+	Response getReportBy(String reportN);
 }

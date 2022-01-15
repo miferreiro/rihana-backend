@@ -30,6 +30,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.sing_group.rihana.domain.dao.spi.report.ReportDAO;
+import org.sing_group.rihana.domain.entities.patient.Patient;
 import org.sing_group.rihana.domain.entities.report.Report;
 import org.sing_group.rihana.service.spi.acl.permission.PermissionService;
 import org.sing_group.rihana.service.spi.report.ReportService;
@@ -61,6 +62,22 @@ public class DefaultReportService implements ReportService {
 		}
 
 		return reportDAO.get(id);
+	}
+
+	@Override
+	public Report getReportBy(String reportN) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+			loginLogged,
+			"REPORT_MANAGEMENT",
+			"SHOW_CURRENT") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
+		return reportDAO.getReportBy(reportN);
 	}
 
 	@Override
