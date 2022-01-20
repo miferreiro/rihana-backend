@@ -101,7 +101,7 @@ public class DefaultExplorationService implements ExplorationService {
 
 	@Override
 	public Stream<Exploration> listExplorationsByUserInDateRange(int page, int pageSize, User user, Date initialDate,
-																 Date finalDate, Set<SignType> signTypes) {
+																 Date finalDate, Set<SignType> signTypes, String operator) {
 
 		String loginLogged = context.getCallerPrincipal().getName();
 		if (!this.permissionService.hasPermission(
@@ -117,7 +117,8 @@ public class DefaultExplorationService implements ExplorationService {
 			throw new EJBAccessException("Insufficient privileges");
 		}
 
-		return explorationDao.listExplorationsByUserInDateRange(page, pageSize, user, initialDate, finalDate, signTypes);
+		return explorationDao.listExplorationsByUserInDateRange(page, pageSize, user, initialDate, finalDate, signTypes,
+			operator);
 	}
 
 	@Override
@@ -142,7 +143,7 @@ public class DefaultExplorationService implements ExplorationService {
 
 	@Override
 	public int countExplorationsByUserAndSignTypesInDateRange(User user, Date initialDate, Date finalDate,
-															  Set<SignType> signTypes) {
+															  Set<SignType> signTypes, String operator) {
 
 		String loginLogged = context.getCallerPrincipal().getName();
 		if (!this.permissionService.hasPermission(
@@ -158,7 +159,8 @@ public class DefaultExplorationService implements ExplorationService {
 			throw new EJBAccessException("Insufficient privileges");
 		}
 
-		return explorationDao.countExplorationsByUserAndSignTypesInDateRange(user, initialDate, finalDate, signTypes);
+		return explorationDao.countExplorationsByUserAndSignTypesInDateRange(user, initialDate, finalDate, signTypes,
+			operator);
 	}
 
 	@Override

@@ -42,13 +42,13 @@ public interface ExplorationService {
 	Stream<Exploration> listExplorationsByUserInDateRange(int page, int pageSize,
 														  User user,
 														  Date initialDate, Date finalDate,
-														  Set<SignType> signTypes);
+														  Set<SignType> signTypes, String operator);
 
 	int countAllExplorations();
 
 	int countExplorationsByUserAndSignTypesInDateRange(User user,
 													   Date initialDate, Date finalDate,
-													   Set<SignType> signTypes);
+													   Set<SignType> signTypes, String operator);
 
 	Exploration create(Exploration exploration);
 

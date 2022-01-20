@@ -92,8 +92,8 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 	@Override
 	public Stream<Exploration> listExplorationsByUserInDateRange(Integer page, Integer pageSize, User user,
 																 Date initialDate, Date finalDate,
-																 Set<SignType> signTypes) {
-		return this.listExplorations(page, pageSize, user, initialDate, finalDate, signTypes).stream();
+																 Set<SignType> signTypes, String operator) {
+		return this.listExplorations(page, pageSize, user, initialDate, finalDate, signTypes, operator).stream();
 	}
 
 	@Override
@@ -103,8 +103,8 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 
 	@Override
 	public int countExplorationsByUserAndSignTypesInDateRange(User user, Date initialDate, Date finalDate,
-															  Set<SignType> signTypes) {
-		return this.listExplorations(null,null, user, initialDate, finalDate, signTypes).size();
+															  Set<SignType> signTypes, String operator) {
+		return this.listExplorations(null,null, user, initialDate, finalDate, signTypes, operator).size();
 	}
 
 	@Override
@@ -130,7 +130,7 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 	}
 
 	private List listExplorations(Integer page, Integer pageSize, User user, Date initialDate, Date finalDate,
-								  Set<SignType> signTypes) {
+								  Set<SignType> signTypes, String operator) {
 
 		String roleLogged = userDao.get(context.getCallerPrincipal().getName()).getRole().getName();
 
@@ -168,7 +168,7 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 					.append(querySignType)
 					.append(")");
 				if (count + 1 < signTypes.size()){
-					stringBuilder.append(" AND ");
+					stringBuilder.append(" " + operator + " ");
 				}
 		  	}
 			stringBuilder.append(") ");

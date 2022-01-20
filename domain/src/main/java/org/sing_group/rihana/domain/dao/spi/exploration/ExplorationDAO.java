@@ -37,12 +37,13 @@ public interface ExplorationDAO {
 	Exploration getExplorationDeleted(String id);
 
 	Stream<Exploration> listExplorationsByUserInDateRange(Integer page, Integer pageSize, User user,
-														  Date initialDate, Date finalDate, Set<SignType> signTypes);
+														  Date initialDate, Date finalDate, Set<SignType> signTypes,
+														  String operator);
 
 	int countAllExplorations();
 
 	int countExplorationsByUserAndSignTypesInDateRange(User user, Date initialDate, Date finalDate,
-													   Set<SignType> signTypes);
+													   Set<SignType> signTypes, String operator);
 
 	Exploration create(Exploration exploration);
 

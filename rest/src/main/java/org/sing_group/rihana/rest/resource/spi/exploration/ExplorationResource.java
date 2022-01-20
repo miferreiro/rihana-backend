@@ -22,8 +22,6 @@
  */
 package org.sing_group.rihana.rest.resource.spi.exploration;
 
-import java.util.Set;
-
 import javax.ejb.Local;
 import javax.ws.rs.core.Response;
 
@@ -36,7 +34,7 @@ public interface ExplorationResource {
 
 	Response listExplorations(String userId, int page, int pageSize,
 							  String initialDateStr, String finalDateStr,
-							  Set<String> signTypes);
+							  String signTypes);
 
 	Response create(ExplorationEditionData explorationEditionData);
 

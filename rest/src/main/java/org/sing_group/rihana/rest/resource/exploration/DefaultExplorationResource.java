@@ -25,6 +25,7 @@ package org.sing_group.rihana.rest.resource.exploration;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.MediaType.APPLICATION_XML;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -190,13 +191,14 @@ public class DefaultExplorationResource implements ExplorationResource {
 		@QueryParam("user") String userId,
 		@QueryParam("page") int page, @QueryParam("pageSize") int pageSize,
 		@QueryParam("initialDate") String initialDateStr, @QueryParam("finalDate") String finalDateStr,
-		@QueryParam("signType") Set<String> signTypes
+		@QueryParam("signType") String signTypes
 	) {
 		User user = null;
 		int countExplorations;
 		Set<SignType> signTypeSet;
 		Date initialDate = null;
 		Date finalDate = null;
+		String operator = "AND";
 
 		if (initialDateStr != null && !initialDateStr.isEmpty() && initialDateStr != "") {
 			initialDate = dateFormatter.getDateInitialDayTime(initialDateStr);
@@ -206,30 +208,42 @@ public class DefaultExplorationResource implements ExplorationResource {
 			finalDate = dateFormatter.getDateFinalDayTime(finalDateStr);
 		}
 
-		if (signTypes == null || signTypes.size() == 0) {
+		if (signTypes == null || signTypes.equals("")) {
 			signTypeSet = new HashSet<>();
 		} else {
-			signTypeSet = signTypes.stream().map(signType -> this.signTypeService.get(signType)).collect(Collectors.toSet());
+			if (signTypes.contains(",")) {
+				operator = "OR";
+				signTypeSet = Arrays.stream(signTypes.split(","))
+					.map(signType -> this.signTypeService.get(signType)).collect(Collectors.toSet());
+			} else {
+				operator = "AND";
+				signTypeSet = Arrays.stream(signTypes.split(";"))
+					.map(signType -> this.signTypeService.get(signType)).collect(Collectors.toSet());
+			}
 		}
 
 		String loginLogged = context.getCallerPrincipal().getName();
 		if (userId == null || userId.equals("")) {
-			countExplorations = this.service.countExplorationsByUserAndSignTypesInDateRange(null, initialDate, finalDate, signTypeSet);
+			countExplorations = this.service.countExplorationsByUserAndSignTypesInDateRange(null, initialDate,
+				finalDate, signTypeSet, operator);
 		} else {
 			user = this.userService.get(userId);
-			countExplorations = this.service.countExplorationsByUserAndSignTypesInDateRange(user, initialDate, finalDate, signTypeSet);
+			countExplorations = this.service.countExplorationsByUserAndSignTypesInDateRange(user, initialDate,
+				finalDate, signTypeSet, operator);
 		}
 
 
 		if (this.permissionService.hasPermission(loginLogged, "EXPLORATION_MANAGEMENT", "RETRIEVE") ||
 			this.permissionService.isAdmin(loginLogged)) {
 			return Response.ok(
-				this.service.listExplorationsByUserInDateRange(page, pageSize, null, initialDate, finalDate, signTypeSet)
+				this.service.listExplorationsByUserInDateRange(page, pageSize, null, initialDate, finalDate,
+						signTypeSet, operator)
 					.map(this.explorationMapper::toExplorationAdminData).toArray(ExplorationAdminData[]::new)
 			).header("X-Pagination-Total-Items", countExplorations).build();
 		} else {
 			return Response.ok(
-				this.service.listExplorationsByUserInDateRange(page, pageSize, user, initialDate, finalDate, signTypeSet)
+				this.service.listExplorationsByUserInDateRange(page, pageSize, user, initialDate, finalDate,
+						signTypeSet, operator)
 					.map(this.explorationMapper::toExplorationData).toArray(ExplorationData[]::new)
 			).header("X-Pagination-Total-Items", countExplorations).build();
 		}
