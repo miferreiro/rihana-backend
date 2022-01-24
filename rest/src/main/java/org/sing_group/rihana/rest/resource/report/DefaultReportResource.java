@@ -51,15 +51,15 @@ import org.sing_group.rihana.service.spi.report.ReportService;
 
 @Path("report")
 @Produces({
-	APPLICATION_JSON, APPLICATION_XML
+	APPLICATION_JSON + ";charset=utf-8", APPLICATION_XML + ";charset=utf-8"
 })
 @Consumes({
-	APPLICATION_JSON, APPLICATION_XML
+	APPLICATION_JSON + ";charset=utf-8", APPLICATION_XML + ";charset=utf-8"
 })
 @Api(value = "report")
 @Stateless
 @Default
-@CrossDomain(allowedHeaders = "X-Pagination-Total-Items")
+@CrossDomain(allowedHeaders = {"X-Pagination-Total-Items", "charset"})
 public class DefaultReportResource implements ReportResource {
 
 	@Inject

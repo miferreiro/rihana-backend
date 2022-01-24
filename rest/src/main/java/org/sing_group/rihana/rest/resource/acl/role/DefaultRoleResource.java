@@ -57,15 +57,15 @@ import org.sing_group.rihana.service.spi.acl.role.RoleService;
 
 @Path("role")
 @Produces({
-	APPLICATION_JSON, APPLICATION_XML
+	APPLICATION_JSON + ";charset=utf-8", APPLICATION_XML + ";charset=utf-8"
 })
 @Consumes({
-	APPLICATION_JSON, APPLICATION_XML
+	APPLICATION_JSON + ";charset=utf-8", APPLICATION_XML + ";charset=utf-8"
 })
 @Api(value = "role")
 @Stateless
 @Default
-@CrossDomain
+@CrossDomain(allowedHeaders = "charset")
 public class DefaultRoleResource implements RoleResource {
 
 	@Inject

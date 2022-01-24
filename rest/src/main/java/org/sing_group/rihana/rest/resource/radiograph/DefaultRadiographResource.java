@@ -56,15 +56,15 @@ import org.sing_group.rihana.service.spi.radiograph.RadiographService;
 
 @Path("radiograph")
 @Produces({
-	APPLICATION_JSON, APPLICATION_XML
+	APPLICATION_JSON + ";charset=utf-8", APPLICATION_XML + ";charset=utf-8"
 })
 @Consumes({
-	APPLICATION_JSON, APPLICATION_XML
+	APPLICATION_JSON + ";charset=utf-8", APPLICATION_XML + ";charset=utf-8"
 })
 @Api(value = "radiograph")
 @Stateless
 @Default
-@CrossDomain(allowedHeaders = "X-Pagination-Total-Items")
+@CrossDomain(allowedHeaders = {"X-Pagination-Total-Items", "charset"})
 public class DefaultRadiographResource implements RadiographResource {
 
 	@Inject

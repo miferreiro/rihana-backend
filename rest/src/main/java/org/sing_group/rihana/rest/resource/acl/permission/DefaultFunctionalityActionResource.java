@@ -55,15 +55,15 @@ import org.sing_group.rihana.service.spi.acl.permission.FunctionalityActionServi
 
 @Path("functionalityaction")
 @Produces({
-	APPLICATION_JSON, APPLICATION_XML
+	APPLICATION_JSON + ";charset=utf-8", APPLICATION_XML + ";charset=utf-8"
 })
 @Consumes({
-	APPLICATION_JSON, APPLICATION_XML
+	APPLICATION_JSON + ";charset=utf-8", APPLICATION_XML + ";charset=utf-8"
 })
 @Api(value = "functionalityaction")
 @Stateless
 @Default
-@CrossDomain
+@CrossDomain(allowedHeaders = "charset")
 public class DefaultFunctionalityActionResource implements FunctionalityActionResource {
 
 	@Inject

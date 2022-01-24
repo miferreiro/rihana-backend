@@ -66,15 +66,15 @@ import org.sing_group.rihana.service.spi.user.UserService;
 
 @Path("sign")
 @Produces({
-	APPLICATION_JSON, APPLICATION_XML
+	APPLICATION_JSON + ";charset=utf-8", APPLICATION_XML + ";charset=utf-8"
 })
 @Consumes({
-	APPLICATION_JSON, APPLICATION_XML
+	APPLICATION_JSON + ";charset=utf-8", APPLICATION_XML + ";charset=utf-8"
 })
 @Api(value = "sign")
 @Stateless
 @Default
-@CrossDomain
+@CrossDomain(allowedHeaders = "charset")
 public class DefaultSignResource implements SignResource {
 
 	@Inject

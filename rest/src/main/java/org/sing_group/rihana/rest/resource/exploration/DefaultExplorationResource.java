@@ -94,15 +94,15 @@ import org.sing_group.rihana.service.spi.user.UserService;
 
 @Path("exploration")
 @Produces({
-	APPLICATION_JSON, APPLICATION_XML
+	APPLICATION_JSON + ";charset=utf-8", APPLICATION_XML + ";charset=utf-8"
 })
 @Consumes({
-	APPLICATION_JSON, APPLICATION_XML
+	APPLICATION_JSON + ";charset=utf-8", APPLICATION_XML + ";charset=utf-8"
 })
 @Api(value = "exploration")
 @Stateless
 @Default
-@CrossDomain(allowedHeaders = "X-Pagination-Total-Items")
+@CrossDomain(allowedHeaders = {"X-Pagination-Total-Items", "charset"})
 public class DefaultExplorationResource implements ExplorationResource {
 
 	@Resource

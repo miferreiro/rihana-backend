@@ -56,15 +56,15 @@ import org.sing_group.rihana.service.spi.acl.action.ActionService;
 
 @Path("action")
 @Produces({
-	APPLICATION_JSON, APPLICATION_XML
+	APPLICATION_JSON + ";charset=utf-8", APPLICATION_XML + ";charset=utf-8"
 })
 @Consumes({
-	APPLICATION_JSON, APPLICATION_XML
+	APPLICATION_JSON + ";charset=utf-8", APPLICATION_XML + ";charset=utf-8"
 })
 @Api(value = "action")
 @Stateless
 @Default
-@CrossDomain
+@CrossDomain(allowedHeaders = "charset")
 public class DefaultActionResource implements ActionResource {
 
 	@Inject
