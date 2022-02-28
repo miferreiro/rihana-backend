@@ -41,6 +41,10 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 
 import org.sing_group.rihana.domain.entities.acl.role.Role;
@@ -48,6 +52,8 @@ import org.sing_group.rihana.domain.entities.exploration.Exploration;
 
 @Entity
 @Table(name = "user")
+@XmlRootElement(name = "user")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -61,6 +67,7 @@ public class User implements Serializable {
 	@ManyToOne(optional = false)
 	private Role role;
 
+	@XmlTransient
 	@OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Exploration> explorations = new HashSet<>();
 

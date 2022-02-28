@@ -46,6 +46,9 @@ import java.util.stream.Stream;
 import javax.annotation.Resource;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
 import org.sing_group.rihana.domain.entities.exploration.Exploration;
 import org.sing_group.rihana.domain.entities.radiograph.Radiograph;
@@ -67,6 +70,28 @@ public class DefaultExplorationStorage implements ExplorationStorage {
 
 	public DefaultExplorationStorage(String path) {
 		this.path = path;
+	}
+
+	@Override
+	public String storeExplorationXml(Exploration exploration) {
+		Path file = getExplorationFolderForId(exploration.getId());
+
+		file = file.resolve(exploration.getId() + ".xml");
+
+		if (exists(file)) {
+			file.toFile().delete();
+		}
+
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(Exploration.class);
+			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+			jaxbMarshaller.marshal(exploration, file.toFile());
+
+		} catch (JAXBException e) {
+			throw new RuntimeException(e);
+		}
+		return file.toString();
 	}
 
 	@Override

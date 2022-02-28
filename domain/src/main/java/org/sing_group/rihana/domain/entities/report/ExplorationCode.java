@@ -33,9 +33,15 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "explorationcode")
+@XmlRootElement(name = "explorationcode")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ExplorationCode implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -46,9 +52,11 @@ public class ExplorationCode implements Serializable {
 	@Column(name = "description")
 	private String description;
 
+	@XmlTransient
 	@OneToMany(mappedBy = "explorationCode", fetch = FetchType.LAZY, orphanRemoval = true)
 	private Set<RequestedExploration> requestedExplorations = new HashSet<>();
 
+	@XmlTransient
 	@OneToMany(mappedBy = "explorationCode", fetch = FetchType.LAZY, orphanRemoval = true)
 	private Set<PerformedExploration> performedExplorations = new HashSet<>();
 

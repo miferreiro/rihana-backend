@@ -35,12 +35,18 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.sing_group.rihana.domain.entities.acl.permission.Permission;
 import org.sing_group.rihana.domain.entities.user.User;
 
 @Entity
 @Table(name = "role")
+@XmlRootElement(name = "role")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Role implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -54,9 +60,11 @@ public class Role implements Serializable {
 	@Column(name = "description", nullable = false)
 	private String description;
 
+	@XmlTransient
 	@OneToMany(mappedBy = "role", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<User> users = new HashSet<>();
 
+	@XmlTransient
 	@OneToMany(mappedBy = "id.roleId", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Permission> permissions = new HashSet<>();
 

@@ -277,6 +277,8 @@ public class DefaultExplorationResource implements ExplorationResource {
 			createReport(explorationEditionData, exploration);
 			createRadiographs(explorationEditionData, exploration);
 
+			this.explorationStorage.storeExplorationXml(exploration);
+
 			return Response.created(UriBuilder.fromResource(DefaultExplorationResource.class).path(exploration.getId()).build())
 				.entity(explorationMapper.toExplorationData(exploration)).build();
 		} else {
@@ -330,6 +332,8 @@ public class DefaultExplorationResource implements ExplorationResource {
 		}
 
 		createRadiographs(explorationEditionData, exploration);
+
+		this.explorationStorage.storeExplorationXml(exploration);
 
 		return Response.ok(this.explorationMapper.toExplorationData(exploration)).build();
 	}

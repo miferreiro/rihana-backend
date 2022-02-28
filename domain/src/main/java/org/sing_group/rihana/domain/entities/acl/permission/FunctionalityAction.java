@@ -37,12 +37,17 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.sing_group.rihana.domain.entities.acl.action.Action;
 import org.sing_group.rihana.domain.entities.acl.functionality.Functionality;
 
 @Entity
 @Table(name = "functionalityaction")
+@XmlRootElement(name = "functionalityaction")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class FunctionalityAction implements Serializable {
 	private static final long serialVersionUID = 1L;
 

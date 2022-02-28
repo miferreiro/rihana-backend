@@ -43,6 +43,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.persistence.Version;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.sing_group.rihana.domain.entities.Identifiable;
 import org.sing_group.rihana.domain.entities.patient.Patient;
@@ -54,6 +57,8 @@ import org.sing_group.rihana.domain.entities.user.User;
 @Table(name = "exploration", uniqueConstraints = @UniqueConstraint(columnNames = {
 	"title"
 }))
+@XmlRootElement(name = "exploration")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Exploration implements Identifiable {
 
 	@Id

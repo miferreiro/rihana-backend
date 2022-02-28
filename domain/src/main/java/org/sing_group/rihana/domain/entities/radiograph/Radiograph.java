@@ -39,6 +39,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.sing_group.rihana.domain.entities.Identifiable;
 import org.sing_group.rihana.domain.entities.exploration.Exploration;
@@ -46,6 +50,8 @@ import org.sing_group.rihana.domain.entities.sign.Sign;
 
 @Entity
 @Table(name = "radiograph")
+@XmlRootElement(name = "radiograph")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Radiograph implements Identifiable {
 
 	@Id
@@ -62,6 +68,7 @@ public class Radiograph implements Identifiable {
 	@Column(name = "observations")
 	private String observations;
 
+	@XmlTransient
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "exploration_id", referencedColumnName = "id")
 	private Exploration exploration;

@@ -35,11 +35,17 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.sing_group.rihana.domain.entities.Identifiable;
 
 @Entity
 @Table(name = "signlocation")
+@XmlRootElement(name = "signlocation")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class SignLocation implements Identifiable {
 
 	@Id
@@ -61,6 +67,7 @@ public class SignLocation implements Identifiable {
 	@Column(name = "creation_date", columnDefinition = "DATETIME(3)")
 	private Timestamp creationDate;
 
+	@XmlTransient
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Sign sign;
 

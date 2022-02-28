@@ -35,11 +35,16 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.sing_group.rihana.domain.entities.acl.permission.FunctionalityAction;
 
 @Entity
 @Table(name = "functionality")
+@XmlRootElement(name = "functionality")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Functionality implements Serializable {
 	private static final long serialVersionUID = 1L;
 

@@ -41,12 +41,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.sing_group.rihana.domain.entities.Identifiable;
 import org.sing_group.rihana.domain.entities.exploration.Exploration;
 
 @Entity
 @Table(name = "report")
+@XmlRootElement(name = "report")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Report implements Identifiable {
 
 	@Id
@@ -80,13 +86,16 @@ public class Report implements Identifiable {
 	@Column(name = "conclusions")
 	private String conclusions;
 
+	@XmlTransient
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "exploration_id", referencedColumnName = "id")
 	private Exploration exploration;
 
+	@XmlTransient
 	@OneToMany(mappedBy = "report", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<RequestedExploration> requestedExplorations = new HashSet<>();
 
+	@XmlTransient
 	@OneToMany(mappedBy = "report", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<PerformedExploration> performedExplorations = new HashSet<>();
 

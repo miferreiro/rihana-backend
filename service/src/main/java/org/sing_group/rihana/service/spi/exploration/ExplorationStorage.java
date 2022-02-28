@@ -31,6 +31,8 @@ import org.sing_group.rihana.domain.entities.radiograph.Radiograph;
 
 public interface ExplorationStorage {
 
+	String storeExplorationXml(Exploration exploration);
+
 	String storeRadiograph(Radiograph radiograph, InputStream data);
 
 	FileInputStream retrieveRadiograph(Radiograph radiograph);

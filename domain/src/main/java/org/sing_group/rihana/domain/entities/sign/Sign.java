@@ -35,12 +35,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.sing_group.rihana.domain.entities.Identifiable;
 import org.sing_group.rihana.domain.entities.radiograph.Radiograph;
 
 @Entity
 @Table(name = "sign")
+@XmlRootElement(name = "sign")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Sign implements Identifiable {
 
 	@Id
@@ -51,6 +57,7 @@ public class Sign implements Identifiable {
 	@JoinColumn(name = "signtype_code")
 	private SignType type;
 
+	@XmlTransient
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "radiograph_id", referencedColumnName = "id")
 	private Radiograph radiograph;

@@ -34,9 +34,15 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
 @Table(name = "signtype")
+@XmlRootElement(name = "signtype")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class SignType implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -54,12 +60,12 @@ public class SignType implements Serializable {
 	private int target;
 
 	@Column(name = "primaryColor", length = 8, nullable = false)
-
-					private String primaryColor;
+	private String primaryColor;
 
 	@Column(name = "secondaryColor", length = 8, nullable = false)
 	private String secondaryColor;
 
+	@XmlTransient
 	@OneToMany(mappedBy = "type", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Sign> signs = new HashSet<>();
 

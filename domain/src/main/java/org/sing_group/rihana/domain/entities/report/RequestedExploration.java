@@ -33,11 +33,17 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.sing_group.rihana.domain.entities.Identifiable;
 
 @Entity
 @Table(name = "requestedexploration")
+@XmlRootElement(name = "requestedexploration")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class RequestedExploration implements Identifiable {
 
 	@Id
@@ -47,6 +53,7 @@ public class RequestedExploration implements Identifiable {
 	@Column(name = "date")
 	private Timestamp date;
 
+	@XmlTransient
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "report_id", referencedColumnName = "id")
 	private Report report;

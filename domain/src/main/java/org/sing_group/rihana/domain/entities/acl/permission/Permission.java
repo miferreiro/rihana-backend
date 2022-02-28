@@ -33,11 +33,16 @@ import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.sing_group.rihana.domain.entities.acl.role.Role;
 
 @Entity
 @Table(name = "permission")
+@XmlRootElement(name = "permission")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Permission implements Serializable {
 	private static final long serialVersionUID = 1L;
 
