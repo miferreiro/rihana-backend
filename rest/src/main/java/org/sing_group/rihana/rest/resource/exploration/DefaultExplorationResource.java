@@ -265,7 +265,7 @@ public class DefaultExplorationResource implements ExplorationResource {
 
 			Patient patient = createPatient(explorationEditionData);
 
-			String title = "Exploration " + (this.service.countAllExplorations() + 1);
+			String title = "Exploration " + (this.service.getLastTitleExploration() + 1);
 			Exploration exploration = new Exploration(
 				title,
 				explorationEditionData.getExplorationDate(),

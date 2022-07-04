@@ -36,6 +36,8 @@ public interface ExplorationDAO {
 
 	Exploration getExplorationDeleted(String id);
 
+	int getLastTitleExploration();
+
 	Stream<Exploration> listExplorationsByUserInDateRange(Integer page, Integer pageSize, User user,
 														  Date initialDate, Date finalDate, Set<SignType> signTypes,
 														  String operator);

@@ -100,6 +100,22 @@ public class DefaultExplorationService implements ExplorationService {
 	}
 
 	@Override
+	public int getLastTitleExploration() {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+			loginLogged,
+			"EXPLORATION_MANAGEMENT",
+			"SHOW_ALL") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
+		return explorationDao.getLastTitleExploration();
+	}
+
+	@Override
 	public Stream<Exploration> listExplorationsByUserInDateRange(int page, int pageSize, User user, Date initialDate,
 																 Date finalDate, Set<SignType> signTypes, String operator) {
 

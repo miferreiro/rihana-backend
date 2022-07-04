@@ -22,7 +22,9 @@
  */
 package org.sing_group.rihana.domain.dao.exploration;
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -87,6 +89,26 @@ public class DefaultExplorationDAO implements ExplorationDAO {
 	public Exploration getExplorationDeleted(String id) {
 		return this.dh.get(id).filter(Exploration::isDeleted)
 			.orElseThrow(() -> new IllegalArgumentException("Unknown deleted exploration: " + id));
+	}
+
+	@Override
+	public int getLastTitleExploration() {
+
+		Query query = this.em.createQuery("SELECT e.title FROM Exploration e", String.class);
+		List<String> explorations = query.getResultList();
+		explorations.replaceAll(e -> e.split(" ")[1]);
+
+		Set<Integer> explorationTitles = new HashSet<>(explorations.size());
+
+		for(String exploration : explorations) {
+			explorationTitles.add(Integer.parseInt(exploration));
+		}
+
+		if (explorations.size() == 0) {
+			return 0;
+		} else {
+			return Collections.max(explorationTitles);
+		}
 	}
 
 	@Override

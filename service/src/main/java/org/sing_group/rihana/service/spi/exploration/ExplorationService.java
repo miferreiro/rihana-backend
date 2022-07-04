@@ -39,6 +39,8 @@ public interface ExplorationService {
 
 	Exploration getExplorationDeleted(String id);
 
+	int getLastTitleExploration();
+
 	Stream<Exploration> listExplorationsByUserInDateRange(int page, int pageSize,
 														  User user,
 														  Date initialDate, Date finalDate,
