@@ -74,40 +74,67 @@ public class DefaultExplorationStorage implements ExplorationStorage {
 
 	@Override
 	public String storeExplorationXml(Exploration exploration) {
-		Path file = getExplorationFolderForId(exploration.getId());
+		Path filePath = getExplorationFolderForId(exploration.getId());
 
-		file = file.resolve(exploration.getId() + ".xml");
+		File folder = filePath.toFile();
 
-		if (exists(file)) {
-			file.toFile().delete();
+		folder.setExecutable(true, false);
+		folder.setReadable(true, false);
+		folder.setWritable(true, false);
+
+		filePath = filePath.resolve(exploration.getId() + ".xml");
+
+		if (exists(filePath)) {
+			filePath.toFile().delete();
 		}
+
+		File file = filePath.toFile();
 
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(Exploration.class);
 			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-			jaxbMarshaller.marshal(exploration, file.toFile());
+			jaxbMarshaller.marshal(exploration, file);
 
 		} catch (JAXBException e) {
 			throw new RuntimeException(e);
 		}
+
+		file.setExecutable(true, false);
+		file.setReadable(true, false);
+		file.setWritable(true, false);
+
 		return file.toString();
 	}
 
 	@Override
 	public String storeRadiograph(Radiograph radiograph, InputStream data) {
-		Path file = getExplorationFolderForId(radiograph.getExploration().getId());
+		Path filePath = getExplorationFolderForId(radiograph.getExploration().getId());
 
-		file = file.resolve(radiograph.getType().name() + ".png");
+		File folder = filePath.toFile();
 
-		if (exists(file)) {
-			throw new IllegalArgumentException("File already exists: " + file);
+		folder.setExecutable(true, false);
+		folder.setReadable(true, false);
+		folder.setWritable(true, false);
+
+		filePath = filePath.resolve(radiograph.getType().name() + ".png");
+
+		if (exists(filePath)) {
+			throw new IllegalArgumentException("File already exists: " + filePath);
 		}
+
+		File file = filePath.toFile();
+
 		try {
-			copy(data, file);
+			copy(data, file.toPath());
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+
+		file.setExecutable(true, false);
+		file.setReadable(true, false);
+		file.setWritable(true, false);
+
 		return file.toString();
 	}
 
@@ -173,9 +200,18 @@ public class DefaultExplorationStorage implements ExplorationStorage {
 					.resolve("backup")
 					.resolve(exploration.getId());
 
+				File folder;
+
 				if (!exists(backupPath) || !isDirectory(backupPath)) {
-					new File(backupPath.toString()).mkdirs();
+					folder = new File(backupPath.toString());
+					folder.mkdirs();
+				} else {
+					folder = filePath.toFile();
 				}
+
+				folder.setExecutable(true, false);
+				folder.setReadable(true, false);
+				folder.setWritable(true, false);
 
 				backupPath = backupPath.resolve(new SimpleDateFormat("'" + radiograph.getType().name() + "'-yyyyMMddHHmm'.png'")
 					.format(new Date()));
@@ -185,6 +221,12 @@ public class DefaultExplorationStorage implements ExplorationStorage {
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
+
+				File file = filePath.toFile();
+
+				file.setExecutable(true, false);
+				file.setReadable(true, false);
+				file.setWritable(true, false);
 
 				radiograph.setSource(backupPath.toString());
 			}
