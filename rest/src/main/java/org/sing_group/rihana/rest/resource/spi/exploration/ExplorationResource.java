@@ -32,6 +32,8 @@ public interface ExplorationResource {
 
 	Response getExploration(String id);
 
+	Response getExplorationDeleted(String id);
+
 	Response listExplorations(String userId, int page, int pageSize,
 							  String initialDateStr, String finalDateStr,
 							  String signTypes);
