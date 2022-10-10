@@ -295,7 +295,7 @@ VALUES
     ('PLE', 'Pleural effusion', 'Pleural effusion', '1500', '#F6A9FF', '#5609A9', 0, null),
     ('PNE', 'Pneumothorax', 'Pneumothorax', '1500', '#A1887F', '#4E342E', 0, null),
     ('RED', 'Redistribution', 'Redistribution', '1500', '#FFC37D', '#843E04', 0, null),
-    ('NOF', 'No findings', 'No findings', '1500', '#000000', '#FFFFFF', 0, null),
+    ('NOP', 'Nonpathological', 'Nonpathological', '1500', '#000000', '#FFFFFF', 0, null),
     ('OTH', 'Other', 'Other findings', '1500', '#D0BDF6', '#6F44C7', 0, null);
 
 --
@@ -339,7 +339,7 @@ VALUES
     ('34', 'CAR', '14', '100', '100', '2018-12-12 23:00:00', '2020-02-24 17:21:58', 0, null),
     ('35', 'RED', '15', '100', '100', '2018-12-12 23:00:00', '2020-02-24 17:21:58', 0, null),
     ('36', 'CON', '15', '100', '100', '2018-12-12 23:00:00', '2020-02-24 17:21:58', 0, null),
-    ('37', 'NOF', '16', '100', '100', '2018-12-12 23:00:00', '2020-02-24 17:21:58', 0, null);
+    ('37', 'NOP', '16', '100', '100', '2018-12-12 23:00:00', '2020-02-24 17:21:58', 0, null);
 
 --
 -- Data for table `Sign location`
