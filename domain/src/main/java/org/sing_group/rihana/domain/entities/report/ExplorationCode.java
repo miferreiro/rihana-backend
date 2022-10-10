@@ -37,6 +37,9 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import org.sing_group.rihana.domain.entities.TimestampAdapter;
 
 @Entity
 @Table(name = "explorationcode")
@@ -64,6 +67,7 @@ public class ExplorationCode implements Serializable {
 	private boolean deleted;
 
 	@Column(name = "delete_date", columnDefinition = "DATETIME(3)")
+	@XmlJavaTypeAdapter(TimestampAdapter.class)
 	private Timestamp deleteDate;
 
 	ExplorationCode() { }

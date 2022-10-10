@@ -39,8 +39,10 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.sing_group.rihana.domain.entities.Identifiable;
+import org.sing_group.rihana.domain.entities.TimestampAdapter;
 
 @Entity
 @Table(name = "signlocation")
@@ -65,6 +67,7 @@ public class SignLocation implements Identifiable {
 	private int height;
 
 	@Column(name = "creation_date", columnDefinition = "DATETIME(3)")
+	@XmlJavaTypeAdapter(TimestampAdapter.class)
 	private Timestamp creationDate;
 
 	@XmlTransient

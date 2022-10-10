@@ -39,8 +39,10 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.sing_group.rihana.domain.entities.Identifiable;
+import org.sing_group.rihana.domain.entities.TimestampAdapter;
 import org.sing_group.rihana.domain.entities.radiograph.Radiograph;
 
 @Entity
@@ -72,16 +74,19 @@ public class Sign implements Identifiable {
 	private Integer contrast;
 
 	@Column(name = "creation_date", columnDefinition = "DATETIME(3)")
+	@XmlJavaTypeAdapter(TimestampAdapter.class)
 	private Timestamp creationDate;
 
 	@Version
 	@Column(name = "update_date", columnDefinition = "DATETIME(3)")
+	@XmlJavaTypeAdapter(TimestampAdapter.class)
 	private Timestamp updateDate;
 
 	@Column(name = "deleted", columnDefinition="BIT(1) DEFAULT FALSE")
 	private boolean deleted;
 
 	@Column(name = "delete_date", columnDefinition = "DATETIME(3)")
+	@XmlJavaTypeAdapter(TimestampAdapter.class)
 	private Timestamp deleteDate;
 
 	Sign() { }

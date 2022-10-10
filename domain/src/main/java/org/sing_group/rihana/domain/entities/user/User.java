@@ -46,7 +46,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.sing_group.rihana.domain.entities.TimestampAdapter;
 import org.sing_group.rihana.domain.entities.acl.role.Role;
 import org.sing_group.rihana.domain.entities.exploration.Exploration;
 
@@ -75,6 +77,7 @@ public class User implements Serializable {
 	private boolean deleted;
 
 	@Column(name = "delete_date", columnDefinition = "DATETIME(3)")
+	@XmlJavaTypeAdapter(TimestampAdapter.class)
 	private Timestamp deleteDate;
 
 	User() { }
