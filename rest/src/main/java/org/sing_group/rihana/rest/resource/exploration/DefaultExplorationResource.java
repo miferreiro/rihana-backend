@@ -286,6 +286,7 @@ public class DefaultExplorationResource implements ExplorationResource {
 			Exploration exploration = new Exploration(
 				title,
 				explorationEditionData.getExplorationDate(),
+				explorationEditionData.getSource(),
 				user,
 				patient
 			);
@@ -316,6 +317,8 @@ public class DefaultExplorationResource implements ExplorationResource {
 	public Response edit(@PathParam("id") String id, ExplorationEditionData explorationEditionData) {
 
 		Exploration exploration = this.service.getExploration(id);
+
+		exploration.setSource(explorationEditionData.getSource());
 
 		if (!explorationEditionData.getReport().getReportN().equals(exploration.getCurrentReport().getReportN())) {
 			if (reportService.existsReportNBy(explorationEditionData.getReport().getReportN())) {

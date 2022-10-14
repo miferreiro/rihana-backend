@@ -32,6 +32,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import io.swagger.annotations.ApiModel;
+import org.sing_group.rihana.domain.entities.exploration.Exploration.Source;
 import org.sing_group.rihana.domain.entities.user.User;
 import org.sing_group.rihana.rest.entity.UuidAndUri;
 
@@ -50,6 +51,9 @@ public class ExplorationAdminData implements Serializable {
 	@XmlElement(name = "explorationDate", required = true)
 	private Date explorationDate;
 
+	@XmlElement(name = "source")
+	private Source source;
+
 	@XmlElement(name = "user")
 	private String user;
 
@@ -67,10 +71,11 @@ public class ExplorationAdminData implements Serializable {
 
 	public ExplorationAdminData() { }
 
-	public ExplorationAdminData(String id, String title, Date explorationDate, User user, UuidAndUri patient, UuidAndUri report, List<UuidAndUri> radiographs, boolean deleted) {
+	public ExplorationAdminData(String id, String title, Date explorationDate, Source source, User user, UuidAndUri patient, UuidAndUri report, List<UuidAndUri> radiographs, boolean deleted) {
 		this.id = id;
 		this.title = title;
 		this.explorationDate = explorationDate;
+		this.source = source;
 		this.user = user.getLogin();
 		this.patient = patient;
 		this.report = report;
@@ -88,6 +93,10 @@ public class ExplorationAdminData implements Serializable {
 
 	public Date getExplorationDate() {
 		return this.explorationDate;
+	}
+
+	public Source getSource() {
+		return this.source;
 	}
 
 	public String getUser() {

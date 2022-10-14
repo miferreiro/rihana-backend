@@ -103,6 +103,7 @@ CREATE TABLE `patient` (
     PRIMARY KEY (`id`),
     UNIQUE KEY (`patientID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 --
 -- Table structure for table `Exploration`
 --
@@ -110,6 +111,7 @@ CREATE TABLE `exploration` (
     `id`            varchar(255)    NOT NULL,
     `title`         varchar(255)    NOT NULL,
     `date`          datetime        NOT NULL,
+    `source`        varchar(255)    DEFAULT NULL,
     `user_login`    varchar(255)    NOT NULL,
     `patient_id`    varchar(255)    NOT NULL,
     `creation_date` datetime(3)     DEFAULT NULL,

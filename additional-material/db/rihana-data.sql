@@ -185,20 +185,20 @@ VALUES
 --
 -- Data for table `Exploration`
 --
-INSERT INTO `exploration` (`id`, `title`, `date`, `user_login`, `patient_id`, `creation_date`, `update_date`, `deleted`, `delete_date`)
+INSERT INTO `exploration` (`id`, `title`, `date`, `source`, `user_login`, `patient_id`, `creation_date`, `update_date`, `deleted`, `delete_date`)
 VALUES
-    ('1', 'Exploration 1', '2018-12-12 23:00:00', 'radiologist', '1', '2018-12-12 23:00:00', '2020-02-24 17:21:58', 0, null),
-    ('2', 'Exploration 2', '2019-09-24 22:00:00', 'radiologist', '2', '2019-09-24 22:00:00', '2020-02-24 17:21:58', 0, null),
-    ('3', 'Exploration 3', '2019-02-19 23:00:00', 'radiologist', '3', '2019-02-19 23:00:00', '2020-02-24 17:22:00', 0, null),
-    ('4', 'Exploration 4', '2019-09-09 22:00:00', 'radiologist', '4', '2019-09-09 22:00:00', '2020-02-24 17:22:01', 0, null),
-    ('5', 'Exploration 5', '2019-01-27 23:00:00', 'radiologist', '5', '2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
-    ('6', 'Exploration 6', '2019-01-27 23:00:00', 'radiologist', '2', '2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
-    ('7', 'Exploration 7', '2019-12-27 23:22:12', 'radiologist', '3', '2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
-    ('8', 'Exploration 8', '2019-11-27 23:00:00', 'radiologist', '5', '2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
-    ('9', 'Exploration 9', '2019-01-7 23:00:00', 'radiologist', '1', '2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
-    ('10', 'Exploration 10', '2019-02-27 10:00:00', 'radiologist', '1', '2019-02-27 10:00:00', '2019-02-27 10:00:00', 0, null),
-    ('11', 'Exploration 11', '2020-01-27 23:00:00', 'radiologist', '2', '2020-01-27 23:00:00', '2020-01-27 23:00:00', 0, null),
-    ('12', 'Exploration 12', '2021-01-27 00:00:00', 'radiologist', '3', '2021-01-27 00:00:00', '2021-01-27 00:00:00', 0, null);
+    ('1', 'Exploration 1', '2018-12-12 23:00:00', 'PADCHEST', 'radiologist', '1', '2018-12-12 23:00:00', '2020-02-24 17:21:58', 0, null),
+    ('2', 'Exploration 2', '2019-09-24 22:00:00', 'PADCHEST', 'radiologist', '2', '2019-09-24 22:00:00', '2020-02-24 17:21:58', 0, null),
+    ('3', 'Exploration 3', '2019-02-19 23:00:00', 'PADCHEST', 'radiologist', '3', '2019-02-19 23:00:00', '2020-02-24 17:22:00', 0, null),
+    ('4', 'Exploration 4', '2019-09-09 22:00:00', 'PADCHEST', 'radiologist', '4', '2019-09-09 22:00:00', '2020-02-24 17:22:01', 0, null),
+    ('5', 'Exploration 5', '2019-01-27 23:00:00', 'PADCHEST', 'radiologist', '5', '2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
+    ('6', 'Exploration 6', '2019-01-27 23:00:00', 'PADCHEST', 'radiologist', '2', '2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
+    ('7', 'Exploration 7', '2019-12-27 23:22:12', 'PADCHEST', 'radiologist', '3', '2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
+    ('8', 'Exploration 8', '2019-11-27 23:00:00', 'PADCHEST', 'radiologist', '5', '2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
+    ('9', 'Exploration 9', '2019-01-7 23:00:00', 'PADCHEST', 'radiologist', '1', '2019-01-27 23:00:00', '2020-02-24 17:22:02', 0, null),
+    ('10', 'Exploration 10', '2019-02-27 10:00:00', 'PADCHEST', 'radiologist', '1', '2019-02-27 10:00:00', '2019-02-27 10:00:00', 0, null),
+    ('11', 'Exploration 11', '2020-01-27 23:00:00', 'PADCHEST', 'radiologist', '2', '2020-01-27 23:00:00', '2020-01-27 23:00:00', 0, null),
+    ('12', 'Exploration 12', '2021-01-27 00:00:00', 'PADCHEST', 'radiologist', '3', '2021-01-27 00:00:00', '2021-01-27 00:00:00', 0, null);
 
 --
 -- Data for table `Report`

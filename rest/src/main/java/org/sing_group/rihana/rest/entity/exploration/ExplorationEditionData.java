@@ -32,6 +32,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import io.swagger.annotations.ApiModel;
+import org.sing_group.rihana.domain.entities.exploration.Exploration.Source;
 import org.sing_group.rihana.rest.entity.patient.PatientEditionData;
 import org.sing_group.rihana.rest.entity.radiograph.RadiographEditionData;
 import org.sing_group.rihana.rest.entity.report.ReportEditionData;
@@ -48,6 +49,9 @@ public class ExplorationEditionData implements Serializable {
 	@XmlElement(name = "explorationDate", required = true)
 	private Date explorationDate;
 
+	@XmlElement(name = "source")
+	private Source source;
+
 	@XmlElement(name = "user", required = true)
 	private String user;
 
@@ -62,9 +66,10 @@ public class ExplorationEditionData implements Serializable {
 
 	public ExplorationEditionData() { }
 
-	public ExplorationEditionData(String id, Date explorationDate, String user, PatientEditionData patient, ReportEditionData reportEditionData, Set<RadiographEditionData> radiographs) {
+	public ExplorationEditionData(String id, Date explorationDate, Source source, String user, PatientEditionData patient, ReportEditionData reportEditionData, Set<RadiographEditionData> radiographs) {
 		this.setId(id);
 		this.setExplorationDate(explorationDate);
+		this.setSource(source);
 		this.setUser(user);
 		this.setPatient(patient);
 		this.setReport(reportEditionData);
@@ -85,6 +90,14 @@ public class ExplorationEditionData implements Serializable {
 
 	public void setExplorationDate(Date explorationDate) {
 		this.explorationDate = explorationDate;
+	}
+
+	public Source getSource() {
+		return source;
+	}
+
+	public void setSource(Source source) {
+		this.source = source;
 	}
 
 	public String getUser() {

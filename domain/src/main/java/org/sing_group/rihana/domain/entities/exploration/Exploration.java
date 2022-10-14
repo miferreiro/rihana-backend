@@ -35,6 +35,8 @@ import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -74,6 +76,33 @@ public class Exploration implements Identifiable {
 	@XmlJavaTypeAdapter(TimestampAdapter.class)
 	private Timestamp date;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "source")
+	private Source source;
+
+	public enum Source {
+		SERGAS("SERGAS"),
+		PADCHEST("PADCHEST");
+
+		public final String label;
+
+		Source(String label) {
+			this.label = label;
+		}
+
+		public String getSource(){
+			return label;
+		}
+
+		public String toString() {
+			return this.label;
+		}
+
+		public String getString() {
+			return this.label;
+		}
+	}
+
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "user_login", columnDefinition = "login")
 	private User user;
@@ -106,10 +135,11 @@ public class Exploration implements Identifiable {
 
 	Exploration() { }
 
-	public Exploration(String title, Date date, User user, Patient patient) {
+	public Exploration(String title, Date date, Source source, User user, Patient patient) {
 		id = UUID.randomUUID().toString();
 		this.setTitle(title);
 		this.setDate(date);
+		this.setSource(source);
 		this.setUser(user);
 		this.setPatient(patient);
 		this.creationDate = this.updateDate = new Timestamp(System.currentTimeMillis());
@@ -117,10 +147,11 @@ public class Exploration implements Identifiable {
 		this.deleteDate = null;
 	}
 
-	public Exploration(String title, Date date, User user, Patient patient, Report report, Set<Radiograph> radiographs) {
+	public Exploration(String title, Date date, Source source, User user, Patient patient, Report report, Set<Radiograph> radiographs) {
 		id = UUID.randomUUID().toString();
 		this.setTitle(title);
 		this.setDate(date);
+		this.setSource(source);
 		this.setUser(user);
 		this.setPatient(patient);
 		this.reports.add(report);
@@ -151,6 +182,14 @@ public class Exploration implements Identifiable {
 	public void setDate(Date date) {
 		checkArgument(date, d -> requireNonNull(d, "exploration date cannot be null"));
 		this.date = new Timestamp(date.getTime());
+	}
+
+	public Source getSource() {
+		return source;
+	}
+
+	public void setSource(Source source) {
+		this.source = source;
 	}
 
 	public User getUser() {

@@ -51,7 +51,7 @@ public class DefaultExplorationMapper implements ExplorationMapper {
 	@Override
 	public ExplorationData toExplorationData(Exploration exploration) {
 		return new ExplorationData(
-			exploration.getId(), exploration.getTitle(), exploration.getDate(), exploration.getUser(),
+			exploration.getId(), exploration.getTitle(), exploration.getDate(), exploration.getSource(), exploration.getUser(),
 			fromEntity(requestURI, exploration.getPatient(), DefaultPatientResource.class),
 			fromEntity(requestURI, exploration.getCurrentReport(), DefaultReportResource.class),
 			fromEntities(requestURI, new ArrayList<>(exploration.getCurrentRadiographs()), DefaultRadiographResource.class)
@@ -60,7 +60,7 @@ public class DefaultExplorationMapper implements ExplorationMapper {
 	@Override
 	public ExplorationAdminData toExplorationAdminData(Exploration exploration) {
 		return new ExplorationAdminData(
-			exploration.getId(), exploration.getTitle(), exploration.getDate(), exploration.getUser(),
+			exploration.getId(), exploration.getTitle(), exploration.getDate(), exploration.getSource(), exploration.getUser(),
 			fromEntity(requestURI, exploration.getPatient(), DefaultPatientResource.class),
 			fromEntity(requestURI, exploration.getCurrentReport(), DefaultReportResource.class),
 			fromEntities(requestURI, new ArrayList<>(exploration.getCurrentRadiographs()), DefaultRadiographResource.class),
