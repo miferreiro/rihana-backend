@@ -67,4 +67,9 @@ public class DefaultExplorationCodeDAO implements ExplorationCodeDAO {
 			.createQuery("SELECT e FROM ExplorationCode e WHERE e.code=:code", ExplorationCode.class)
 			.setParameter("code", code).getResultList().size() != 0;
 	}
+
+	@Override
+	public ExplorationCode create(ExplorationCode explorationCode) {
+		return this.dh.persist(explorationCode);
+	}
 }

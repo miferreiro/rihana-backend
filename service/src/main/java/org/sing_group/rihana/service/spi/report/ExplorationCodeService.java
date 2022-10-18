@@ -32,4 +32,6 @@ public interface ExplorationCodeService {
 	ExplorationCode getExplorationCode(String code);
 
 	boolean existsExplorationCodeBy(String code);
+
+	ExplorationCode create(ExplorationCode explorationCode);
 }

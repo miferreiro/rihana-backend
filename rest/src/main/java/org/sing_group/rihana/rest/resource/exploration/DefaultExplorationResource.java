@@ -432,10 +432,10 @@ public class DefaultExplorationResource implements ExplorationResource {
 			this.reportService.create(report);
 
 			for (RequestedExplorationEditionData r : reportEditionData.getRequestedExplorations()) {
-
 				ExplorationCode explorationCode;
 				if (!this.explorationCodeService.existsExplorationCodeBy(r.getCode())) {
 					explorationCode = new ExplorationCode(r.getCode(), r.getDescription());
+					this.explorationCodeService.create(explorationCode);
 				} else {
 					explorationCode = this.explorationCodeService.getExplorationCode(r.getCode());
 				}
@@ -446,10 +446,10 @@ public class DefaultExplorationResource implements ExplorationResource {
 			}
 
 			for (PerformedExplorationEditionData p : reportEditionData.getPerformedExplorations()) {
-
 				ExplorationCode explorationCode;
 				if (!this.explorationCodeService.existsExplorationCodeBy(p.getCode())) {
 					explorationCode = new ExplorationCode(p.getCode(), p.getDescription());
+					this.explorationCodeService.create(explorationCode);
 				} else {
 					explorationCode = this.explorationCodeService.getExplorationCode(p.getCode());
 				}

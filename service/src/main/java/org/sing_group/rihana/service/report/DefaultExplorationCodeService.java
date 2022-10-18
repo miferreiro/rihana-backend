@@ -78,4 +78,20 @@ public class DefaultExplorationCodeService implements ExplorationCodeService {
 
 		return explorationCodeDao.existsExplorationCodeBy(code);
 	}
+
+	@Override
+	public ExplorationCode create(ExplorationCode explorationCode) {
+
+		String loginLogged = context.getCallerPrincipal().getName();
+		if (!this.permissionService.hasPermission(
+			loginLogged,
+			"REPORT_MANAGEMENT",
+			"ADD") &&
+			!this.permissionService.isAdmin(loginLogged)
+		) {
+			throw new EJBAccessException("Insufficient privileges");
+		}
+
+		return explorationCodeDao.create(explorationCode);
+	}
 }
