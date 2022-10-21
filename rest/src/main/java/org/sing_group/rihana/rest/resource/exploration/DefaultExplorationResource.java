@@ -277,31 +277,31 @@ public class DefaultExplorationResource implements ExplorationResource {
 	@Override
 	public Response create(ExplorationEditionData explorationEditionData) {
 
-		if (!reportService.existsReportNBy(explorationEditionData.getReport().getReportN())) {
-			User user = this.userService.get(explorationEditionData.getUser());
-
-			Patient patient = createPatient(explorationEditionData);
-
-			String title = "Exploration " + (this.service.getLastTitleExploration() + 1);
-			Exploration exploration = new Exploration(
-				title,
-				explorationEditionData.getExplorationDate(),
-				explorationEditionData.getSource(),
-				user,
-				patient
-			);
-
-			exploration = this.service.create(exploration);
-			createReport(explorationEditionData, exploration);
-			createRadiographs(explorationEditionData, exploration);
-
-			this.explorationStorage.storeExplorationXml(exploration);
-
-			return Response.created(UriBuilder.fromResource(DefaultExplorationResource.class).path(exploration.getId()).build())
-				.entity(explorationMapper.toExplorationData(exploration)).build();
-		} else {
+		if (explorationEditionData.getReport().getReportN() != null && reportService.existsReportNBy(explorationEditionData.getReport().getReportN())) {
 			return Response.status(Response.Status.CONFLICT).entity("The report already exists").build();
 		}
+
+		User user = this.userService.get(explorationEditionData.getUser());
+
+		Patient patient = createPatient(explorationEditionData);
+
+		String title = "Exploration " + (this.service.getLastTitleExploration() + 1);
+		Exploration exploration = new Exploration(
+			title,
+			explorationEditionData.getExplorationDate(),
+			explorationEditionData.getSource(),
+			user,
+			patient
+		);
+
+		exploration = this.service.create(exploration);
+		createReport(explorationEditionData, exploration);
+		createRadiographs(explorationEditionData, exploration);
+
+		this.explorationStorage.storeExplorationXml(exploration);
+
+		return Response.created(UriBuilder.fromResource(DefaultExplorationResource.class).path(exploration.getId()).build())
+			.entity(explorationMapper.toExplorationData(exploration)).build();
 	}
 
 	@PUT
@@ -320,7 +320,7 @@ public class DefaultExplorationResource implements ExplorationResource {
 
 		exploration.setSource(explorationEditionData.getSource());
 
-		if (!explorationEditionData.getReport().getReportN().equals(exploration.getCurrentReport().getReportN())) {
+		if (explorationEditionData.getReport() != null && (exploration.getCurrentReport() == null || !explorationEditionData.getReport().getReportN().equals(exploration.getCurrentReport().getReportN()))) {
 			if (reportService.existsReportNBy(explorationEditionData.getReport().getReportN())) {
 				return Response.status(Response.Status.CONFLICT).entity("The report already exists").build();
 			}
@@ -388,7 +388,7 @@ public class DefaultExplorationResource implements ExplorationResource {
 	public Response recover(@PathParam("id") String id) {
 		Exploration exploration = this.service.getExplorationDeleted(id);
 
-		if (reportService.existsReportNBy(exploration.getCurrentReport().getReportN())) {
+		if (exploration.getCurrentReport() != null && reportService.existsReportNBy(exploration.getCurrentReport().getReportN())) {
 			return Response.status(Response.Status.CONFLICT).entity("The report already exists").build();
 		}
 
@@ -399,7 +399,7 @@ public class DefaultExplorationResource implements ExplorationResource {
 	private Patient createPatient(ExplorationEditionData explorationEditionData) {
 		Patient patient = null;
 
-		if  (explorationEditionData.getPatient() != null) {
+		if  (explorationEditionData.getPatient() != null && explorationEditionData.getPatient().getPatientID() != null) {
 			PatientEditionData patientEditionData = explorationEditionData.getPatient();
 
 			if (!this.patientService.existsPatientBy(patientEditionData.getPatientID())) {
@@ -416,7 +416,7 @@ public class DefaultExplorationResource implements ExplorationResource {
 	}
 
 	private void createReport(ExplorationEditionData explorationEditionData, Exploration exploration) {
-		if (explorationEditionData.getReport() != null) {
+		if (explorationEditionData.getReport() != null && explorationEditionData.getReport().getReportN() != null) {
 			ReportEditionData reportEditionData = explorationEditionData.getReport();
 			Report report = new Report(reportEditionData.getReportN(),
 				reportEditionData.getCompletionDate(),

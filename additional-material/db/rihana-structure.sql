@@ -113,7 +113,7 @@ CREATE TABLE `exploration` (
     `date`          datetime        NOT NULL,
     `source`        varchar(255)    DEFAULT NULL,
     `user_login`    varchar(255)    NOT NULL,
-    `patient_id`    varchar(255)    NOT NULL,
+    `patient_id`    varchar(255)    DEFAULT NULL,
     `creation_date` datetime(3)     DEFAULT NULL,
     `update_date`   datetime(3)     DEFAULT NULL,
     `deleted`       bit(1)          DEFAULT b'0',

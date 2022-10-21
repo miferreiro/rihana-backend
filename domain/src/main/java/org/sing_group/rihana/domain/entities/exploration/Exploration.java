@@ -108,7 +108,7 @@ public class Exploration implements Identifiable {
 	private User user;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "patient_id", referencedColumnName = "id", nullable = false)
+	@JoinColumn(name = "patient_id", referencedColumnName = "id", nullable = true)
 	private Patient patient;
 
 	@OneToMany(mappedBy = "exploration", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -233,7 +233,12 @@ public class Exploration implements Identifiable {
 	}
 
 	public Report getCurrentReport() {
-		return reports.stream().filter(report -> !report.isDeleted()).findFirst().get();
+
+		if (reports.isEmpty()) {
+			return null;
+		} else {
+			return reports.stream().filter(report -> !report.isDeleted()).findFirst().get();
+		}
 	}
 
 	public void internalRemoveRadiograph(Radiograph radiograph) {

@@ -55,10 +55,10 @@ public class ExplorationEditionData implements Serializable {
 	@XmlElement(name = "user", required = true)
 	private String user;
 
-	@XmlElement(name = "patient", required = true)
+	@XmlElement(name = "patient")
 	private PatientEditionData patient;
 
-	@XmlElement(name = "report", required = true)
+	@XmlElement(name = "report")
 	private ReportEditionData report;
 
 	@XmlElement(name = "radiographs", required = true)

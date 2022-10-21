@@ -31,6 +31,7 @@ import javax.enterprise.inject.Default;
 import javax.ws.rs.core.UriInfo;
 
 import org.sing_group.rihana.domain.entities.exploration.Exploration;
+import org.sing_group.rihana.rest.entity.UuidAndUri;
 import org.sing_group.rihana.rest.entity.exploration.ExplorationAdminData;
 import org.sing_group.rihana.rest.entity.exploration.ExplorationData;
 import org.sing_group.rihana.rest.entity.mapper.spi.ExplorationMapper;
@@ -50,19 +51,45 @@ public class DefaultExplorationMapper implements ExplorationMapper {
 
 	@Override
 	public ExplorationData toExplorationData(Exploration exploration) {
+
+		UuidAndUri report, patient;
+		if (exploration.getCurrentReport() == null) {
+			report = null;
+		} else {
+			report =fromEntity(requestURI, exploration.getCurrentReport(), DefaultReportResource.class);
+		}
+
+		if (exploration.getPatient() == null) {
+			patient = null;
+		} else {
+			patient =fromEntity(requestURI, exploration.getPatient(), DefaultPatientResource.class);
+		}
+
 		return new ExplorationData(
 			exploration.getId(), exploration.getTitle(), exploration.getDate(), exploration.getSource(), exploration.getUser(),
-			fromEntity(requestURI, exploration.getPatient(), DefaultPatientResource.class),
-			fromEntity(requestURI, exploration.getCurrentReport(), DefaultReportResource.class),
+			patient, report,
 			fromEntities(requestURI, new ArrayList<>(exploration.getCurrentRadiographs()), DefaultRadiographResource.class)
 		);
 	}
 	@Override
 	public ExplorationAdminData toExplorationAdminData(Exploration exploration) {
+
+		UuidAndUri report, patient;
+		if (exploration.getCurrentReport() == null) {
+			report = null;
+		} else {
+			report =fromEntity(requestURI, exploration.getCurrentReport(), DefaultReportResource.class);
+		}
+
+		if (exploration.getPatient() == null) {
+			patient = null;
+		} else {
+			patient =fromEntity(requestURI, exploration.getPatient(), DefaultPatientResource.class);
+		}
+
 		return new ExplorationAdminData(
 			exploration.getId(), exploration.getTitle(), exploration.getDate(), exploration.getSource(), exploration.getUser(),
-			fromEntity(requestURI, exploration.getPatient(), DefaultPatientResource.class),
-			fromEntity(requestURI, exploration.getCurrentReport(), DefaultReportResource.class),
+			patient, report,
 			fromEntities(requestURI, new ArrayList<>(exploration.getCurrentRadiographs()), DefaultRadiographResource.class),
 			exploration.isDeleted()
 		);
