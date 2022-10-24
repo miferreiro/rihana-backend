@@ -82,7 +82,8 @@ public class Exploration implements Identifiable {
 
 	public enum Source {
 		SERGAS("SERGAS"),
-		PADCHEST("PADCHEST");
+		MANUAL_PADCHEST("MANUAL_PADCHEST"),
+		AUTOMATIC_PADCHEST("AUTOMATIC_PADCHEST");
 
 		public final String label;
 
