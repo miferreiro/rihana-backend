@@ -61,7 +61,9 @@ public class DefaultPatientDAO implements PatientDAO {
 
 	@Override
 	public Patient create(Patient patient) {
-		patient.setPatientID(encrypt(patient.getPatientID()));
+		if (patient.getPatientID() != null) {
+			patient.setPatientID(encrypt(patient.getPatientID()));
+		}
 		return this.dh.persist(patient);
 	}
 
@@ -94,7 +96,9 @@ public class DefaultPatientDAO implements PatientDAO {
 
 	@Override
 	public Patient edit(Patient patient) {
-		patient.setPatientID(encrypt(patient.getPatientID()));
+		if (patient.getPatientID() != null) {
+			patient.setPatientID(encrypt(patient.getPatientID()));
+		}
 		return this.dh.update(patient);
 	}
 

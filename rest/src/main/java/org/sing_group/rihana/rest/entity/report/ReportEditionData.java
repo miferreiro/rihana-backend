@@ -32,6 +32,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import io.swagger.annotations.ApiModel;
+import org.sing_group.rihana.domain.entities.report.Report.Type;
 import org.sing_group.rihana.rest.entity.UuidAndUri;
 
 @XmlRootElement(name = "report-edition-data", namespace = "http://entity.resource.rest.rihana.sing-group.org")
@@ -40,34 +41,37 @@ import org.sing_group.rihana.rest.entity.UuidAndUri;
 public class ReportEditionData implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@XmlElement(name = "reportNumber", required = true)
+	@XmlElement(name = "type", required = true)
+	private Type type;
+
+	@XmlElement(name = "reportNumber")
 	private String reportN;
 
-	@XmlElement(name = "completionDate", required = true)
+	@XmlElement(name = "completionDate")
 	private Date completionDate;
 
-	@XmlElement(name = "applicant", required = true)
+	@XmlElement(name = "applicant")
 	private String applicant;
 
-	@XmlElement(name = "priority", required = true)
+	@XmlElement(name = "priority")
 	private String priority;
 
-	@XmlElement(name = "status", required = true)
+	@XmlElement(name = "status")
 	private String status;
 
-	@XmlElement(name = "bed", required = true)
+	@XmlElement(name = "bed")
 	private String bed;
 
-	@XmlElement(name = "clinicalData", required = true)
+	@XmlElement(name = "clinicalData")
 	private String clinicalData;
 
-	@XmlElement(name = "findings", required = true)
+	@XmlElement(name = "findings")
 	private String findings;
 
-	@XmlElement(name = "conclusions", required = true)
+	@XmlElement(name = "conclusions")
 	private String conclusions;
 
-	@XmlElement(name = "exploration", required = true)
+	@XmlElement(name = "exploration")
 	private UuidAndUri exploration;
 
 	@XmlElement(name = "requestedExplorations")
@@ -78,11 +82,12 @@ public class ReportEditionData implements Serializable {
 
 	public ReportEditionData() { }
 
-	public ReportEditionData(String reportN, Date completionDate, String applicant, String priority,
+	public ReportEditionData(Type type, String reportN, Date completionDate, String applicant, String priority,
 							 String status, String bed, String clinicalData, String findings, String conclusions,
 							 UuidAndUri exploration, Set<RequestedExplorationEditionData> requestedExplorations,
 							 Set<PerformedExplorationEditionData> performedExplorations) {
 
+		this.type = type;
 		this.reportN = reportN;
 		this.completionDate = completionDate;
 		this.applicant = applicant;
@@ -95,6 +100,14 @@ public class ReportEditionData implements Serializable {
 		this.exploration = exploration;
 		this.requestedExplorations = requestedExplorations;
 		this.performedExplorations = performedExplorations;
+	}
+
+	public Type getType() {
+		return type;
+	}
+
+	public void setType(Type type) {
+		this.type = type;
 	}
 
 	public String getReportN() {

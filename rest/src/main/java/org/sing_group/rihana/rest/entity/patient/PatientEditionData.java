@@ -39,7 +39,7 @@ import org.sing_group.rihana.domain.entities.patient.Patient.SEX;
 public class PatientEditionData implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@XmlElement(name = "patientID", required = true)
+	@XmlElement(name = "patientID")
 	private String patientID;
 	@XmlElement(name = "sex")
 	private SEX sex;

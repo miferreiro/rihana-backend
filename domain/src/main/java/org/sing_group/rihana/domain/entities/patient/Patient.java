@@ -22,9 +22,6 @@
  */
 package org.sing_group.rihana.domain.entities.patient;
 
-import static java.util.Objects.requireNonNull;
-import static org.sing_group.fluent.checker.Checks.checkArgument;
-
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashSet;
@@ -63,7 +60,7 @@ public class Patient implements Identifiable {
 	@Column(name = "id")
 	private String id;
 
-	@Column(name = "patientID", nullable = false)
+	@Column(name = "patientID")
 	private String patientID;
 
 	@Enumerated(EnumType.STRING)
@@ -139,7 +136,6 @@ public class Patient implements Identifiable {
 	}
 
 	public void setPatientID(String publicID) {
-		checkArgument(publicID, p -> requireNonNull(p, "patient identifier cannot be null"));
 		this.patientID = publicID;
 	}
 

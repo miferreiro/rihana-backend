@@ -42,7 +42,7 @@ public class PatientData implements Serializable {
 	@XmlElement(name = "id", required = true)
 	private String id;
 
-	@XmlElement(name = "patientID", required = true)
+	@XmlElement(name = "patientID")
 	private String patientID;
 
 	@XmlElement(name = "sex")

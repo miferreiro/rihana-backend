@@ -62,7 +62,7 @@ public class DefaultReportMapper implements ReportMapper {
 	public ReportData toReportData(Report report) {
 
 		return new ReportData(
-			report.getId(), report.getReportN(), report.getCompletionDate(), report.getApplicant(),
+			report.getId(), report.getType(), report.getReportN(), report.getCompletionDate(), report.getApplicant(),
 			report.getPriority(), report.getStatus(), report.getBed(), report.getClinicalData(), report.getFindings(),
 			report.getConclusions(),
 			fromEntity(requestURI, report.getExploration(), DefaultExplorationResource.class),

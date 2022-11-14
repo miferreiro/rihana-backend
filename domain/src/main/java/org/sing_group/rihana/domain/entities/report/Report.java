@@ -22,9 +22,6 @@
  */
 package org.sing_group.rihana.domain.entities.report;
 
-import static java.util.Objects.requireNonNull;
-import static org.sing_group.fluent.checker.Checks.checkArgument;
-
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashSet;
@@ -34,6 +31,8 @@ import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -60,6 +59,33 @@ public class Report implements Identifiable {
 	@Id
 	@Column(name = "id")
 	private String id;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "type")
+	private Type type;
+
+	public enum Type {
+		FILE("FILE"),
+		MANUAL("MANUAL");
+
+		public final String label;
+
+		Type(String label) {
+			this.label = label;
+		}
+
+		public String getSEX(){
+			return label;
+		}
+
+		public String toString() {
+			return this.label;
+		}
+
+		public String getString() {
+			return this.label;
+		}
+	}
 
 	@Column(name = "reportN")
 	private String reportN;
@@ -120,9 +146,10 @@ public class Report implements Identifiable {
 
 	Report() { }
 
-	public Report(String reportN, Date completionDate, String applicant, String priority, String status,
+	public Report(Type type, String reportN, Date completionDate, String applicant, String priority, String status,
 				  String bed, String clinicalData, String findings, String conclusions) {
 		this.id = UUID.randomUUID().toString();
+		this.setType(type);
 		this.setReportN(reportN);
 		this.setCompletionDate(completionDate);
 		this.setApplicant(applicant);
@@ -142,12 +169,19 @@ public class Report implements Identifiable {
 		return id;
 	}
 
+	public Type getType() {
+		return type;
+	}
+
+	public void setType(Type type) {
+		this.type = type;
+	}
+
 	public String getReportN() {
 		return reportN;
 	}
 
 	public void setReportN(String reportN) {
-		checkArgument(reportN, t -> requireNonNull(t, "reportN cannot be null"));
 		this.reportN = reportN;
 	}
 
@@ -156,7 +190,12 @@ public class Report implements Identifiable {
 	}
 
 	public void setCompletionDate(Date completionDate) {
-		this.completionDate = new Timestamp(completionDate.getDate());
+		if (completionDate != null) {
+			this.completionDate = new Timestamp(completionDate.getDate());
+		} else {
+			this.completionDate = null;
+		}
+
 	}
 
 	public String getApplicant() {

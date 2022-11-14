@@ -320,14 +320,24 @@ public class DefaultExplorationResource implements ExplorationResource {
 
 		exploration.setSource(explorationEditionData.getSource());
 
-		if (explorationEditionData.getReport() != null && (exploration.getCurrentReport() == null || !explorationEditionData.getReport().getReportN().equals(exploration.getCurrentReport().getReportN()))) {
+		if (explorationEditionData.getReport() != null &&
+			(exploration.getCurrentReport() == null ||
+			(explorationEditionData.getReport() != null && exploration.getCurrentReport() != null &&
+				explorationEditionData.getReport().getReportN() != null && exploration.getCurrentReport().getReportN() != null &&
+				!explorationEditionData.getReport().getReportN().equals(exploration.getCurrentReport().getReportN())))) {
 			if (reportService.existsReportNBy(explorationEditionData.getReport().getReportN())) {
 				return Response.status(Response.Status.CONFLICT).entity("The report already exists").build();
 			}
 		}
 
-		Patient patient = createPatient(explorationEditionData);
-		exploration.setPatient(patient);
+		if (exploration.getPatient() != null && exploration.getPatient().getPatientID() == null &&
+			explorationEditionData.getPatient().getPatientID() == null) {
+			Patient patient = editPatient(exploration, explorationEditionData);
+			exploration.setPatient(patient);
+		} else {
+			Patient patient = createPatient(explorationEditionData);
+			exploration.setPatient(patient);
+		}
 
 		this.service.edit(exploration);
 
@@ -388,7 +398,8 @@ public class DefaultExplorationResource implements ExplorationResource {
 	public Response recover(@PathParam("id") String id) {
 		Exploration exploration = this.service.getExplorationDeleted(id);
 
-		if (exploration.getCurrentReport() != null && reportService.existsReportNBy(exploration.getCurrentReport().getReportN())) {
+		if (exploration.getCurrentReport() != null &&
+			reportService.existsReportNBy(exploration.getCurrentReport().getReportN())) {
 			return Response.status(Response.Status.CONFLICT).entity("The report already exists").build();
 		}
 
@@ -396,13 +407,31 @@ public class DefaultExplorationResource implements ExplorationResource {
 		return Response.ok().build();
 	}
 
+	private Patient editPatient(Exploration exploration, ExplorationEditionData explorationEditionData) {
+		Patient patient = null;
+
+		if  (explorationEditionData.getPatient() != null) {
+			PatientEditionData patientEditionData = explorationEditionData.getPatient();
+
+			patient = this.patientService.get(exploration.getPatient().getId());
+			patient.setSex(explorationEditionData.getPatient().getSex());
+			patient.setBirthdate(explorationEditionData.getPatient().getBirthdate());
+
+			patient = this.patientService.edit(patient);
+		}
+
+		return patient;
+	}
+
+
 	private Patient createPatient(ExplorationEditionData explorationEditionData) {
 		Patient patient = null;
 
-		if  (explorationEditionData.getPatient() != null && explorationEditionData.getPatient().getPatientID() != null) {
+		if  (explorationEditionData.getPatient() != null) {
 			PatientEditionData patientEditionData = explorationEditionData.getPatient();
 
-			if (!this.patientService.existsPatientBy(patientEditionData.getPatientID())) {
+			if (patientEditionData.getPatientID() == null ||
+				!this.patientService.existsPatientBy(patientEditionData.getPatientID())) {
 				patient = new Patient(patientEditionData.getPatientID(),
 					patientEditionData.getSex(),
 					patientEditionData.getBirthdate());
@@ -416,9 +445,10 @@ public class DefaultExplorationResource implements ExplorationResource {
 	}
 
 	private void createReport(ExplorationEditionData explorationEditionData, Exploration exploration) {
-		if (explorationEditionData.getReport() != null && explorationEditionData.getReport().getReportN() != null) {
+		if (explorationEditionData.getReport() != null) {
 			ReportEditionData reportEditionData = explorationEditionData.getReport();
-			Report report = new Report(reportEditionData.getReportN(),
+			Report report = new Report(reportEditionData.getType(),
+				reportEditionData.getReportN(),
 				reportEditionData.getCompletionDate(),
 				reportEditionData.getApplicant(),
 				reportEditionData.getPriority(),
@@ -431,32 +461,36 @@ public class DefaultExplorationResource implements ExplorationResource {
 			report.setExploration(exploration);
 			this.reportService.create(report);
 
-			for (RequestedExplorationEditionData r : reportEditionData.getRequestedExplorations()) {
-				ExplorationCode explorationCode;
-				if (!this.explorationCodeService.existsExplorationCodeBy(r.getCode())) {
-					explorationCode = new ExplorationCode(r.getCode(), r.getDescription());
-					this.explorationCodeService.create(explorationCode);
-				} else {
-					explorationCode = this.explorationCodeService.getExplorationCode(r.getCode());
-				}
+			if (reportEditionData.getRequestedExplorations() != null) {
+				for (RequestedExplorationEditionData r : reportEditionData.getRequestedExplorations()) {
+					ExplorationCode explorationCode;
+					if (!this.explorationCodeService.existsExplorationCodeBy(r.getCode())) {
+						explorationCode = new ExplorationCode(r.getCode(), r.getDescription());
+						this.explorationCodeService.create(explorationCode);
+					} else {
+						explorationCode = this.explorationCodeService.getExplorationCode(r.getCode());
+					}
 
-				RequestedExploration requestedExploration = new RequestedExploration(r.getDate(), report, explorationCode);
-				this.requestedExplorationService.create(requestedExploration);
-				report.internalAddRequestedExploration(requestedExploration);
+					RequestedExploration requestedExploration = new RequestedExploration(r.getDate(), report, explorationCode);
+					this.requestedExplorationService.create(requestedExploration);
+					report.internalAddRequestedExploration(requestedExploration);
+				}
 			}
 
-			for (PerformedExplorationEditionData p : reportEditionData.getPerformedExplorations()) {
-				ExplorationCode explorationCode;
-				if (!this.explorationCodeService.existsExplorationCodeBy(p.getCode())) {
-					explorationCode = new ExplorationCode(p.getCode(), p.getDescription());
-					this.explorationCodeService.create(explorationCode);
-				} else {
-					explorationCode = this.explorationCodeService.getExplorationCode(p.getCode());
-				}
+			if (reportEditionData.getPerformedExplorations() != null) {
+				for (PerformedExplorationEditionData p : reportEditionData.getPerformedExplorations()) {
+					ExplorationCode explorationCode;
+					if (!this.explorationCodeService.existsExplorationCodeBy(p.getCode())) {
+						explorationCode = new ExplorationCode(p.getCode(), p.getDescription());
+						this.explorationCodeService.create(explorationCode);
+					} else {
+						explorationCode = this.explorationCodeService.getExplorationCode(p.getCode());
+					}
 
-				PerformedExploration performedExploration = new PerformedExploration(p.getDate(), p.getPortable(), p.getSurgery(), report, explorationCode);
-				this.performedExplorationService.create(performedExploration);
-				report.internalAddPerformedExploration(performedExploration);
+					PerformedExploration performedExploration = new PerformedExploration(p.getDate(), p.getPortable(), p.getSurgery(), report, explorationCode);
+					this.performedExplorationService.create(performedExploration);
+					report.internalAddPerformedExploration(performedExploration);
+				}
 			}
 			this.reportService.edit(report);
 		}
